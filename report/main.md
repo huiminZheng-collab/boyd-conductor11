@@ -3,7 +3,7 @@
 **日期**：2026-08-04　**仓库**：`boyd-conductor11/`　**攻击用时**：约 2 小时（数值 + 代数实验）
 
 > 阅读指南：第一部分（§1–§4）是公开文献的详细综述，自包含，不需要先验知识以外的背景；
-> 第二部分（§5–§8）是本次工作（数值攻击 + 代数分析）的结果。
+> 第二部分（§5–§9）是本次工作（两波数值/代数攻击）的结果，含第一波结论的更正（§8）与证明纲要（§9）。
 
 ---
 
@@ -177,7 +177,8 @@ conductor 19 的 $Q_\alpha$ 族上成功的方法（超几何公式 + BMZ）来�
 (C1)(C2) 的证明链条是：modular units + 尖点间路径 + BMZ。(C3) 的积分路径端点是
 $\theta=0,\pi/2,\pi$ 对应的三个点，其中 $\theta=\pi/2$（torus 交点）处曲线"穿过"环面，
 路径边界 $2[P_{\pi/2}]-[P_0]-[P_\pi]$ 是否由尖点组成、能否套用 BMZ，文献中没有答案。
-我们在 §8 用**精确代数计算**回答了这个问题（答案是否定的，且我们定位了具体障碍）。
+第一波分析曾据此断言朴素 BMZ 被阻断；第二波发现该推理用错了积分链——
+正确对象是全圆带符号闭链，闭性是拓扑性质，与端点是否扭点无关。详见 §8（更正）与 §9（证明纲要）。
 
 ---
 
@@ -246,7 +247,8 @@ $$\pi\,I_{\mathrm{split}}=-\int_\gamma\eta(x,y_-),\qquad
 \partial\gamma=2[P_{\pi/2}]-[P_0]-[P_\pi],$$
 $$P_0=(1,-1),\quad P_\pi=(-1,-1+\sqrt2),\quad P_{\pi/2}=(i,e^{i\pi/4}).$$
 
-套 BMZ 的前提：(i) $x,y$ 是 $X_1(11)$ 上的 modular units；(ii) 路径端点是尖点。
+套用 regulator 定理的前提：(i) $x,y$ 是 $X_1(11)$ 上的 modular units；(ii) 积分链在
+$H_1(E,\mathbb Z)^-$（复共轭反不变部分）中闭合。
 
 **(i) 成立（精确验证）**：四次模型的不变量给出 $j=-2^{12}/11=j(X_1(11))$ ✓。
 群律精确计算（`code/torsion.py`）：对 $A=(0,1)$（即 $S_0$ 上的点 $(0,0)$），
@@ -258,44 +260,59 @@ $\operatorname{div}(y)=3[(0,0)]-3[P_\infty]$ 的支撑全是 5-扭点
 （$E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/5\mathbb Z$ 恰为 $X_1(11)$ 的有理尖点），
 故 **$x,y$ 确为 modular units**（Manin–Drinfeld）。
 
-## 8. 证明路线分析（下）：朴素 BMZ 被边界阻断 —— **主要代数结果**
+## 8. 闭性机制——第一波"障碍"分析的更正
 
-**(ii) 不成立（精确验证）**：在 $\mathbb Q(\sqrt2)$、$\mathbb Q(\zeta_8)$ 上算群律
-（`code/endpoint_torsion2.py`、`code/boundary_torsion.py`）：
+### 8.1 第一波的错误推理（如实记录）
 
-- $P_0=(1,0)=-A$：5-扭点 ✓（尖点）；
-- $P_\pi=(-1,2\sqrt2)$、$P_{\pi/2}=(i,2\zeta_8)$：算到 $20P$ 均非扭点（坐标高度二次增长）；
-- 决定性组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$：**算到 $30T$ 非扭点**。
+第一波曾断言：劈裂积分路径 $\gamma$ 的边界组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$ 非扭点，故 $\partial\gamma$ 不是尖点除子，朴素 BMZ（要求尖点间路径）被阻断。**该断言的群律计算本身有效，但结论是错的**：它用错了积分链——把劈裂积分当成"半圆上的路径积分"来取边界，而正确的对象是全圆上的带符号闭链。
 
-故 $\partial\gamma$ **不是尖点除子**，朴素 BMZ（要求尖点间路径）不能直接应用——
-这正是 (C3) 与 (C1)(C2) 的本质差别，也解释了 Samart 所说的 "less apparent"。
-（对比：Samart 的 $Q_\alpha$ 族在 conductor 19 处路径闭包条件恰好成立，其 Theorem 2 得证。）
+### 8.2 正确的积分链 $\tilde\gamma$ 是拓扑闭链
 
-**(C3) 在 149 位精度上仍然成立**，说明存在更隐蔽的机制。后续候选方向：
+取全圆 $|x|=1$，$x=e^{i\theta}$，$\theta\in[-\pi,\pi]$，携带连续大模长分支 $y_+(\theta)$，权 $+1$（$\theta>0$）/ $-1$（$\theta<0$），在 $y_+$ 跨越单位圆的折点 $\theta=\pm c$（$c=\pi/2$）处分段。这是 Samart（其 Lemma 9 的机制）意义下的修正链 $\tilde\gamma$。
 
-1. **Mellit 式"平行线"**：在非扭点 $T$ 处建立椭圆双对数 $D_E$ 的有理函数关系，使非尖点贡献消去；
-2. **Samart 式超几何公式**：为 $S$ 族建立 $\tilde n$-型修正 Mahler 测度的 ${}_4F_3/{}_3F_2$ 公式（$S$ 族目前无一般公式）；
-3. **half-Mahler 分解**：Lalín–Samart–Zudilin 在 conductor 21 用的"半 Mahler 测度"技术。
+边界分析：链的边界只可能来自折点与端点。端点 $\theta=\pm\pi$ 给出 $[P_\pi]-[P_{-\pi}]$，而 $P_\pi=P_{-\pi}$（$x=-1$ 处两分支连续相接），相消；折点贡献 $\partial\tilde\gamma=2\big([P_c]-[P_{-c}]\big)$。而 $P_{-c}=\overline{P_c}$（复共轭），故在 $H_1(E,\mathbb Z)^-$（复共轭的 $-1$ 特征空间）中 $[P_c]-[\overline{P_c}]$ 自动闭合——**闭性与 $P_c$ 是否为扭点无关**。第一波找到的"障碍"（$T$ 非扭点）系假象：那是错误链的边界，正确链根本不经过那个组合。
 
-## 9. 总结
+### 8.3 修正 Mahler 测度与 (C3) 的等价改写
+
+沿 $\tilde\gamma$ 的修正 Mahler 测度满足精确恒等式
+$$\tilde n=-I_{\mathrm{split}},\qquad \int_{\tilde\gamma}\eta(x,y)=2\pi\, I_{\mathrm{split}}$$
+（`code/closedness_check.py`，折点 $\theta=0,\pm\pi/2$ 分段，44 位）。于是
+$$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$$
+数值上 $\tilde n=-b_{11}$ 到 44 位。
+
+## 9. 证明纲要：Beilinson–Brunault 路线
+
+| 步骤 | 内容 | 状态 |
+|---|---|---|
+| S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2） | 待严格书写 |
+| S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
+| S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
+| S4 | Beilinson–Brunault regulator 定理：闭链配对 $=r\pi b_{11}$ | 引用，假设核对中 |
+| S5 | $r=2$：数值锁定（44 位），独立代数计算待做 | 部分 |
+
+**条件性结论**：若 S4 的假设核对通过，则 (C3) 成立。这把一个 50 位数值猜想化为有限的书写/核对任务——这是第二波的主要收获。
+
+## 10. 总结
 
 1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **149 位**（原公开记录 50 位）。
 2. 新结构定理 $|y_-|\le1\Rightarrow I_1+I_2=-m(S_0)$，把 (C3) 化为 $I_1=(b_{11}-m(S_0))/2$。
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
-4. 证明路线测绘：modular units 前提**成立**（$5A=O$ 精确验证）；朴素 BMZ **被边界非尖点阻断**
-   （$T=(3,2i\sqrt2)$ 非扭点）——指明了证明必须绕开的具体障碍。
+4. modular units 前提**成立**（$5A=O$ 精确验证）。
+5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
+6. 证明纲要：(C3) 等价于 $\int_{\tilde\gamma}\eta=2\pi b_{11}$，很可能由 Beilinson–Brunault 定理直接推出；余下 S1 书写、S4 假设核对、$r=2$ 代数推导（§9）。
 
-## 10. 复现方式
+
+## 11. 复现方式
 
 ```
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
-  && python boundary_torsion.py
+  && python boundary_torsion.py && python closedness_check.py
 ```
 
 依赖：Python 3.12 + mpmath + sympy。
 
-## 11. 文献导读（`literature/`）
+## 12. 文献导读（`literature/`）
 
 - `bertin-lalin-survey.pdf` — Bertin–Lalín 综述：全局图景与各 conductor 状态（先读这篇）
 - `boyd-pnwnt2015.pdf` — Boyd 2015 slides：猜想史 + $m(S_0)$ 原始数据

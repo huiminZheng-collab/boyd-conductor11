@@ -37,9 +37,11 @@ conductor 11 的三条恒等式中两条已被 Brunault 证明，剩下一条（
 Samart 2023 eq.~(4.1)）仍开放。本报告：(i) 自包含地综述公开文献；
 (ii) 将开放猜想数值确认到 \textbf{149 位}（原公开记录 50 位）；
 (iii) 发现并证明结构恒等式 $I_1+I_2=-m(S_0)$；
-(iv) 用精确代数计算（非数值）证明 $x,y$ 是 $X_1(11)$ 上的 modular units（$5A=O$），
-但路径边界除子 $T=2P_{\pi/2}-P_\pi=(3,2i\sqrt2)$ \textbf{不是扭点}——
-朴素 Brunault--Mellit--Zudilin 路线被阻断，障碍被精确定位。
+(iv) 用精确代数计算（非数值）证明 $x,y$ 是 $X_1(11)$ 上的 modular units（$5A=O$）；
+(v) 第二波更正：第一波“边界非尖点阻断朴素 BMZ”的断言源于用错积分链——
+正确的全圆带符号闭链 $\tilde\gamma$ 在 $H_1(E,\ZZ)^-$ 中拓扑闭合，
+由此把猜想化为 $\int_{\tilde\gamma}\eta=2\pi b_{11}$，并给出
+Beilinson--Brunault 路线的证明纲要（余下假设核对与常数 $r=2$ 的代数推导）。
 \end{abstract}
 
 \tableofcontents
@@ -247,8 +249,9 @@ conductor 19 的 $Q_\alpha$ 族上成功的方法（超几何公式 + BMZ）来�
 \eqref{C1}\eqref{C2} 的证明链条是：modular units + 尖点间路径 + BMZ。
 \eqref{C3} 的积分路径端点是 $\theta=0,\pi/2,\pi$ 对应的三个点，其中 $\theta=\pi/2$
 （torus 交点）处曲线“穿过”环面；路径边界 $2[P_{\pi/2}]-[P_0]-[P_\pi]$ 是否由尖点组成、
-能否套用 BMZ，文献中没有答案。我们在 \S\ref{sec:proof} 用\textbf{精确代数计算}回答了这个问题
-（答案是否定的，且我们定位了具体障碍）。
+能否套用 BMZ，文献中没有答案。第一波曾据此断言朴素 BMZ 被阻断；第二波发现该推理
+用错了积分链——正确对象是全圆带符号闭链，它在 $H_1(E,\ZZ)^-$ 中自动闭合
+（详见 \S\ref{sec:obstruction} 的更正与 \S\ref{sec:outline} 的证明纲要）。
 
 \part*{第二部分：本次工作}
 \addcontentsline{toc}{part}{第二部分：本次工作}
@@ -344,7 +347,8 @@ $m(P')=0.40560289185535\ldots$，而 $m(S_0)=0.40560295591501\ldots$——
 P_0=(1,-1),\quad P_\pi=(-1,-1+\sqrt2),\quad P_{\pi/2}=(i,e^{i\pi/4}).
 \]
 
-套 BMZ 的前提：(i) $x,y$ 是 $X_1(11)$ 上的 modular units；(ii) 路径端点是尖点。
+套 regulator 定理的前提：(i) $x,y$ 是 $X_1(11)$ 上的 modular units；
+(ii) 积分链在 $H_1(E,\ZZ)^-$ 中闭合。
 
 \textbf{(i) 成立（精确验证）}：四次模型的不变量给出 $j=-2^{12}/11=j(X_1(11))$ \checkmark。
 群律精确计算（\texttt{code/torsion.py}）：对 $A=(0,1)$（即 $S_0$ 上的点 $(0,0)$），
@@ -355,30 +359,66 @@ P_0=(1,-1),\quad P_\pi=(-1,-1+\sqrt2),\quad P_{\pi/2}=(i,e^{i\pi/4}).
 的支撑全是 5-扭点（$E(\QQ)_{\mathrm{tors}}=\ZZ/5\ZZ$ 恰为 $X_1(11)$ 的有理尖点），
 故 \textbf{$x,y$ 确为 modular units}（Manin--Drinfeld）。
 
-\section{证明路线分析（下）：朴素 BMZ 被边界阻断 —— 主要代数结果}\label{sec:obstruction}
+\section{闭性机制——第一波“障碍”分析的更正}\label{sec:obstruction}
 
-\textbf{(ii) 不成立（精确验证）}：在 $\QQ(\sqrt2)$、$\QQ(\zeta_8)$ 上算群律
-（\texttt{code/endpoint\_torsion2.py}、\texttt{code/boundary\_torsion.py}）：
+\subsection{第一波的错误推理（如实记录）}
+
+第一波曾在 $\QQ(\sqrt2)$、$\QQ(\zeta_8)$ 上算群律
+（\texttt{code/endpoint\_torsion2.py}、\texttt{code/boundary\_torsion.py}），得到：
 \begin{itemize}[nosep]
 \item $P_0=(1,0)=-A$：5-扭点 \checkmark（尖点）；
 \item $P_\pi=(-1,2\sqrt2)$、$P_{\pi/2}=(i,2\zeta_8)$：算到 $20P$ 均非扭点（坐标高度二次增长）；
-\item 决定性组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$：\textbf{算到 $30T$ 非扭点}。
+\item 决定性组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$：算到 $30T$ 非扭点。
 \end{itemize}
+并据此断言：$\partial\gamma$ 不是尖点除子，朴素 BMZ（要求尖点间路径）被阻断。
+\textbf{群律计算本身有效，但结论是错的}：它用错了积分链——把劈裂积分当成
+“半圆上的路径积分”来取边界，而正确的对象是全圆上的带符号闭链。
 
-故 $\partial\gamma$ \textbf{不是尖点除子}，朴素 BMZ（要求尖点间路径）不能直接应用——
-这正是 \eqref{C3} 与 \eqref{C1}\eqref{C2} 的本质差别，也解释了 Samart 所说的
-“less apparent”。（对比：Samart 的 $Q_\alpha$ 族在 conductor 19 处路径闭包条件恰好成立，
-其 Theorem 2 得证。）
+\subsection{正确的积分链 $\tilde\gamma$ 是拓扑闭链}\label{sec:closed}
 
-\textbf{\eqref{C3} 在 149 位精度上仍然成立}，说明存在更隐蔽的机制。后续候选方向：
-\begin{enumerate}[nosep]
-\item \textbf{Mellit 式“平行线”}：在非扭点 $T$ 处建立椭圆双对数 $D_E$ 的有理函数关系，
-使非尖点贡献消去；
-\item \textbf{Samart 式超几何公式}：为 $S$ 族建立 $\tilde n$ 型修正 Mahler 测度的
-${}_4F_3/{}_3F_2$ 公式（$S$ 族目前无一般公式）；
-\item \textbf{half-Mahler 分解}：Lal\'in--Samart--Zudilin 在 conductor 21 用的
-“半 Mahler 测度”技术。
-\end{enumerate}
+取全圆 $|x|=1$，$x=e^{i\theta}$，$\theta\in[-\pi,\pi]$，携带连续大模长分支
+$y_+(\theta)$，权 $+1$（$\theta>0$）/ $-1$（$\theta<0$），在 $y_+$ 跨越单位圆的
+折点 $\theta=\pm c$（$c=\pi/2$）处分段。这是 Samart（其 Lemma 9 的机制）意义下的
+修正链 $\tilde\gamma$。
+
+边界分析：链的边界只可能来自折点与端点。端点 $\theta=\pm\pi$ 给出
+$[P_\pi]-[P_{-\pi}]$，而 $P_\pi=P_{-\pi}$（$x=-1$ 处两分支连续相接），相消；
+折点贡献 $\partial\tilde\gamma=2\big([P_c]-[P_{-c}]\big)$。而
+$P_{-c}=\overline{P_c}$（复共轭），故在 $H_1(E,\ZZ)^-$（复共轭的 $-1$ 特征空间）中
+$[P_c]-[\overline{P_c}]$ 自动闭合——\textbf{闭性与 $P_c$ 是否为扭点无关}。
+第一波找到的“障碍”（$T$ 非扭点）系假象：那是错误链的边界，正确链根本不经过那个组合。
+
+\subsection{修正 Mahler 测度与 \eqref{C3} 的等价改写}
+
+沿 $\tilde\gamma$ 的修正 Mahler 测度满足精确恒等式
+\[
+\tilde n=-\Isplit,\qquad \int_{\tilde\gamma}\eta(x,y)=2\pi\,\Isplit
+\]
+（\texttt{code/closedness\_check.py}，折点 $\theta=0,\pm\pi/2$ 分段，44 位）。于是
+\[
+\text{\eqref{C3}}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\,\bN,
+\]
+数值上 $\tilde n=-\bN$ 到 44 位。
+
+\section{证明纲要：Beilinson--Brunault 路线}\label{sec:outline}
+
+\begin{center}
+\begin{tabular}{clll}
+\hline
+步骤 & 内容 & 状态 \\
+\hline
+S1 & 闭性引理：$\tilde\gamma$ 在 $H_1(E,\ZZ)^-$ 中闭合（\S\ref{sec:closed}） & 待严格书写 \\
+S2 & tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ & \\
+   & 全分圆，故 $\{x,y\}\in K_2(E)\otimes\QQ$ & 已查 \\
+S3 & modular units：$x,y$ 的除子支撑于尖点（$5A=O$ 精确验证，\S\ref{sec:proof}） & 已证 \\
+S4 & Beilinson--Brunault regulator 定理：闭链配对 $=r\pi\bN$ & 引用，假设核对中 \\
+S5 & $r=2$：数值锁定（44 位），独立代数计算待做 & 部分 \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{条件性结论}：若 S4 的假设核对通过，则 \eqref{C3} 成立。这把一个 50 位数值猜想
+化为有限的书写/核对任务——这是第二波的主要收获。
 
 \section{总结}
 
@@ -387,9 +427,12 @@ ${}_4F_3/{}_3F_2$ 公式（$S$ 族目前无一般公式）；
 \item 新结构定理 $|y_-|\le1\Rightarrow I_1+I_2=-m(S_0)$（命题 \ref{prop:structure}），
 把 \eqref{C3} 化为 $I_1=(\bN-m(S_0))/2$。
 \item $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
-\item 证明路线测绘：modular units 前提\textbf{成立}（$5A=O$ 精确验证）；
-朴素 BMZ \textbf{被边界非尖点阻断}（$T=(3,2i\sqrt2)$ 非扭点）——
-指明了证明必须绕开的具体障碍。
+\item modular units 前提\textbf{成立}（$5A=O$ 精确验证，\S\ref{sec:proof}）。
+\item \textbf{更正}：第一波“朴素 BMZ 被非扭边界阻断”的断言不成立——正确积分链
+$\tilde\gamma$ 在 $H_1(E,\ZZ)^-$ 中拓扑闭合，与扭点无关（\S\ref{sec:obstruction}）。
+\item 证明纲要：\eqref{C3} 等价于 $\int_{\tilde\gamma}\eta=2\pi\bN$，很可能由
+Beilinson--Brunault 定理直接推出；余下 S1 书写、S4 假设核对、$r=2$ 代数推导
+（\S\ref{sec:outline}）。
 \end{enumerate}
 
 \section{复现方式}
@@ -397,7 +440,7 @@ ${}_4F_3/{}_3F_2$ 公式（$S$ 族目前无一般公式）；
 \begin{verbatim}
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
-  && python boundary_torsion.py
+  && python boundary_torsion.py && python closedness_check.py
 \end{verbatim}
 依赖：Python 3.12 + mpmath + sympy。
 
