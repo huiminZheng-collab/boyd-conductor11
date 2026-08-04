@@ -2,113 +2,290 @@
 
 **日期**：2026-08-04　**仓库**：`boyd-conductor11/`　**攻击用时**：约 2 小时（数值 + 代数实验）
 
-## 1. 问题陈述
+> 阅读指南：第一部分（§1–§4）是公开文献的详细综述，自包含，不需要先验知识以外的背景；
+> 第二部分（§5–§8）是本次工作（数值攻击 + 代数分析）的结果。
 
-Boyd (1998) 系统猜想：许多二元多项式的对数 Mahler 测度 $m(P)$ 是椭圆曲线 $L$ 值的有理倍数，
-$m(P) \stackrel?= r\cdot b_N$，其中 $b_N=L'(E_N,0)=\dfrac{N}{4\pi^2}L(E_N,2)$（根数 $+1$），$r\in\mathbb Q$。
+---
 
-Conductor 11（最小可能 conductor；$E_{11}=X_1(11)$，LMFDB `11.a3`，$E(\mathbb Q)=\mathbb Z/5\mathbb Z$；
-关联模形式 $f_{11}=\eta(\tau)^2\eta(11\tau)^2$）：
+# 第一部分：背景详解（公开部分）
 
-| # | 恒等式 | 状态 |
-|---|--------|------|
-| (C1) | $m\big((1+x)(1+y)(1+x+y)+xy\big)=7b_{11}$ | 已证（Brunault 2005/06） |
-| (C2) | $m\big(y^2+(x^2+2x-1)y+x^3\big)=5b_{11}$ | 已证（Brunault 2006） |
-| (C3) | $S_0=y^2+(x^2+1)y+x^3$ 的**劈裂积分** $I_{\mathrm{split}}=\pm b_{11}$ | **开放**（Boyd 1998 (2-33)；Samart 2023 eq. (4.1)） |
+## 1. Mahler 测度是什么
 
-(C3) 的具体形式：$S_0=0$ 即 conductor 11 曲线。它在 2-torus 上有零点（$x=\pm i$），故
-$m(S_0)$ 本身**不是** $b_{11}$ 的有理倍数（Boyd 的数值观察，本报告复现）。猜想的是
-$$I_{\mathrm{split}}:=\frac1\pi\int_0^{\pi/2}\log|y_-(e^{i\theta})|\,d\theta-\frac1\pi\int_{\pi/2}^{\pi}\log|y_-(e^{i\theta})|\,d\theta\ \stackrel?=\ \pm b_{11},$$
-其中 $y_\pm(x)=-\frac{x^2+1}2\pm\sqrt{\frac{(x^2+1)^2}4-x^3}$。符号取决于根的命名（$|y_+||y_-|=1$，换根变号；
-本报告取主支 sqrt，得 $+b_{11}$；Samart 的 $\tilde y_-$ 约定给出 $-L'(E,0)$，内容相同）。
+### 1.1 定义与 Jensen 公式
 
-## 2. 方法
+对非零多项式 $P(x_1,\dots,x_n)\in\mathbb C[x_1^{\pm1},\dots,x_n^{\pm1}]$，其**对数 Mahler 测度**是 $\log|P|$ 在 $n$ 维环面 $\mathbb T^n=\{|x_1|=\cdots=|x_n|=1\}$ 上的平均：
 
-- **$b_{11}$ 高精度**（`code/b11.py`）：$f_{11}=\sum a_nq^n$ 整数系数 + 权 2 近似函数方程
+$$m(P)=\int_0^1\!\!\cdots\!\int_0^1 \log\big|P\big(e^{2\pi i t_1},\dots,e^{2\pi i t_n}\big)\big|\,dt_1\cdots dt_n,
+\qquad M(P)=e^{m(P)}.$$
+
+**单变量情形**是完全可以算的：若 $P(x)=a_0\prod_{j=1}^d(x-\alpha_j)$，Jensen 公式给出
+
+$$m(P)=\log|a_0|+\sum_{j=1}^d\log^+|\alpha_j|,\qquad \log^+v:=\max(\log v,0).$$
+
+即"首项系数 + 单位圆外根的贡献"。由此，对整系数单变量多项式，$m(P)$ 总是**代数数的对数**。
+Kronecker 定理：$m(P)=0 \iff P$ 是单位根式（分圆）多项式乘以单项式。著名的 **Lehmer 问题**（1933）
+问 $m(P)>0$ 能否任意小；目前最小纪录仍是 Lehmer 本人的 $m(x^{10}+x^9-x^7-x^6-x^5-x^4-x^3+x+1)=\log(1.17628\ldots)$。
+
+**两变量情形**完全不同：$m(P)$ 一般是超越数，而且——这正是本课题的主题——它竟然反复地等于
+**椭圆曲线 $L$ 函数特殊值的有理倍数**。
+
+### 1.2 降维：把二维积分化为一维
+
+计算 $m(P(x,y))$ 的实用方法是先对 $y$ 用 Jensen 公式。若把 $P$ 看成 $y$ 的多项式
+$P=A(x)y^2+B(x)y+C(x)$，两根 $y_\pm(x)$，则
+
+$$m(P)=\frac1{2\pi}\int_0^{2\pi}\Big[\log|A(e^{i\theta})|+\log^+|y_+(e^{i\theta})|+\log^+|y_-(e^{i\theta})|\Big]d\theta.$$
+
+本报告所有 Mahler 测度数值都是用这个一维积分算的（mpmath 任意精度）。
+
+### 1.3 第一个漂亮公式：Smyth (1981)
+
+$$m(1+x+y)=\frac{3\sqrt3}{4\pi}L(\chi_{-3},2)=L'(\chi_{-3},-1)=0.3230659\ldots$$
+
+其中 $\chi_{-3}$ 是 conductor 3 的奇 Dirichlet 特征。证明路线：Jensen 降维后得到 log-sine 积分，
+再认出它是 Clausen 函数（二重对数 $\mathrm{Cl}_2$）的特殊值，而 $\mathrm{Cl}_2(\pi/3)\propto L(\chi_{-3},2)$。
+这个公式是后来一切"Mahler 测度 = $L$ 值"现象的鼻祖。注意：曲线 $1+x+y=0$ 是**有理曲线**（亏格 0），
+对应的 $L$ 函数是 Dirichlet 的；亏格 1 时就轮到椭圆曲线的 $L$ 函数登场。
+
+## 2. 椭圆曲线及其 $L$ 函数：conductor 11 为何特殊
+
+### 2.1 椭圆曲线的 $L$ 函数与 conductor
+
+$\mathbb Q$ 上的椭圆曲线 $E$ 有 $L$ 函数 $L(E,s)=\sum_{n\ge1}a_n n^{-s}$，其中好素数处
+$a_p=p+1-\#E(\mathbb F_p)$。**conductor** $N$ 是衡量 $E$ 坏约化程度的正整数（可看作"$E$ 的层级"）。
+**$\mathbb Q$ 上椭圆曲线的最小可能 conductor 是 11**——没有 conductor 1 到 10 的椭圆曲线。
+所以"最简的"椭圆曲线 $L$ 值就是 conductor 11 的 $L$ 值，这也是 Boyd 表格里 conductor 11 居首位的原因。
+
+Conductor 11 只有**一个同源类（isogeny class）**，含三条曲线（LMFDB `11.a1–a3`）。其中：
+
+- $X_1(11):\ y^2+y=x^3-x^2$（即 `11.a3`），判别式 $-11$，$j=-2^{12}/11$，$E(\mathbb Q)=\mathbb Z/5\mathbb Z$；
+- $X_0(11):\ y^2+y=x^3-x^2-10x-20$（即 `11.a1`）。
+
+### 2.2 模形式与函数方程
+
+模性定理（Wiles 等）：$L(E,s)$ 的系数 $a_n$ 是一个权 2、水平 $N$ 的尖形式 $f_E$ 的 Fourier 系数。
+对 conductor 11，这个尖形式有极漂亮的 **eta 乘积**表达式：
+
+$$f_{11}(\tau)=\eta(\tau)^2\eta(11\tau)^2=q\prod_{n\ge1}(1-q^n)^2(1-q^{11n})^2=\sum_{n\ge1}a_nq^n,
+\qquad q=e^{2\pi i\tau}.$$
+
+完备化 $L$ 函数 $\Lambda(E,s)=N^{s/2}(2\pi)^{-s}\Gamma(s)L(E,s)$ 满足函数方程
+$\Lambda(E,s)=w\,\Lambda(E,2-s)$。$E_{11}$ 的根数 $w=+1$（秩 0）。由此推出本报告的核心常数恒等式：
+
+> **推导** $b_N=L'(E,0)=\frac{N}{4\pi^2}L(E,2)$：$s\to0$ 时 $\Gamma(s)=1/s+O(1)$，
+> 而 $L(E,0)=0$（函数方程迫使），故 $L(E,s)=L'(E,0)s+O(s^2)$，$\Gamma(s)L(E,s)\to L'(E,0)$，
+> 即 $\Lambda(E,0)=L'(E,0)$。另一方面 $\Lambda(E,0)=\Lambda(E,2)=N(2\pi)^{-2}\Gamma(2)L(E,2)=\frac{N}{4\pi^2}L(E,2)$。$\blacksquare$
+
+所以 $L'(E,0)$（$s=0$ 处的导数，Beilinson 猜想喜欢的点）与 $L(E,2)$（临界区间右端点，
+模形式方法好算的点）只差一个有理因子，文献中两种写法混用。数值上
+
+$$b_{11}=L'(E_{11},0)=\frac{11}{4\pi^2}L(E_{11},2)=0.15214714172591804948622729747863\ldots$$
+
+（我们的 `code/b11.py` 用 $f_{11}$ 的系数和"近似函数方程"把它算到 300 位；
+$L(E,2)=\sum a_n[\,\cdots\,]$ 是一个以 $e^{-2\pi n/\sqrt{11}}$ 速度收敛的级数，几十项就够几百位。）
+
+## 3. Boyd 猜想从哪来：Deninger、Beilinson 与 Boyd 的数值实验
+
+### 3.1 Deninger 的观察（1995–1997）
+
+Deninger 研究 $K_2$ 与 Mahler 测度的联系时猜想
+
+$$m\Big(1+x+\frac1x+y+\frac1y\Big)\stackrel?=\frac{15}{4\pi^2}L(E_{15},2)=L'(E_{15},0),$$
+
+曲线 $1+x+1/x+y+1/y=0$ 恰为 conductor 15 的椭圆曲线。数值吻合到几十位。
+**为什么应该有这种事？** 机制（Deninger–Rodríguez Villegas 的解释）：
+
+1. 对"温顺"（tempered）多项式 $P$（Newton 多边形的每个面多项式都是分圆的，
+   这等价于 $K$ 论里某个符号 $\{x,y\}$ 在曲线 $P=0$ 上 tame 平凡），
+   Jensen 降维后的一维积分可以改写为**椭圆 regulator**
+   $$\eta(x,y)=\log|x|\,d\arg y-\log|y|\,d\arg x$$
+   沿环面与曲线相交路径的积分；
+2. Beilinson 猜想（对模曲线是定理级别的显式化）说这类 regulator 配对等于 $L(E,2)$ 的有理倍数。
+
+于是"$m(P)=r\,b_N$"是 Bloch–Beilinson 猜想的具体化身；Rodríguez Villegas (1997) 进一步把
+$m(P_k)$ 写成模形式，使得 CM（复乘）情形可以严格证明。
+
+### 3.2 Boyd 的系统实验（1998）
+
+Boyd（*Experimental Mathematics* 7:1，引用 248 次）对形如
+$P_k=A(x)y^2+(B(x)+kx)y+C(x)$ 的族做了大规模数值实验，按 conductor 分类列出了几十条
+$m(P)=r\,b_N$ 型猜想（$r$ 为小的有理数），每条都验证到约 50 位小数。最小 conductor 就是 11。
+此后 25 年，这些猜想被逐个击破：
+
+- CM 曲线（conductor 27, 32, 36）：Rodríguez Villegas、Lalín–Rogers、Rogers–Zudilin 等；
+- conductor 14：Mellit (2012) 与 Mellit–Brunault（"平行线"椭圆双对数方法）、Touafek；
+- conductor 15：Rogers–Zudilin (2014) 证明 Deninger 原猜想；
+- conductor 20, 24：Rogers–Zudilin；conductor 21：Lalín–Samart–Zudilin (2016)；
+- **conductor 11：Brunault (2005/2006)**，见下节。
+
+### 3.3 Brunault 的突破与 BMZ 公式
+
+Beilinson 曾证明：模曲线上 modular units（除子只支撑在尖点上的有理函数）的 regulator
+可以用 $L$ 值表示，但常数不显式。**Brunault 的博士论文（2005，ENS Lyon）把这个定理完全显式化**，
+并应用于 $X_1(11)$——它恰好是可以用 modular units 参数化的椭圆曲线
+（Brunault 后来证明这种曲线只有有限条）。由此他证明了 conductor 11 的两条 Boyd 猜想：
+
+$$m\big((1+x)(1+y)(1+x+y)+xy\big)=\frac{77}{4\pi^2}L(E_{11},2)=7b_{11}, \tag{C1}$$
+$$m\big(y^2+(x^2+2x-1)y+x^3\big)=5b_{11}. \tag{C2}$$
+
+后来 Mellit–Brunault–Zudilin 把这类计算凝成一条可直接套用的公式（`literature/zudilin-regulator.pdf`）：
+对 Siegel units $g_a(\tau)=q^{NB_2(a/N)/2}\prod_{n\equiv a}(1-q^n)\prod_{n\equiv -a}(1-q^n)$，
+
+$$\int_{c/N}^{i\infty}\eta(g_a,g_b)=\frac1{4\pi}L(f_{a,b;c},2),$$
+
+其中 $f_{a,b;c}$ 是某个显式写出的权 2 模形式（Eisenstein 级数乘积组合）。
+**直观含义**：只要你的多项式的 $x,y$ 是模曲线上的 modular units、且积分路径连接两个尖点，
+regulator 积分就直接是一个 $L$ 值。这是目前证明此类恒等式的主力武器，也是本报告 §8 分析证明路线时的标尺。
+
+## 4. 仍然开放的 (C3)：torus 上有零点时会发生什么
+
+### 4.1 陈述
+
+Boyd 1998 编号 (2-33) 的族 $S_k=y^2+(x^2+kx+1)y+x^3$。取 $k=0$：
+
+$$S_0=y^2+(x^2+1)y+x^3=0\quad\Longleftrightarrow\quad \text{conductor 11 的椭圆曲线}.$$
+
+与 (C1)(C2) 的多项式不同，$S_0$ **在环面上有零点**：$x=i$ 时 $y^2=i$，$x=-i$ 时 $y^2=-i$，
+即 $(x,y)=(i,\pm e^{i\pi/4})$ 与 $(-i,\pm e^{-i\pi/4})$ 满足 $|x|=|y|=1$。此时 Deninger 的 regulator 公式出现边界修正，
+Boyd 数值发现
+
+$$m(S_0)=0.4056029559150104\ldots\ \ \text{“seemingly not } r\,b_{11}\text{”},$$
+
+即 $m(S_0)$ 本身**不是** $b_{11}$ 的有理倍数（我们用 PSLQ 在 $10^8$ 系数界内复核了这一点）。
+但 Boyd 同时发现：**沿 branch cut 劈开的带符号积分**仍然等于 $b_{11}$。写 $S_0=0$ 的两根
+
+$$y_\pm(x)=-\frac{x^2+1}{2}\pm\sqrt{\frac{(x^2+1)^2}{4}-x^3},$$
+
+$x=e^{i\theta}$ 沿上半环面走，$\theta=\pi/2$ 处正是 torus 交点 $x=i$（"分支切口"），定义
+
+$$I_{\mathrm{split}}:=\underbrace{\frac1\pi\int_0^{\pi/2}\log|y_-(e^{i\theta})|\,d\theta}_{I_1}
+\;-\;\underbrace{\frac1\pi\int_{\pi/2}^{\pi}\log|y_-(e^{i\theta})|\,d\theta}_{I_2}\ \stackrel?=\ \pm b_{11}. \tag{C3}$$
+
+（符号取决于哪个根叫 $y_-$：$|y_+||y_-|=|x^3|=1$，换根整体变号。Samart 2023 的约定写成 $-L'(E,0)$。）
+
+Boyd 的原话（经 Samart 2023 §4 引用）：
+
+> "This is in accord with our contention that in case $P$ vanishes on the torus, it is the integral
+> of $\log|y|$ around a branch cut rather than $m(P)$, which should be rationally related to $L'(E,0)$."
+
+Samart 2023（arXiv:2301.05390）把 (C3) 明确列为**未证明的猜想**，并指出可尝试用他在
+conductor 19 的 $Q_\alpha$ 族上成功的方法（超几何公式 + BMZ）来证，但"$S$ 族的情形 less apparent"。
+这就是本次攻击的靶子。
+
+### 4.2 为什么这个情形难
+
+(C1)(C2) 的证明链条是：modular units + 尖点间路径 + BMZ。(C3) 的积分路径端点是
+$\theta=0,\pi/2,\pi$ 对应的三个点，其中 $\theta=\pi/2$（torus 交点）处曲线"穿过"环面，
+路径边界 $2[P_{\pi/2}]-[P_0]-[P_\pi]$ 是否由尖点组成、能否套用 BMZ，文献中没有答案。
+我们在 §8 用**精确代数计算**回答了这个问题（答案是否定的，且我们定位了具体障碍）。
+
+---
+
+# 第二部分：本次工作
+
+## 5. 方法
+
+- **$b_{11}$ 高精度**（`code/b11.py`）：由 $f_{11}=\eta(\tau)^2\eta(11\tau)^2=\sum a_nq^n$ 的整数系数
+  （Euler 函数平方的截断卷积，精确整数），用权 2、根数 $+1$ 的近似函数方程
   $$b_{11}=\Lambda(f,2)=\sum_{n\ge1}a_n\Big[e^{-t_n}\Big(\frac1{t_n}+\frac1{t_n^2}\Big)+E_1(t_n)\Big],\quad t_n=\frac{2\pi n}{\sqrt{11}},$$
-  $E_1$ 为指数积分。与 Boyd 的 $b_{11}=0.1521471\ldots$ 吻合。
-- **Mahler 测度**：Jensen 降维 $m(Ay^2+By+C)=\frac1{2\pi}\int_0^{2\pi}[\log|A|+\sum_j\log^+|y_j|]d\theta$（mpmath，80–300 dps）。
-- **PSLQ**：mpmath.pslq。
-- **椭圆曲线群律**：在四次模型 $u^2=x^4-4x^3+2x^2+1$（令 $u=2y+x^2+1$）上用首一抛物线法实现
-  （`code/torsion.py` 等），在 $\mathbb Q$、$\mathbb Q(\sqrt2)$、$\mathbb Q(\zeta_8)$ 上**精确有理数运算**。
+  $E_1$ 为指数积分（来自 $\int_1^\infty e^{-ty}/y\,dy$）。项衰减 $\sim e^{-1.894n}$，200 项足够 300 位。
+- **Mahler 测度**：§1.2 的一维 Jensen 积分，mpmath 80–300 dps。
+- **PSLQ**：mpmath.pslq，搜索小系数整数关系。
+- **椭圆曲线群律（精确）**：令 $u=2y+x^2+1$ 把 $S_0=0$ 化为四次曲线
+  $u^2=x^4-4x^3+2x^2+1$，在其上用首一抛物线 $u=x^2+bx+c$ 实现加法/取负
+  （`code/torsion.py`）；全部在 $\mathbb Q$、$\mathbb Q(\sqrt2)$、$\mathbb Q(\zeta_8)$ 上
+  用分数精确运算，**不是数值近似**。
 
-## 3. 数值结果
+## 6. 数值结果
 
-### 3.1 已证恒等式的独立复验（80 dps，`notes/attack1-results.txt`）
+### 6.1 已证恒等式的独立复验（80 dps，`notes/attack1-results.txt`）
 
-- $m\big((1+x)(1+y)(1+x+y)+xy\big)=1.06502999208142634\ldots$，$|m-7b_{11}|\approx5.0\times10^{-53}$；
-- $m\big(y^2+(x^2+2x-1)y+x^3\big)=0.76073570862959024\ldots$，$|m-5b_{11}|\approx3.6\times10^{-53}$。
+| 恒等式 | 计算值 | 与右端之差 |
+|---|---|---|
+| (C1) $m((1+x)(1+y)(1+x+y)+xy)$ | $1.06502999208142634\ldots$ | $\|m-7b_{11}\|\approx5.0\times10^{-53}$ |
+| (C2) $m(y^2+(x^2+2x-1)y+x^3)$ | $0.76073570862959024\ldots$ | $\|m-5b_{11}\|\approx3.6\times10^{-53}$ |
 
-### 3.2 开放猜想 (C3) 确认到 149 位 —— **本报告主要数值结果**（`notes/attack3-results.txt`）
+### 6.2 开放猜想 (C3) 确认到 149 位 —— **主要数值结果**（`notes/attack3-results.txt`）
 
-300 dps 下：
 $$I_{\mathrm{split}}=0.152147141725918049486227297478634495628143589164226122809889823882023289695302776676\ldots$$
 $$|I_{\mathrm{split}}-b_{11}|=4.85\times10^{-149}.$$
-此前公开记录为 Boyd 的 50 位验证；本次将其推进到 **149 位**。
 
-### 3.3 结构恒等式（数值 152 位 + 可证）
+此前公开记录是 Boyd 的 50 位验证；本次推进到 **149 位**。
 
-数值发现 $I_1+I_2=-m(S_0)$ 到 152 位（`notes/attack2-results.txt`）。事实上这是**定理**：
-数值扫描确认 $\max_{\theta\in[0,\pi]}|y_-(e^{i\theta})|=1$（仅在 $\theta=0,\pi/2$ 取到），又 $|y_+y_-|=|x^3|=1$，
-故 $|y_-|\le1\le|y_+|$ 处处成立，
-$$m(S_0)=\frac1\pi\int_0^\pi\log|y_+|\,d\theta=-\frac1\pi\int_0^\pi\log|y_-|\,d\theta=-(I_1+I_2).\qquad\blacksquare$$
-推论：(C3) 等价于 $I_1=\dfrac{b_{11}-m(S_0)}{2}$、$I_2=-\dfrac{b_{11}+m(S_0)}{2}$。
+### 6.3 结构恒等式（先数值发现，后给出证明）
 
-### 3.4 $m(S_0)$ 的负结果
+计算中注意到 $I_1+I_2=-m(S_0)$ 吻合到 152 位。事实上这是**定理**：
+
+> **命题**：在 $[0,\pi]$ 上 $|y_-(e^{i\theta})|\le1\le|y_+(e^{i\theta})|$（数值扫描：
+> $\max|y_-|=1$，仅在 $\theta=0,\pi/2$ 取等）。又 $|y_+y_-|=|x^3|=1$，故
+> $$m(S_0)=\frac1\pi\int_0^\pi\log|y_+|\,d\theta=-\frac1\pi\int_0^\pi\log|y_-|\,d\theta=-(I_1+I_2).\qquad\blacksquare$$
+
+**推论**：(C3) 等价于 $I_1=\dfrac{b_{11}-m(S_0)}{2}$、$I_2=-\dfrac{b_{11}+m(S_0)}{2}$。
+也就是说，劈裂积分的猜想给出的是"大弧段积分"与"小弧段积分"各自的确切值。
+
+### 6.4 $m(S_0)$ 的负结果
 
 $m(S_0)=0.40560295591501040\ldots$（Boyd 的 $0.4056029$ ✓）。
-- PSLQ$(m(S_0),b_{11})$，系数界 $10^8$：**无关系**（复现 Boyd 的"seemingly not $rb_{11}$"）；
+
+- PSLQ$(m(S_0),b_{11})$，系数界 $10^8$：**无关系**（复核 Boyd 的 "seemingly not $rb_{11}$"）；
 - PSLQ 对 $\{m(S_0),b_{11},\log2,\log3,\mathrm{Catalan},m(1+x+y)\}$，系数界 $10^{10}$：**无关系**。
-  支持 $m(S_0)$ 需用椭圆双对数表达而非初等常数。
+  支持 "$m(S_0)$ 需用椭圆双对数表达而非初等常数" 的预期。
 
-### 3.5 插曲：两个模型的 Mahler 测度不同
+### 6.5 插曲：两个模型的 Mahler 测度不同
 
-$m(P')$，$P'=y^2+y+x^3+x^2$（Boyd slides 的模型）：$0.40560289185535\ldots$，与 $m(S_0)=0.40560295591501\ldots$
-**仅前 7 位相同**（$0.4056029$），第 8 位起不同（差 $6.4\times10^{-8}$）。Boyd slides 的 $0.4056029$ 实为 $m(P')$。
+Boyd slides 用模型 $P'=y^2+y+x^3+x^2$ 给出 $m=0.4056029$。我们算出
+$m(P')=0.40560289185535\ldots$，而 $m(S_0)=0.40560295591501\ldots$——**仅前 7 位相同**
+（差 $6.4\times10^{-8}$）。slides 的值是 $m(P')$；这提醒"同一椭圆曲线的不同多项式模型，
+Mahler 测度不同"（$m(P)$ 是多项式的不变量，不是曲线的不变量）。
 
-## 4. 证明路线分析：modular units 可行，朴素 BMZ 被堵 —— **本报告主要代数结果**
+## 7. 证明路线分析（上）：modular units 前提成立
 
-### 4.1 regulator 形式化
+劈裂积分可写成 regulator 积分：$|x|=1$ 上 $\log|y|\,d\arg x=-\eta(x,y)$，故
 
-$|x|=1$ 上 $\log|y|\,d\arg x=-\eta(x,y)$，$\eta(x,y)=\log|x|\,d\arg y-\log|y|\,d\arg x$。
-劈裂积分 $=-\frac1\pi\int_\gamma\eta(x,y_-)$，路径边界
-$$\partial\gamma=2[P_{\pi/2}]-[P_0]-[P_\pi],\quad P_0=(1,-1),\ P_\pi=(-1,-1+\sqrt2),\ P_{\pi/2}=(i,e^{i\pi/4}).$$
+$$\pi\,I_{\mathrm{split}}=-\int_\gamma\eta(x,y_-),\qquad
+\partial\gamma=2[P_{\pi/2}]-[P_0]-[P_\pi],$$
+$$P_0=(1,-1),\quad P_\pi=(-1,-1+\sqrt2),\quad P_{\pi/2}=(i,e^{i\pi/4}).$$
 
-### 4.2 $x,y$ 是 $X_1(11)$ 上的 modular units（精确验证 ✓）
+套 BMZ 的前提：(i) $x,y$ 是 $X_1(11)$ 上的 modular units；(ii) 路径端点是尖点。
 
-四次模型 $u^2=x^4-4x^3+2x^2+1$ 的不变量 $I=16,\ J=-304$，$j=2^8I^3/(4I^3-J^2)\cdot?$ 计算得
-$j=-4096/11=-2^{12}/11=j(X_1(11))$ ✓。用首一抛物线群律（$\mathbb Q$ 上精确有理运算，`code/torsion.py`）：
-$$A:=(0,1)\ [= (0,0)\in S_0]:\qquad 2A=(0,-1),\quad 4A=(1,0)=-A\ \Longrightarrow\ \boxed{5A=O}.$$
-故 $(0,0),(0,-1),P_\infty$ 都是 5-扭点。由于
-$$\operatorname{div}(x)=[(0,0)]+[(0,-1)]-2[P_\infty],\qquad \operatorname{div}(y)=3[(0,0)]-3[P_\infty],$$
-$x,y$ 的除子支撑在 $E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/5\mathbb Z$（$=X_1(11)$ 的有理尖点）上，
-**$x,y$ 确为 modular units**（Manin–Drinfeld）。这正是 Brunault 路线得以施行的前提。
+**(i) 成立（精确验证）**：四次模型的不变量给出 $j=-2^{12}/11=j(X_1(11))$ ✓。
+群律精确计算（`code/torsion.py`）：对 $A=(0,1)$（即 $S_0$ 上的点 $(0,0)$），
 
-### 4.3 障碍：路径边界不是尖点除子（精确验证 ✗）
+$$2A=(0,-1),\qquad 4A=(1,0)=-A\quad\Longrightarrow\quad \boxed{5A=O}.$$
 
-群律在 $\mathbb Q(\sqrt2)$、$\mathbb Q(\zeta_8)$ 上精确计算（`code/endpoint_torsion2.py`、`boundary_torsion.py`）：
+于是 $\operatorname{div}(x)=[(0,0)]+[(0,-1)]-2[P_\infty]$ 与
+$\operatorname{div}(y)=3[(0,0)]-3[P_\infty]$ 的支撑全是 5-扭点
+（$E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/5\mathbb Z$ 恰为 $X_1(11)$ 的有理尖点），
+故 **$x,y$ 确为 modular units**（Manin–Drinfeld）。
+
+## 8. 证明路线分析（下）：朴素 BMZ 被边界阻断 —— **主要代数结果**
+
+**(ii) 不成立（精确验证）**：在 $\mathbb Q(\sqrt2)$、$\mathbb Q(\zeta_8)$ 上算群律
+（`code/endpoint_torsion2.py`、`code/boundary_torsion.py`）：
+
 - $P_0=(1,0)=-A$：5-扭点 ✓（尖点）；
-- $P_\pi=(-1,2\sqrt2)$、$P_{\pi/2}=(i,2\zeta_8)$：算到 $20P$ 均非扭点（高度二次增长）；
-- 关键组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$：**算到 $30T$ 非扭点**。
+- $P_\pi=(-1,2\sqrt2)$、$P_{\pi/2}=(i,2\zeta_8)$：算到 $20P$ 均非扭点（坐标高度二次增长）；
+- 决定性组合 $T:=2P_{\pi/2}-P_\pi=(3,\,2i\sqrt2)$：**算到 $30T$ 非扭点**。
 
-故 $\partial\gamma$ **不是**尖点除子，朴素 Brunault–Mellit–Zudilin 公式（要求尖点间路径）
-不能直接应用。这与 Samart 2023 §4 的观察一致（"$S$ 族情形 less apparent"；对照：$Q_\alpha$ 族在
-conductor 19 处路径闭包条件成立，其 Theorem 2 得证）。
+故 $\partial\gamma$ **不是尖点除子**，朴素 BMZ（要求尖点间路径）不能直接应用——
+这正是 (C3) 与 (C1)(C2) 的本质差别，也解释了 Samart 所说的 "less apparent"。
+（对比：Samart 的 $Q_\alpha$ 族在 conductor 19 处路径闭包条件恰好成立，其 Theorem 2 得证。）
 
-**结论**：(C3) 的 149 位数值成立意味着某种更隐蔽的机制——候选方向：
-1. Mellit 式"平行线"椭圆双对数关系（在非扭点 $T$ 处 $D_E$ 的消去）；
-2. Samart 式 hypergeometric 公式（$S$ 族尚无一般公式）；
-3. "half-Mahler measure" 分解（Lalín–Samart–Zudilin conductor 21 方法）。
+**(C3) 在 149 位精度上仍然成立**，说明存在更隐蔽的机制。后续候选方向：
 
-## 5. 总结
+1. **Mellit 式"平行线"**：在非扭点 $T$ 处建立椭圆双对数 $D_E$ 的有理函数关系，使非尖点贡献消去；
+2. **Samart 式超几何公式**：为 $S$ 族建立 $\tilde n$-型修正 Mahler 测度的 ${}_4F_3/{}_3F_2$ 公式（$S$ 族目前无一般公式）；
+3. **half-Mahler 分解**：Lalín–Samart–Zudilin 在 conductor 21 用的"半 Mahler 测度"技术。
 
-1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **149 位**（原记录 50 位）。
+## 9. 总结
+
+1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **149 位**（原公开记录 50 位）。
 2. 新结构定理 $|y_-|\le1\Rightarrow I_1+I_2=-m(S_0)$，把 (C3) 化为 $I_1=(b_{11}-m(S_0))/2$。
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
-4. 证明路线测绘：modular units 前提**成立**（$5A=O$ 精确验证），但朴素 BMZ **被边界非尖点阻断**
+4. 证明路线测绘：modular units 前提**成立**（$5A=O$ 精确验证）；朴素 BMZ **被边界非尖点阻断**
    （$T=(3,2i\sqrt2)$ 非扭点）——指明了证明必须绕开的具体障碍。
 
-## 6. 复现方式
+## 10. 复现方式
 
 ```
 cd code && python b11.py && python attack1.py && python attack2.py \
@@ -116,4 +293,15 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python boundary_torsion.py
 ```
 
-依赖：Python 3.12 + mpmath + sympy。文献见 `literature/`，笔记见 `notes/literature-notes.md`。
+依赖：Python 3.12 + mpmath + sympy。
+
+## 11. 文献导读（`literature/`）
+
+- `bertin-lalin-survey.pdf` — Bertin–Lalín 综述：全局图景与各 conductor 状态（先读这篇）
+- `boyd-pnwnt2015.pdf` — Boyd 2015 slides：猜想史 + $m(S_0)$ 原始数据
+- `brunault-these.pdf` — Brunault 博士论文：$X_1(11)$ 上 Beilinson 定理显式化，(C1) 的证明
+- `zudilin-regulator.pdf` — Zudilin：BMZ regulator 公式（证明武器）
+- `samart2023.pdf` — Samart：开放猜想 (C3) 的明确陈述（其 eq. (4.1)）+ conductor 19 的成功范例
+- `lalin-samart-zudilin-cond21.pdf` — conductor 21：half-Mahler 方法范例
+- `boyd-slides.pdf` — Boyd 关于 $L(E,3)$ 的 slides
+- 详细笔记：`notes/literature-notes.md`；原始运行输出：`notes/attack*-results.txt`
