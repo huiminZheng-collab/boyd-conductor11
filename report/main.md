@@ -280,6 +280,35 @@ $$\tilde n=-I_{\mathrm{split}},\qquad \int_{\tilde\gamma}\eta(x,y)=2\pi\, I_{\ma
 $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$$
 数值上 $\tilde n=-b_{11}$ 到 44 位。
 
+### 8.4 $S_k$ 族：$\tilde n(k)$ 高精度数值表与 $k=\pm1$ 的 $L$ 值鉴定
+
+把 §8.2–8.3 的构造用于族 $S_k=y^2+(x^2+kx+1)y+x^3$（`code/ntilde_family.py`，mpmath 50–80 位）：
+
+- **折点存在 ⟺ $|k|<2$**，且折角精确为 $c=\arccos(-k/2)$（由 $2\cos\theta+k=0$，数值验证到 40 位）；$|k|\ge2$ 时 torus 无交点，闭链就是全圆，$\tilde n(k)=m(k)$。
+- 曲线 $E_k$ 的 $j$ 不变量（四次模型 $u^2=x^4+(2k-4)x^3+(k^2+2)x^2+2kx+1$ 的经典不变量 $I=k^4-8k^2+24k+16$、$J=-2k^6+24k^4-72k^3-96k^2+288k-304$，$j=6912\,I^3/(4I^3-J^2)$）：
+  $j(0)=-2^{12}/11$、$j(1)=35937/17$、$j(-1)=3375/53$、$j(2)=110592/37$、$j(-2)=110592/91$——
+  分母直接读出 conductor：$k=0\mapsto11$、$1\mapsto17$、$-1\mapsto53$（与 Samart 的记述一致）、$\pm2\mapsto37,\,7\cdot13$。
+
+| $k$ | 折点 $c/\pi$ | $m(k)$ | $\tilde n(k)$ | 鉴定 |
+|---|---|---|---|---|
+| $-1$ | $1/3$ | $0.509262622888242115116259\ldots$ | $-0.464937800214411188907354\ldots$ | **非** $b_{53}$ 有理倍（见下） |
+| $0$ | $1/2$ | $0.405602955915010403908190\ldots$ | $-0.152147141725918049486227\ldots$ | $=-b_{11}$（50 位）|
+| $1$ | $2/3$ | $0.506562114988019791399529\ldots$ | $+0.299355586882915390053800\ldots$ | $=+b_{17}$（50 位）|
+| $\pm2,\pm3$ | 无 | $\tilde n=m$ | 同 $m$ | 标准（无 torus 交点）情形 |
+
+其中 $b_{17}$、$b_{53}$ 不依赖 LMFDB/模形式数据库，由**点计数**自力算出（`code/b_family.py`：
+对 $E_k$ 直接数 $\#E_k(\mathbb F_p)$ 得 $a_p$，乘法性造 $a_n$，代入近似函数方程
+$b=L'(E,0)=\frac{N}{4\pi^2}L(E,2)$；管线在 $k=0$ 上与 η 积的 $b_{11}$ 对 40 位互验）。
+$j(1)=35937/17$ 对应 conductor 17 类（LMFDB 17.a，$w=+1$）。
+
+- **$k=1$（conductor 17）**：$\tilde n(1)=b_{17}$ 到 50 位——Samart 所述 conductor 17 的
+  "(4.1) 类似猜想"的独立高精度确认（$y_-$ 约定下即 $\text{积分}=-L'(E_{17},0)$，有理因子 $r=1$）。
+- **$k=-1$（conductor 53）**：$\tilde n(-1)/b_{53}=0.5184955111679927812617\ldots$
+  **不是有理数**（PSLQ 高 $<10^{10}$，两种根数符号、混入 $m(-1),\pi,\log2,\log3$ 均阴性）。
+  这与 Samart 提到的 conductor 53 "类似猜想恒等式"不符——要么该猜想的归一化/积分对象不同，
+  要么它基于较低精度的巧合。诚实记为**待解的矛盾点**（也可能是我们的链定义需按
+  $\theta=0$ 处额外 torus 交点 $(1,e^{\pm i\pi/3})$ 修正）。
+
 ## 9. 证明纲要：Beilinson–Brunault 路线
 
 | 步骤 | 内容 | 状态 |
@@ -300,6 +329,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
 6. 证明纲要：(C3) 等价于 $\int_{\tilde\gamma}\eta=2\pi b_{11}$，很可能由 Beilinson–Brunault 定理直接推出；余下 S1 书写、S4 假设核对、$r=2$ 代数推导（§9）。
+7. 族结果：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；$k=1$ 时 $\tilde n=b_{17}$ 到 50 位（独立点计数确认 Samart 的 conductor 17 猜想）；$k=-1$ 与 $b_{53}$ **无有理关系**（PSLQ 高 $<10^{10}$）——矛盾点待解（§8.4）。
 
 
 ## 11. 复现方式
@@ -307,7 +337,8 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 ```
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
-  && python boundary_torsion.py && python closedness_check.py
+  && python boundary_torsion.py && python closedness_check.py \
+  && python ntilde_family.py && python b_family.py
 ```
 
 依赖：Python 3.12 + mpmath + sympy。
