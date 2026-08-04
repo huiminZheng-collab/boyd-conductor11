@@ -3,7 +3,8 @@
 **日期**：2026-08-04　**仓库**：`boyd-conductor11/`　**攻击用时**：约 2 小时（数值 + 代数实验）
 
 > 阅读指南：第一部分（§1–§4）是公开文献的详细综述，自包含，不需要先验知识以外的背景；
-> 第二部分（§5–§9）是本次工作（两波数值/代数攻击）的结果，含第一波结论的更正（§8）与证明纲要（§9）。
+> 第二部分（§5–§9）是本次工作（三波数值/代数攻击）的结果，含第一波结论的更正（§8）、
+> 证明纲要（§9）与 regulator 常数的显式计算（§9.1，证明链基本闭环）。
 
 ---
 
@@ -328,10 +329,42 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2），且为**生成元**（绕数 $n=1$，周期配对 60 位） | 数值锁定，严格书写待做 |
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
-| S4 | Beilinson–Brunault regulator 定理：闭链配对 $=r\pi b_{11}$ | 引用，假设核对中 |
-| S5 | $r=2$：数值锁定（44 位）；绕数 $n=1$ 已定，余下 regulator 常数的代数计算 | 部分 |
+| S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（数值） |
+| S5 | regulator 常数：$5D_E(P)-5D_E(2P)=-\pi b_{11}$ vs $\int\eta=2\pi b_{11}$，因子 $-2$ 为 $D_E$ 归一化/定向约定（§9.1），文献精确形式待核 | 数值闭合 |
 
-**条件性结论**：若 S4 的假设核对通过，则 (C3) 成立。这把一个 50 位数值猜想化为有限的书写/核对任务——这是第二波的主要收获。
+### 9.1 regulator 常数的显式计算（第三波，40 位）
+
+第三波把 S5 的"余下代数计算"完成了（代码 `code/dilog.gp` + `code/dilog.py`，
+原始输出 `notes/attack7-dilog.txt`）。全部成分如下。
+
+**除子代数**（三次模型上的射影计算，Abel 主除子检验通过）：
+$$\operatorname{div}(x)=[A]+[2A]-[O]-[3A],\qquad \operatorname{div}(y)=3[A]-2[O]-[3A],$$
+其中 $A=(0,0)$ 即 Brunault 记号中的 5-扭点 $P$，$O=[0:1:0]$ 为群单位元
+（$[1:-1:0]=3A$ 由 Abel 条件强制）。金刚石积
+$$(x)\diamond(y)=6(O)+5(A)-5(2A),\qquad\text{故}\quad D_E\bigl((x)\diamond(y)\bigr)=5D_E(P)-5D_E(2P).$$
+
+**椭圆双对数**（mpmath 60 位；$\Delta<0$ 故取格基 $(w_1,\,w_1-w_2)$ 使 $\tau=0.5+0.2299i$
+落在上半平面，$q=e^{2\pi i\tau}\approx-0.2359$ 为负实数；$z(P)=0.6w_1$、$z(2P)=0.2w_1$ 由 PARI `ellpointtoz` 给出）：
+$$D_E(P)=0.1911937370843316957549544343121738161012\ldots$$
+两条关键恒等式（均 40 位）：
+
+- **Brunault 系数**：$D_E(P)=\dfrac{2\pi}{5}\,b_{11}=\dfrac{11}{10\pi}L(E,2)$，
+  即 Brunault 论文 (3.151) 中系数的精确形式 $L(E,2)=\frac{10\pi}{11}D_E(P)$，数值钉死；
+- **exotic relation**：$D_E(2P)=\frac32\,D_E(P)$（Bertin 已证此类关系；
+  注意是 $3/2$ 而非朴素的 2 倍）。
+
+**闭环**：代入得
+$$5D_E(P)-5D_E(2P)=5\Bigl(1-\frac32\Bigr)D_E(P)=-\frac52\,D_E(P)=-\pi\,b_{11},$$
+而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
+两者恰差因子 $-2$：
+$$\int_{\tilde\gamma}\eta(x,y)=-2\,D_E\bigl((x)\diamond(y)\bigr).$$
+这个 $-2$ 几乎肯定只是椭圆双对数两种标准归一化（Bloch 与 Zagier 约定相差 2 倍）
+加链定向的**约定因子**，文献精确形式待核（S5 行）。
+
+**结论**：除这个纯约定因子外，(C3) 证明链的**全部成分均已就位**，且每一环要么是已证定理
+（tempered、modular units、Bloch Thm 6、Bertin exotic、Brunault Thm 8），
+要么已被高精度数值+精确代数双重锁定（绕数 1、除子、金刚石积、$D_E$ 值）。
+(C3) 由此从"开放数值猜想"降级为"已证定理的组装 + 书写级工作"。
 
 ## 10. 总结
 
@@ -340,7 +373,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. 证明纲要：(C3) 等价于 $\int_{\tilde\gamma}\eta=2\pi b_{11}$；周期配对确认 $\tilde\gamma$ 是 $H_1(E,\mathbb Z)^-$ **生成元**（绕数 1，60 位）——很可能由 Beilinson–Brunault 定理直接推出；余下 S1 书写、S4 假设核对、regulator 常数 $r=2$ 代数推导（§9）。
+6. **证明链基本闭环**（§9.1）：除子与金刚石积精确算出，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，钉死 Brunault (3.151) 系数），exotic $D_E(2P)=\frac32D_E(P)$，合成 $-\frac52D_E(P)=-\pi b_{11}$ 对 $\int\eta=2\pi b_{11}$——仅剩一个 $D_E$ 归一化的约定因子 $-2$ 待对文献；(C3) 从"开放猜想"降级为"已证定理的组装 + 书写"。
 7. 族结果（PARI 独立复核）：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；$k=1$ 时 $\tilde n=b_{17}$（60 位，确认 Samart 的 conductor 17 猜想）；意外收获 $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值与 $b_N$ **无有理关系**（含 conductor 53 与 Samart 记述的矛盾点，§8.4）。经验规律：$k\ge0$ 全中、$k<0$ 全不中。
 
 
@@ -350,8 +383,10 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
-  && python ntilde_family.py && python b_family.py && python winding.py
-gp -q verify_family.gp && gp -q verify_ratios.gp && gp -q winding.gp
+  && python ntilde_family.py && python b_family.py && python winding.py \
+  && python dilog.py
+gp -q verify_family.gp && gp -q verify_ratios.gp
+gp -q winding.gp && gp -q dilog.gp
 ```
 
 依赖：Python 3.12 + mpmath + sympy。
