@@ -57,3 +57,31 @@
 - `samart2023.pdf` — Samart, Mahler measure of a nonreciprocal family（含开放猜想 (4.1)）
 - `lalin-samart-zudilin-cond21.pdf` — conductor 21 的类似方法（方法参考）
 - `boyd-slides.pdf` — Boyd 关于 Mahler 测度与 L(E,3) 的 slides
+
+## 第三波补充（2026-08-04）
+
+### k=2 (conductor 37)、k=3 (conductor 79) 恒等式的文献状态
+- Lalín–Ramamonjisoa "The Mahler measure of a Weierstrass form"（umontreal.ca/~mlalin/Mahler-Weierstrass.pdf）：
+  证的是 F_k=y²+kxy-x³-x 族（conductor 17 的 m(F_3)=7/2 L'(E17,0)），并综述 Rodriguez-Villegas 的
+  conductor 37 恒等式 7m(W₁)=5m(W₂)（W₁,W₂ 为 E37 的**其他** Weierstrass 模型，猜测各=35L'(E37,0)）。
+  **我们的 S_2=y²+(x²+2x+1)y+x³ 是 E37 的非 Weierstrass 模型，不在其列。**
+- conductor 79：未检索到任何 Mahler 测度结果。
+- 结论：m(S_2)=2|L'(E37,0)|、m(S_3)=|L'(E79,0)| 很可能仅见于 Boyd 1998 数值表
+  （projecteuclid 被 Incapsula 拦截，未能核对原表），文献中未见证明。S_2/S_3 无 torus 交点，
+  属标准 BMZ 适用区，是"可证且可能未证"的候选。
+
+### BMZ Theorem 1 的适用范围核对（S4）
+Zudilin "Regulator of modular units and Mahler measures" Thm 1（Mellit–Brunault）：
+modular units g_a,g_b 沿**尖点 c/N 到 i∞** 路径的 regulator 积分 = 4L(f,2)，f 为显式 Eisenstein 组合；
+若组合为尖点形式则得曲线的 L 值。**定理处理的是尖点间开路径**；我们的链 γ̃ 是闭链，
+需要 Beilinson–Brunault（闭链配对版）+ γ̃ 在 H_1(E,Z)^- 中的类。H_1^- 秩 1 ⇒ γ̃ = n·γ⁻，
+n 由周期配对确定。
+
+### 绕数结果（code/winding.py + winding.gp，60 位）
+- 几何路径 |x|=1 携带 y_big 在折点 θ=±π/2 **不连续**（(i,-e^{-iπ/4}) ↔ (i,+e^{iπ/4}) 跳跃）；
+  朴素环积分 -0.47447i 不是任何整闭链的周期（比值 0.16262 非有理）。
+- 带符号链周期 I_signed = -2.917633233876990458...i ≡ PARI 11.a3 的 w_anti = 2i·Im ω₂
+  （比值 1 到 13 位，误差来自 θ=0 处 √θ 奇性）。**γ̃ = H_1(E,Z)⁻ 生成元（绕数 n=1）**。
+- 附带：四次模型 dx/u 的模型常数 κ=1（Om_re = PARI w1 精确相等）。
+- 含义：regulator 配对 r({x,y})[γ̃] = r({x,y})[γ⁻]，Beilinson–Brunault 给出显式有理倍数；
+  数值预测 r({x,y})[γ⁻] = 2π b_11（即纲要中的 r=2），无自由同调 ambiguity。

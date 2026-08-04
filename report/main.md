@@ -272,6 +272,10 @@ $\operatorname{div}(y)=3[(0,0)]-3[P_\infty]$ 的支撑全是 5-扭点
 
 边界分析：链的边界只可能来自折点与端点。端点 $\theta=\pm\pi$ 给出 $[P_\pi]-[P_{-\pi}]$，而 $P_\pi=P_{-\pi}$（$x=-1$ 处两分支连续相接），相消；折点贡献 $\partial\tilde\gamma=2\big([P_c]-[P_{-c}]\big)$。而 $P_{-c}=\overline{P_c}$（复共轭），故在 $H_1(E,\mathbb Z)^-$（复共轭的 $-1$ 特征空间）中 $[P_c]-[\overline{P_c}]$ 自动闭合——**闭性与 $P_c$ 是否为扭点无关**。第一波找到的"障碍"（$T$ 非扭点）系假象：那是错误链的边界，正确链根本不经过那个组合。
 
+**绕数计算（60 位周期配对，`code/winding.py`、`code/winding.gp`）**：几何路径在折点 $\theta=\pm\pi/2$ 其实**不连续**（$y_{\text{big}}$ 在两个交点 $(i,\pm e^{i\pi/4})$ 之间跳跃，左/右极限分别为 $-e^{-i\pi/4}$ 与 $+e^{i\pi/4}$）——这正是必须取带符号链的原因；朴素环积分 $I_{\text{loop}}=-0.47447\ldots i$ 甚至不是任何整闭链的周期（与 $w_{\mathrm{anti}}$ 之比 $0.16262\ldots$ 非有理）。而带符号链在不变微分 $\omega=dx/u$（四次模型 $u^2=x^4-4x^3+2x^2+1$）下的周期
+$$I_{\mathrm{signed}}=-2.917633233876990458\ldots i$$
+与 PARI 给出的 $H_1(E,\mathbb Z)^-$ 生成元周期 $w_{\mathrm{anti}}=2i\,\mathrm{Im}\,\omega_2$（11.a3）**相等**（比值 $=1$ 到 13 位，受端点 $\sqrt\theta$ 奇性的积分误差所限）：**$\tilde\gamma$ 不仅闭合，而且就是 $H_1(E,\mathbb Z)^-$ 的生成元（绕数 $n=1$）**。
+
 ### 8.3 修正 Mahler 测度与 (C3) 的等价改写
 
 沿 $\tilde\gamma$ 的修正 Mahler 测度满足精确恒等式
@@ -321,11 +325,11 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 
 | 步骤 | 内容 | 状态 |
 |---|---|---|
-| S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2） | 待严格书写 |
+| S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2），且为**生成元**（绕数 $n=1$，周期配对 60 位） | 数值锁定，严格书写待做 |
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理：闭链配对 $=r\pi b_{11}$ | 引用，假设核对中 |
-| S5 | $r=2$：数值锁定（44 位），独立代数计算待做 | 部分 |
+| S5 | $r=2$：数值锁定（44 位）；绕数 $n=1$ 已定，余下 regulator 常数的代数计算 | 部分 |
 
 **条件性结论**：若 S4 的假设核对通过，则 (C3) 成立。这把一个 50 位数值猜想化为有限的书写/核对任务——这是第二波的主要收获。
 
@@ -336,7 +340,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. 证明纲要：(C3) 等价于 $\int_{\tilde\gamma}\eta=2\pi b_{11}$，很可能由 Beilinson–Brunault 定理直接推出；余下 S1 书写、S4 假设核对、$r=2$ 代数推导（§9）。
+6. 证明纲要：(C3) 等价于 $\int_{\tilde\gamma}\eta=2\pi b_{11}$；周期配对确认 $\tilde\gamma$ 是 $H_1(E,\mathbb Z)^-$ **生成元**（绕数 1，60 位）——很可能由 Beilinson–Brunault 定理直接推出；余下 S1 书写、S4 假设核对、regulator 常数 $r=2$ 代数推导（§9）。
 7. 族结果（PARI 独立复核）：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；$k=1$ 时 $\tilde n=b_{17}$（60 位，确认 Samart 的 conductor 17 猜想）；意外收获 $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值与 $b_N$ **无有理关系**（含 conductor 53 与 Samart 记述的矛盾点，§8.4）。经验规律：$k\ge0$ 全中、$k<0$ 全不中。
 
 
@@ -346,8 +350,8 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
-  && python ntilde_family.py && python b_family.py
-gp -q verify_family.gp && gp -q verify_ratios.gp
+  && python ntilde_family.py && python b_family.py && python winding.py
+gp -q verify_family.gp && gp -q verify_ratios.gp && gp -q winding.gp
 ```
 
 依赖：Python 3.12 + mpmath + sympy。

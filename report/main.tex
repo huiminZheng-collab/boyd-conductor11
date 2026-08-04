@@ -389,6 +389,19 @@ $P_{-c}=\overline{P_c}$（复共轭），故在 $H_1(E,\ZZ)^-$（复共轭的 $-
 $[P_c]-[\overline{P_c}]$ 自动闭合——\textbf{闭性与 $P_c$ 是否为扭点无关}。
 第一波找到的“障碍”（$T$ 非扭点）系假象：那是错误链的边界，正确链根本不经过那个组合。
 
+\textbf{绕数计算}（60 位周期配对，\texttt{code/winding.py}、\texttt{code/winding.gp}）：
+几何路径在折点 $\theta=\pm\pi/2$ 其实\textbf{不连续}（$y_{\mathrm{big}}$ 在两个交点
+$(i,\pm e^{i\pi/4})$ 之间跳跃）——这正是必须取带符号链的原因；朴素环积分
+$I_{\mathrm{loop}}=-0.47447\ldots i$ 甚至不是任何整闭链的周期（与 $w_{\mathrm{anti}}$
+之比 $0.16262\ldots$ 非有理）。而带符号链在不变微分 $\omega=dx/u$
+（四次模型 $u^2=x^4-4x^3+2x^2+1$）下的周期
+\[
+I_{\mathrm{signed}}=-2.917633233876990458\ldots i
+\]
+与 PARI 给出的 $H_1(E,\ZZ)^-$ 生成元周期 $w_{\mathrm{anti}}=2i\,\mathrm{Im}\,\omega_2$
+（11.a3）\textbf{相等}（比值 $=1$ 到 13 位，受端点 $\sqrt\theta$ 奇性的积分误差所限）：
+\textbf{$\tilde\gamma$ 不仅闭合，而且就是 $H_1(E,\ZZ)^-$ 的生成元（绕数 $n=1$）}。
+
 \subsection{修正 Mahler 测度与 \eqref{C3} 的等价改写}
 
 沿 $\tilde\gamma$ 的修正 Mahler 测度满足精确恒等式
@@ -456,12 +469,12 @@ conductor 53“类似猜想恒等式”\textbf{不符}——我们的 $b_{53}$ �
 \hline
 步骤 & 内容 & 状态 \\
 \hline
-S1 & 闭性引理：$\tilde\gamma$ 在 $H_1(E,\ZZ)^-$ 中闭合（\S\ref{sec:closed}） & 待严格书写 \\
+S1 & 闭性引理：$\tilde\gamma$ 闭合（\S\ref{sec:closed}）且为 $H_1(E,\ZZ)^-$ 生成元（绕数 $n=1$） & 数值锁定，书写待做 \\
 S2 & tempered：$S_0$ 的 Newton 面多项式 & \\
    & $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\QQ$ & 已查 \\
 S3 & modular units：$x,y$ 的除子支撑于尖点（$5A=O$ 精确验证，\S\ref{sec:proof}） & 已证 \\
 S4 & Beilinson--Brunault regulator 定理：闭链配对 $=r\pi\bN$ & 引用，假设核对中 \\
-S5 & $r=2$：数值锁定（44 位），独立代数计算待做 & 部分 \\
+S5 & $r=2$：数值锁定（44 位）；绕数 $n=1$ 已定，余下 regulator 常数代数计算 & 部分 \\
 \hline
 \end{tabular}
 \end{center}
@@ -479,9 +492,10 @@ S5 & $r=2$：数值锁定（44 位），独立代数计算待做 & 部分 \\
 \item modular units 前提\textbf{成立}（$5A=O$ 精确验证，\S\ref{sec:proof}）。
 \item \textbf{更正}：第一波“朴素 BMZ 被非扭边界阻断”的断言不成立——正确积分链
 $\tilde\gamma$ 在 $H_1(E,\ZZ)^-$ 中拓扑闭合，与扭点无关（\S\ref{sec:obstruction}）。
-\item 证明纲要：\eqref{C3} 等价于 $\int_{\tilde\gamma}\eta=2\pi\bN$，很可能由
-Beilinson--Brunault 定理直接推出；余下 S1 书写、S4 假设核对、$r=2$ 代数推导
-（\S\ref{sec:outline}）。
+\item 证明纲要：\eqref{C3} 等价于 $\int_{\tilde\gamma}\eta=2\pi\bN$；周期配对确认
+$\tilde\gamma$ 是 $H_1(E,\ZZ)^-$ \textbf{生成元}（绕数 1，60 位）——很可能由
+Beilinson--Brunault 定理直接推出；余下 S1 书写、S4 假设核对、regulator 常数
+$r=2$ 代数推导（\S\ref{sec:outline}）。
 \item 族结果（PARI 独立复核）：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；
 $k=1$ 时 $\tilde n=b_{17}$（60 位，确认 Samart 的 conductor 17 猜想）；意外收获
 $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值与 $b_N$
@@ -495,8 +509,8 @@ $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
-  && python ntilde_family.py && python b_family.py
-gp -q verify_family.gp && gp -q verify_ratios.gp
+  && python ntilde_family.py && python b_family.py && python winding.py
+gp -q verify_family.gp && gp -q verify_ratios.gp && gp -q winding.gp
 \end{verbatim}
 依赖：Python 3.12 + mpmath + sympy。
 
