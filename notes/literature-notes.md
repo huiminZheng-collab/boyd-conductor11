@@ -85,3 +85,22 @@ n 由周期配对确定。
 - 附带：四次模型 dx/u 的模型常数 κ=1（Om_re = PARI w1 精确相等）。
 - 含义：regulator 配对 r({x,y})[γ̃] = r({x,y})[γ⁻]，Beilinson–Brunault 给出显式有理倍数；
   数值预测 r({x,y})[γ⁻] = 2π b_11（即纲要中的 r=2），无自由同调 ambiguity。
+
+### 因子 -2 与 (3.151) 的文献核对（2026-08-05，子代理全文检索 brunault-these.pdf 等）
+- **Brunault (3.151)**（§3.7, Corollaire 101, p.119）：L(E,2) = (10π/11)·D_E(P)，且
+  D_E(2P) = (3/2)·D_E(P)（后者即 Bertin [10]（J. Reine Angew. Math. 569, 2004）证的
+  **exotic relation**）。我们的数值 D_E(P)=(11/10π)L(E,2)、D_E(2P)/D_E(P)=3/2 逐项吻合。
+  Brunault 的 D_E 定义（Déf. 19, (1.38)）：D_{E,τ}(x)=Σ_{n∈Z} D(xqⁿ)，无任何 2 或 1/(2π)
+  因子——与 code/dilog.py 的级数实现归一化**完全一致**。
+- **因子 -2 的来源（已解决）**：Bloch 定理原始形式（Touafek 2008 Thm 1 转述）：
+  r({f,g})=(1/2π)∫_γ η(f,g)，γ 生成 H_1(E,Z)⁻，则 **π·r = D_E((f)⋄(g))**，即
+  ∫_γ η = ±2·D_E((f)⋄(g))。符号=定向（H_1⁻ 两生成元差符号，故文献只写 |r|；
+  Brunault Remarque 20：D_E 依赖 E(R) 定向、只定到符号）。部分二手文献（LSZ cond21 p.8、
+  Lalín–Mittal Thm 8）印成 ∫η = D_E(⋄) 无因子 2，对应 Rodriguez-Villegas/Deninger 式
+  D_E = Bloch 级数的 2 倍。**我们的 -2 与 Bloch 级数约定下的定理完全一致，非误差。**
+- **更强事实**：Brunault (3.210)/(3.211)（§3.9, p.134）引 Bertin [10, Thm 6 et Cor. 6.1]
+  已证 |r_γ{x,y}| = (5/(2π))·D_E(P) = (11/(4π²))L(E,2) = **b_11**——即 (C3) 的
+  regulator 一侧本来就是 Brunault 的定理（他证 (C1) 的中间结果）。Samart 2023 仍列 (C3)
+  为开放，缺口在劈裂链与 H_1(E,Z)⁻ 生成元的等同（= 我们的绕数 n=1）。
+- **金刚石积约定核对**：文献 (f)⋄(g)=Σ m_i n_j·cl(P_i−Q_j)（Z[E]⁻ 中）。用极小模型
+  独立验算得 8(O)+5(P)−5(2P)，与我们的 6(O)+5(A)−5(2A) 在 Z[E]⁻ 中等价（差 2(O)≡0）。✓

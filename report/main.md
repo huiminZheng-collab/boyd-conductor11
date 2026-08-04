@@ -329,8 +329,8 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2），且为**生成元**（绕数 $n=1$，周期配对 60 位） | 数值锁定，严格书写待做 |
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
-| S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（数值） |
-| S5 | regulator 常数：$5D_E(P)-5D_E(2P)=-\pi b_{11}$ vs $\int\eta=2\pi b_{11}$，因子 $-2$ 为 $D_E$ 归一化/定向约定（§9.1），文献精确形式待核 | 数值闭合 |
+| S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
+| S5 | regulator 常数：$5D_E(P)-5D_E(2P)=-\pi b_{11}$ vs $\int\eta=2\pi b_{11}$；因子 $-2$ = Bloch 定理内在因子 2 × 定向（§9.1，已核） | 闭合 |
 
 ### 9.1 regulator 常数的显式计算（第三波，40 位）
 
@@ -358,12 +358,29 @@ $$5D_E(P)-5D_E(2P)=5\Bigl(1-\frac32\Bigr)D_E(P)=-\frac52\,D_E(P)=-\pi\,b_{11},$$
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
 两者恰差因子 $-2$：
 $$\int_{\tilde\gamma}\eta(x,y)=-2\,D_E\bigl((x)\diamond(y)\bigr).$$
-这个 $-2$ 几乎肯定只是椭圆双对数两种标准归一化（Bloch 与 Zagier 约定相差 2 倍）
-加链定向的**约定因子**，文献精确形式待核（S5 行）。
 
-**结论**：除这个纯约定因子外，(C3) 证明链的**全部成分均已就位**，且每一环要么是已证定理
-（tempered、modular units、Bloch Thm 6、Bertin exotic、Brunault Thm 8），
-要么已被高精度数值+精确代数双重锁定（绕数 1、除子、金刚石积、$D_E$ 值）。
+**因子 $-2$ 的文献核对（已解决）**：这不是误差，而是 Bloch 定理的内在因子。
+按 Bloch 定理的原始形式（如 Touafek 2008 Thm 1 的转述）：约定
+$r(\{f,g\})=\frac{1}{2\pi}\int_\gamma\eta(f,g)$（$\gamma$ 生成 $H_1(E,\mathbb Z)^-$），则
+$$\pi\,r(\{f,g\})=D_E\bigl((f)\diamond(g)\bigr),\qquad\text{即}\qquad
+\int_\gamma\eta(f,g)=\pm2\,D_E\bigl((f)\diamond(g)\bigr),$$
+符号取决于 $\gamma$ 定向（$H_1(E,\mathbb Z)^-$ 的两个生成元差符号，故文献只写 $|r|$；
+Brunault Remarque 20 也指出 $D_E$ 依赖 $E(\mathbb R)$ 定向、只定到符号）。
+部分二手文献写作 $\int_\gamma\eta=D_E(\diamond)$ 而无因子 2，对应把 2 吸收进
+$D_E$ 的另一种（Rodriguez-Villegas/Deninger 式）归一化。**我们的 $-2$ 与 Bloch 级数
+定义下的定理完全一致。**
+
+**更强的事实**：Brunault 论文 (3.210)/(3.211) 引 Bertin [10, Thm 6] 已直接给出
+$$|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=b_{11}.$$
+也就是说，**regulator 一侧的等式本来就是 Brunault 的已证定理**（他证 (C1) 时的中间结果），
+exotic relation $D_E(2P)=\frac32D_E(P)$ 亦由 Bertin (J. Reine Angew. Math. 569, 2004) 证明。
+Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而在于
+**Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 生成元的等同**——这正是我们第二波
+绕数 $n=1$（周期配对，60 位 + PARI 交叉验证）所锁定的那一环。
+
+**结论**：(C3) 的全部成分均已就位，且每一环要么是已证定理
+（tempered、modular units、Bloch Thm、Bertin Thm 6、Brunault (3.151)/(3.210)），
+要么已被高精度数值 + 精确代数双重锁定（绕数 1、除子、金刚石积、$D_E$ 值）。
 (C3) 由此从"开放数值猜想"降级为"已证定理的组装 + 书写级工作"。
 
 ## 10. 总结
@@ -373,7 +390,7 @@ $$\int_{\tilde\gamma}\eta(x,y)=-2\,D_E\bigl((x)\diamond(y)\bigr).$$
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **证明链基本闭环**（§9.1）：除子与金刚石积精确算出，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，钉死 Brunault (3.151) 系数），exotic $D_E(2P)=\frac32D_E(P)$，合成 $-\frac52D_E(P)=-\pi b_{11}$ 对 $\int\eta=2\pi b_{11}$——仅剩一个 $D_E$ 归一化的约定因子 $-2$ 待对文献；(C3) 从"开放猜想"降级为"已证定理的组装 + 书写"。
+6. **证明链基本闭环**（§9.1）：除子与金刚石积精确算出，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，精确吻合 Brunault (3.151)），exotic $D_E(2P)=\frac32D_E(P)$（Bertin 已证），合成 $-\frac52D_E(P)=-\pi b_{11}$ 对 $\int\eta=2\pi b_{11}$；因子 $-2$ 经文献核对为 Bloch 定理的内在因子（$\pi r=D_E(\diamond)$）乘定向符号。更有 Brunault (3.210) 已证 $|r_\gamma\{x,y\}|=b_{11}$——(C3) 的 regulator 一侧本来就是定理，缺的"劈裂链 $=H_1(E,\mathbb Z)^-$ 生成元"一环由绕数 $n=1$ 锁定：(C3) 从"开放猜想"降级为"已证定理的组装 + 书写"。
 7. 族结果（PARI 独立复核）：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；$k=1$ 时 $\tilde n=b_{17}$（60 位，确认 Samart 的 conductor 17 猜想）；意外收获 $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值与 $b_N$ **无有理关系**（含 conductor 53 与 Samart 记述的矛盾点，§8.4）。经验规律：$k\ge0$ 全中、$k<0$ 全不中。
 
 
