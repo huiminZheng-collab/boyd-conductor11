@@ -26,10 +26,12 @@ METHOD (rigorous, crude enclosures suffice -- budget: radius < 0.05):
     other, certified), the smaller root ball is a certified enclosure of
     y_- on the whole piece, and acb.log(y).real is a true enclosure of
     log|y_-|.  Near th = 0 (double root) and th = pi/2 (fold) separation
-    fails; there we take the CONVEX HULL of the two roots' log balls
-    (y_- is one of the two roots, so the hull is still a valid -- crude --
-    range enclosure) and bisect until the hull-width contribution is
-    negligible.  Continuity of log|y| makes the refinement converge.
+    fails; there we take the CONVEX HULL of the two roots' log balls,
+    computed entirely in ball arithmetic as l1 + [0,1]*(l2-l1) with
+    programmatic containment assertions (no float conversion, no empirical
+    padding), so the hull is still a valid -- crude -- range enclosure
+    (y_- is one of the two roots) and bisection until the hull-width
+    contribution is negligible makes the refinement converge.
   * Endpoints 0, pi/2, pi are arb balls (arb.pi()); piece balls are
     arb((a+b)/2, (b-a)/2) -- NOTE python-flint: arb(a,b) = (mid, rad),
     and ctx.dps would override ctx.prec (neither pitfall present here).
@@ -55,7 +57,6 @@ def logabs_ball(th_ball):
     Returns (arb ball, 'sep'|'hull') or (None, 'wide') if a root ball
     contains 0 (log undefined there) and the piece must be refined."""
     x = acb.exp(acb(0, 1) * acb(th_ball))
-    x = acb.exp(acb(0, 1) * acb(th_ball))
     B = x * x + 1
     d = (B * B - 4 * x**3).sqrt()
     y1 = (-B + d) / 2
@@ -72,13 +73,16 @@ def logabs_ball(th_ball):
         return l1, 'sep'
     if m2.upper() < m1.lower():
         return l2, 'sep'
-    # not separable: convex hull of the two roots' log|.| balls
-    lo = min(float(l1.lower()), float(l2.lower()))
-    hi = max(float(l1.upper()), float(l2.upper()))
-    mid, rad = (lo + hi) / 2, (hi - lo) / 2
-    # pad against float rounding of lo/hi (crude but strictly covering)
-    rad = rad * 1.000001 + 1e-25
-    return arb(mid, rad), 'hull'
+    # not separable: convex hull of the two roots' log|.| balls, built
+    # ENTIRELY within ball arithmetic: with t ranging over the ball [0,1],
+    # H = l1 + t*(l2-l1) contains l1 (t=0), l2 (t=1) and every convex
+    # combination, since ball subtraction contains all pairwise
+    # differences.  No float conversion and no empirical padding is
+    # involved; containment is asserted programmatically below.
+    t = arb("0.5", "0.5")
+    H = l1 + t * (l2 - l1)
+    assert H.contains(l1) and H.contains(l2), "hull failed to cover inputs"
+    return H, 'hull'
 
 
 def piece_contrib(a, b):
@@ -136,11 +140,11 @@ def main():
     print("working precision: ctx.prec =", ctx.prec, "bits")
     print("per-integral radius target:", RAD_TARGET.str(5))
     I1, n1 = integrate(arb(0), PI / 2)
-    print("\nI1 = (1/pi) int_0^{pi/2} log|y_-| dth")
+    print("\nI1_raw = int_0^{pi/2} log|y_-| dth  (NOT divided by pi)")
     print("  int ball: mid =", I1.mid().str(30), " rad <=", I1.rad().str(5))
     print("  pieces evaluated (cumulative):", n1)
     I2, n2 = integrate(PI / 2, PI)
-    print("\nI2 = (1/pi) int_{pi/2}^{pi} log|y_-| dth")
+    print("\nI2_raw = int_{pi/2}^{pi} log|y_-| dth  (NOT divided by pi)")
     print("  int ball: mid =", I2.mid().str(30), " rad <=", I2.rad().str(5))
     print("  pieces evaluated (cumulative):", n2)
     I_split = (I1 - I2) / PI

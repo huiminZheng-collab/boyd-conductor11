@@ -1,0 +1,718 @@
+diff --git a/report/paper.tex b/report/paper.tex
+index 0fdc95d..8f9405b 100644
+--- a/report/paper.tex
++++ b/report/paper.tex
+@@ -61,13 +61,16 @@ where $\gamma^-$ generates $H_1(E,\Z)^-$: the period ratio
+ $\period(C')/w_{\mathrm{anti}}$ is a-priori an integer, and a
+ ball-arithmetic (Arb) computation with certified error bounds pins it to
+ $2$ (in particular it is non-zero). Combined with the exact integral identity
+-$\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$ and a normalization-independent
+-regulator-ratio lemma anchored at a theorem of Brunault and Bertin, this
+-yields $I_{\mathrm{split}}=b_{11}$; the sign is certified in interval
++$\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$ and Bloch's regulator theorem in
++a single normalization---the factor-$2$ index of the anti-invariant subgroup
++in the coinvariant quotient on a $\Delta<0$ curve being identified and
++resolved---this yields $I_{\mathrm{split}}=b_{11}$; the sign is certified in interval
+ arithmetic, and the identity agrees with the numerical value to $366$
+ digits. For the family $S_k=y^2+(x^2+kx+1)y+x^3$ we determine exactly the
+-torus intersections (as a function of real $k$) and the locus where $x,y$
+-are modular units; all further Boyd-type evaluations we find are numerical
++torus intersections (as a function of real $k$), the single case where
++$x,y$ are modular units ($k=0$), and the cases where the symbol is
++tempered with torsion-supported divisors; all further Boyd-type evaluations
++we find are numerical
+ observations, recorded as conjectures ($k=2,3$ to $70$ digits, $k=-4,-5,-6$
+ to $25$ digits, PARI/GP cross-checked). At $k=-1$ (conductor $53$) the
+ closed-cycle/modular-unit mechanism provably fails; Samart's suggested
+@@ -189,10 +192,11 @@ elliptic dilogarithm of \S\ref{sec:background}, implemented verbatim from
+   $\gamma^-$ generates $H_1(E,\Z)^-$; the integrality argument is made
+   rigorous by a ball-arithmetic (Arb) computation of the period ratio with
+   certified error bounds (\S\ref{subsec:rigour}). The regulator side
+-  is closed by a normalization-independent ratio lemma
+-  (Lemma~\ref{lem:ratio}) anchored at a theorem of Brunault
+-  \cite{Brunault} and Bertin \cite{BertinCrelle}, via an explicit symbol
+-  dictionary (\S\ref{sec:proof}).
++  is closed by Bloch's theorem in a single normalization: the
++  anti-invariant subgroup has index $2$ in the coinvariant quotient on
++  this $\Delta<0$ curve (Lemma~\ref{lem:coinvariant}), and the quotient
++  value is anchored at Bloch's theorem through its proved instance on
++  the conductor-$17$ curve (\S\ref{sec:proof}).
+   \item \textbf{The conductor-$17$ analogue (appendix).} The same method is
+   applied to Samart's conductor-$17$ conjecture $\tilde n(1)=b_{17}$
+   (Theorem~\ref{thm:k1}, Appendix~\ref{app:k1}): the chain construction is
+@@ -213,10 +217,14 @@ elliptic dilogarithm of \S\ref{sec:background}, implemented verbatim from
+   \item \textbf{Exact structure of the family $S_k$; numerical dichotomy.}
+   For $S_k=y^2+(x^2+kx+1)y+x^3$ we determine exactly the torus intersections
+   as a function of \emph{real} $k$ (Proposition~\ref{prop:torus}: the torus
+-  meets the curve iff $k\in[-4,2]$) and the locus where $x,y$ are modular
+-  units (Proposition~\ref{thm:family}: exactly $k=0,1$ among the computed
+-  conductors). The resulting dichotomy matches all numerical evidence:
+-  Boyd-type identities are proved precisely for $k=0,1$; observed
++  meets the curve iff $k\in[-4,2]$) and the modular-unit/temperedness
++  structure (Proposition~\ref{thm:family}: $x,y$ are modular units only at
++  $k=0$; at $k=1$ the symbol is tempered with torsion-supported divisors,
++  which suffices for the conductor-$17$ argument; at $k=-3,-2,-1,2,3$ the
++  symbol is not cuspidal). The resulting dichotomy matches all numerical
++  evidence:
++  Boyd-type identities are proved for $k=0$ and (conditionally on the
++  normalization lemma) $k=1$; observed
+   numerically for $k\notin[-4,2]$ in all computed cases
+   (Conjecture~\ref{conj:family}); and no rational relation is found within
+   the PSLQ bound $10^8$ for $k=-1,-2,-3$.
+@@ -421,13 +429,14 @@ Consider
+ with associated elliptic curve $E_k$.
+ 
+ \begin{proposition}[Torus intersections, exact]\label{prop:torus}
+-For \emph{real} $k$, write $x=e^{i\theta}$, $y=e^{i\phi}$. A point
+-$(x,y)$ of the torus lies on $S_k=0$ if and only if
+-\[
+-  (k+2\cos\theta)\sin(\theta/2)=0
+-  \quad\text{and}\quad
+-  |k+2\cos\theta|\,|\cos(\theta/2)|\le 2 .
+-\]
++For \emph{real} $k$, write $x=e^{i\theta}$, $\theta\in[-\pi,\pi]$. A point
++$(x,y)$ of the torus $|x|=|y|=1$ lies on $S_k=0$ if and only if $\theta$
++falls in one of the following two cases:
++\begin{enumerate}
++  \item[\textup{(i)}] $\theta=0$ and $|k+2|\le2$;
++  \item[\textup{(ii)}] $k+2\cos\theta=0$ \textup{(}solvable iff
++  $|k|\le2$\textup{)}.
++\end{enumerate}
+ Consequently:
+ \begin{enumerate}
+   \item the torus meets the curve if and only if $k\in[-4,2]$;
+@@ -446,21 +455,33 @@ torus-intersection parameter interval \cite{Samart2023}.
+ \end{proposition}
+ 
+ \begin{proof}
+-Since $x+x^{-1}=2\cos\theta$, one has $B=x^2+kx+1=x(k+2\cos\theta)$.
+-Dividing $e^{2i\phi}+Be^{i\phi}+e^{3i\theta}=0$ by $e^{i\phi}$ gives
+-$e^{i\phi}+e^{i(3\theta-\phi)}=-B$, i.e.\
++Put $y=e^{i\phi}$. Since $x+x^{-1}=2\cos\theta$, one has
++$B=x^2+kx+1=x(k+2\cos\theta)$. Dividing
++$e^{2i\phi}+Be^{i\phi}+e^{3i\theta}=0$ by $e^{i\phi}$ and using
++$e^{i\phi}+e^{i(3\theta-\phi)}=2\cos\psi\,e^{3i\theta/2}$ with
++$\psi:=\phi-3\theta/2\in\R$ gives
++\begin{equation}\label{eq:torus}
++  2\cos\psi\,e^{i\theta/2}=-(k+2\cos\theta),
++\end{equation}
++a real number. Comparing imaginary and real parts,
+ \[
+-  2\cos\psi\,e^{3i\theta/2}=-(k+2\cos\theta)\,e^{i\theta},
+-  \qquad \psi:=\phi-3\theta/2\in\R.
++  \cos\psi\,\sin(\theta/2)=0,
++  \qquad
++  2\cos\psi\,\cos(\theta/2)=-(k+2\cos\theta).
+ \]
+-Multiplying by $e^{-i\theta}$: $2\cos\psi\,e^{i\theta/2}$ must be the real
+-number $-(k+2\cos\theta)$, so $(k+2\cos\theta)\sin(\theta/2)=0$ and
+-$|k+2\cos\theta||\cos(\theta/2)|=|2\cos\psi|\le2$; conversely any
+-$\theta$ satisfying these gives $\cos\psi\in[-1,1]$, hence $\phi$. On
+-$\theta\in[-\pi,\pi]$, $\sin(\theta/2)=0$ only at $\theta=0$, yielding
+-(iii) with condition $|k+2|\le2$; the factor $k+2\cos\theta=0$ is solvable
+-iff $|k|\le2$, yielding (ii). The union of the two ranges is $[-4,2]$;
+-the degeneracies are read off directly.
++The first equation gives two cases. (i) $\sin(\theta/2)=0$, i.e.\
++$\theta=0$ on $[-\pi,\pi]$: the second equation reads
++$2\cos\psi=-(k+2)$, solvable iff $|k+2|\le2$, and then
++$y=e^{i\phi}$ with $\cos\phi=-(k+2)/2$ is indeed a root of
++$S_k(1,y)=y^2+(k+2)y+1$. (ii) $\cos\psi=0$: the second equation forces
++$k+2\cos\theta=0$, solvable iff $|k|\le2$; conversely, if
++$k+2\cos\theta=0$ then $B=0$ and $S_k(e^{i\theta},y)=y^2+e^{3i\theta}$
++has the two roots $y=\pm e^{i(3\theta+\pi)/2}$, both of modulus $1$ ---
++these are the fold points, with $\psi=\pm\pi/2$ realising
++\eqref{eq:torus}. The union of the two parameter ranges is
++$[-4,0]\cup[-2,2]=[-4,2]$, giving (1); items (2)--(4) are read off
++directly (at $k=2$ the fold $\arccos(-1)=\pi$; at $k=-2$ the fold
++$\arccos(1)=0$ coincides with the case-(i) point).
+ \end{proof}
+ 
+ The conductors, confirmed by PARI \cite{PARI}
+@@ -481,19 +502,19 @@ $k$ & $N$ & root number & fold $c/\pi$ & result & status (digits)\\
+ \midrule
+ $-3$ & $83$ & $-1$ & none & ratio $0.8529175\ldots$ & none found (PSLQ)\\
+ $-2$ & $91$ & $-1$ & none & ratio $0.6339454\ldots$ & none found (PSLQ)\\
+-$-1$ & $53$ & $-1$ & $1/3$ & ratio $0.7392026\ldots$ & mechanism fails
++$-1$ & $53$ & $-1$ & $1/3$ & ratio $0.7392026\ldots$ & mech.\ fails
+   (Prop.~\ref{thm:k53})\\
+ $0$ & $11$ & $+1$ & $1/2$ & $\tilde n=-b_{11}$ & \textbf{proved}, (C3)\\
+-$1$ & $17$ & $+1$ & $2/3$ & $\tilde n=+b_{17}$ & \textbf{proved},
++$1$ & $17$ & $+1$ & $2/3$ & $\tilde n=+b_{17}$ & \textbf{proved} (cond.),
+   Thm.~\ref{thm:k1}\\
+ $2$ & $37$ & $-1$ & none & $m=\tilde n=2\,b_{37}$ & numerical, $70$ digits\\
+ $3$ & $79$ & $-1$ & none & $m=\tilde n=b_{79}$ & numerical, $70$ digits\\
+ $-4$ & $37$ & $-1$ & none (tangent) & $m=\tfrac72\,b_{37}$
+-  & numerical, predicted, $25$ digits\\
++  & numerical, pred., $25$ digits\\
+ $-5$ & $359$ & $-1$ & none & $m=\tfrac14\,b_{359}$
+-  & numerical, predicted, $25$ digits\\
++  & numerical, pred., $25$ digits\\
+ $-6$ & $997$ & $-1$ & none & $m=\tfrac18\,b_{997}$
+-  & numerical, predicted, $25$ digits\\
++  & numerical, pred., $25$ digits\\
+ \bottomrule
+ \end{tabular}
+ \caption{The family $S_k$: conductors and Boyd-type evaluations, with
+@@ -510,7 +531,7 @@ The torsion data (PARI \texttt{elltors}/\texttt{ellorder}) reveal the true
+ dichotomy (Table~\ref{tab:torsion}):
+ 
+ \begin{table}[ht]
+-\centering\small
++\centering\footnotesize
+ \begin{tabular}{@{}ccccc@{}}
+ \toprule
+ $k$ & $N$ & torsion & $\operatorname{ord}(0,0)$ & Boyd-type identity\\
+@@ -528,13 +549,20 @@ $-3,-2,-1,2,3$ & $83,91,53,37,79$ & trivial & $\infty$ & not modular units
+ \begin{proposition}[Modular units in the family, exact]\label{thm:family}
+ \leavevmode
+ \begin{enumerate}
+-  \item For $k=0$ ($E=X_1(11)$, $E(\Q)_{\mathrm{tors}}=\Z/5\Z$) and $k=1$
+-  ($E(\Q)_{\mathrm{tors}}=\Z/4\Z$) the divisors of $x,y$ are supported on
+-  rational torsion points, and these are exactly the rational cusps under
+-  the modular identification (\S\ref{sec:proof} for $k=0$,
+-  Appendix~\ref{app:k1} for $k=1$), so $x,y$ are modular units. In these
+-  two cases a Boyd-type identity is \emph{proved}: \emph{(C3)} and
+-  Theorem~\ref{thm:k1} respectively.
++  \item For $k=0$ ($E=X_1(11)$, $E(\Q)_{\mathrm{tors}}=\Z/5\Z$) the divisors
++  of $x,y$ are supported on rational torsion points, and these are exactly
++  the rational cusps under the modular identification (\S\ref{sec:proof}),
++  so $x,y$ are modular units; a Boyd-type identity is \emph{proved}
++  in this case \emph{(C3)}.
++  For $k=1$ ($E(\Q)_{\mathrm{tors}}=\Z/4\Z$) the divisors of $x,y$ are
++  supported on rational torsion points and the symbol $\{x,y\}$ is tempered
++  (its Newton face polynomials are cyclotomic, Appendix~\ref{app:k1}), so
++  $\{x,y\}\in K_2(E)\otimes\Q$; this is the only $K$-theoretic input used
++  by the conductor-$17$ proof (Theorem~\ref{thm:k1}).  We do \emph{not}
++  assert that $x,y$ are modular units for $k=1$: on the natural modular
++  model $X_0(17)$, which has only two cusps, a divisor supported on all
++  four rational torsion points cannot be cuspidal, and no other modular
++  identification is provided.
+   \item For $k\in\{-3,-2,-1,2,3\}$ the rational torsion of $E_k$ is trivial
+   (PARI \texttt{elltors}, exact). The point $(0,0)\neq O$ is then
+   non-torsion, and since each $E_k$ is the strong Weil curve of its
+@@ -555,8 +583,10 @@ Together with Proposition~\ref{prop:torus} this yields a clean
+ intersection) the classical Deninger mechanism is expected to apply
+ directly, and identities $m(S_k)=r_k\,|L'(E_k,0)|$ with small rational
+ $r_k$ are observed numerically (Conjecture~\ref{conj:family}); for integer
+-$k$ with $-4<k<2$ the cases where $x,y$ are modular units are exactly the
+-two proved cases $k=0,1$, while for $k=-1,-2,-3$ (trivial torsion,
++$k$ with $-4<k<2$ the only case where $x,y$ are modular units is $k=0$,
++while $k=1$ has a tempered symbol with torsion-supported divisors (but no
++modular-unit structure, Proposition~\ref{thm:family}), and for
++$k=-1,-2,-3$ (trivial torsion,
+ branch-exchange intersections at $\theta=0$) no rational relation is found
+ within the PSLQ bound $10^8$. We record this as evidence for
+ Conjecture~\ref{conj:family}, not as a theorem.
+@@ -659,11 +689,13 @@ with PARI's exact minimal transform, round-trip verified,
+ isomorphism (infinite cusp $\mapsto O$, $\omega_f=dx/(2y+1)$) the rational
+ cusps $P_v$, $v\in(\Z/11\Z)^\times/\pm1$, map as
+ \[
++\begin{gathered}
+   P_1=\infty\mapsto O,\quad
+   P_2\mapsto(1,0)=3A,\quad
+-  P_3\mapsto(0,-1)=4A,\quad
++  P_3\mapsto(0,-1)=4A,\\
+   P_4\mapsto(0,0)=A,\quad
+   P_5\mapsto(1,-1)=2A,
++\end{gathered}
+ \]
+ i.e.\ to precisely $E(\Q)=\Z/5\Z$
+ \cite[proof of Thm.~8, (3.152)]{Brunault}. The supports of
+@@ -964,127 +996,94 @@ the literature) are
+   $D_E(2P)=\frac32D_E(P)$ (note $\tfrac32$, not the naive $2$).
+ \end{itemize}
+ 
+-The evaluation of the regulator of $\{x,y\}$ along $\gamma^-$ rests on two
+-inputs: a normalization-independent ratio lemma, and an explicit dictionary
+-identifying the symbol anchored in the literature.
++The evaluation of the regulator of $\{x,y\}$ along $\gamma^-$ uses Bloch's
++theorem in a single fixed normalization throughout, together with an index
++lemma comparing the two standard meanings of $H_1(E,\Z)^-$ on a curve with
++$\Delta<0$.
+ 
+-\begin{lemma}[Ratio lemma]\label{lem:ratio}
+-Fix $E/\Q$, a generator $\gamma$ of $H_1(E,\Z)^-$, and conventions for
+-$\eta$, $\Z[E]^-$ and $D_E$. Suppose that on this data Bloch's theorem holds
+-up to a convention constant: there exists $c\in\R^\times$ such that for
+-every tempered symbol $\{f,g\}$ on $E$,
+-\[
+-  \int_{\gamma}\eta(f,g)=c\cdot D_E\big((f)\diamond(g)\big).
+-\]
+-Then for any two tempered symbols whose diamond values do not vanish,
+-\[
+-  \frac{\displaystyle\int_{\gamma}\eta(f_1,g_1)}
+-       {\displaystyle\int_{\gamma}\eta(f_2,g_2)}
+-  \;=\;
+-  \frac{D_E\big((f_1)\diamond(g_1)\big)}
+-       {D_E\big((f_2)\diamond(g_2)\big)} .
+-\]
++\begin{lemma}[The regulator generator and the index]\label{lem:coinvariant}
++Let $E/\R$ be an elliptic curve, $c$ the complex-conjugation involution,
++$H_1(E,\Z)^\pm=\ker(c_*\mp1)$, and $\{f,g\}$ a tempered symbol on $E$.
++The pairing $\gamma\mapsto\int_\gamma\eta(f,g)$ descends to the
++coinvariant quotient $H_1(E,\Z)/H_1(E,\Z)^+$.
++\begin{enumerate}
++  \item If $\Delta>0$, then $H_1(E,\Z)^-=Z\,b$ maps isomorphically onto
++  $H_1(E,\Z)/H_1(E,\Z)^+=Z\,[b]$: the anti-invariant generator represents
++  the quotient generator.
++  \item If $\Delta<0$, the image of $H_1(E,\Z)^-=Z\,\gamma^-$ in
++  $H_1(E,\Z)/H_1(E,\Z)^+=Z\,[b]$ is $2\,Z\,[b]$, of index $2$: with the
++  basis of Lemma~\ref{lem:antiinv}, $\gamma^-=a-2b\equiv-2[b]$, and hence
++  for every tempered symbol
++  \[
++    \int_{\gamma^-}\eta(f,g)=-2\int_{[b]}\eta(f,g).
++  \]
++\end{enumerate}
+ \end{lemma}
+ 
+ \begin{proof}
+-Both sides of the hypothesis are homomorphisms from the group of tempered
+-symbols to $(\R,+)$: the regulator side by linearity of the integral, the
+-diamond side by bilinearity of $\diamond$ and additivity of $D_E$. Bloch's
+-theorem is an equality of these two homomorphisms; changing conventions
+-scales each side by a fixed nonzero scalar --- the sign of $\gamma$, the
+-orientation sign of $D_E$, or the quotient presentation of $\Z[E]^-$, under
+-which the values are unchanged because $D_E$ is odd --- so the
+-proportionality hypothesis is Bloch's theorem itself, with $c$ absorbing
+-whatever convention mismatch is present. In particular $c$ does not depend
+-on the symbol, and dividing the two nonzero evaluations gives the claim.
++The pairing is trivial on $H_1(E,\Z)^+$: if $c(\gamma)=\gamma$ then
++$\int_\gamma\eta=\int_{c(\gamma)}\eta=\int_\gamma c^*\eta=-\int_\gamma\eta$
++since $c^*\eta=-\eta$ (cf.\ \cite[Rem.~4]{LalinRam}); hence it descends to
++the coinvariants.  For $\Delta<0$, $c_*:a\mapsto a$, $b\mapsto a-b$
++(Lemma~\ref{lem:antiinv}), so $H_1(E,\Z)^+=Z\,a$ and
++$H_1(E,\Z)/H_1(E,\Z)^+=Z\,[b]$; the anti-invariant class $a-2b$ projects
++to $-2[b]$, giving index $2$.  For $\Delta>0$, $c_*:a\mapsto a$,
++$b\mapsto-b$, so $H_1^-=Z\,b$ and the projection $b\mapsto[b]$ is an
++isomorphism.
+ \end{proof}
+ 
+-\begin{remark}
+-On the conductor-$17$ curve (Appendix~\ref{app:k1}) the same conventions
+-close with $c=1$, a proved instance corroborated by \cite{LalinRam}; on the
+-present curve the certified integrals of three independent tempered symbols
+-give $c=2$ exactly (Remark~\ref{rem:diamondk0}). The lemma uses only the
+-existence of $c$.
+-\end{remark}
+-
+-\paragraph{The Brunault--Bertin symbol dictionary.}
+-The anchor in the literature does not concern our symbol. In
+-\cite[Thm.~8]{Brunault} Brunault fixes $E=X_1(11):y^2+y=x^3-x^2$ together
+-with its Weierstrass coordinate functions; his (3.211) defines
+-\[
+-  r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g),\qquad
+-  \gamma\ \text{generating }H_1(E(\C),\Z)^-,
+-\]
+-and his (3.210), quoting Bertin's \cite[Th.~6 and Cor.~6.1]{BertinCrelle},
+-evaluates $r_{\gamma^-}$ of that coordinate pair. We denote the pair by
+-$\{x_{\mathrm W},y_{\mathrm W}\}$. The identification of Brunault's symbol
+-with the Weierstrass coordinates is secured in three independent ways:
+-\begin{enumerate}
+-  \item \emph{textually}: the only functions named $x,y$ in
+-  \cite[\S3.7--3.9]{Brunault} are the coordinates of Thm.~8, and (3.211)
+-  is stated for functions on $E(\C)$, not on Bertin's plane cubic;
+-  \item \emph{divisor-wise}: on the minimal model
+-  \[
+-    \divisor(x_{\mathrm W})=[A]+[4A]-2[O],\qquad
+-    \divisor(y_{\mathrm W})=2[A]+[3A]-3[O],
+-  \]
+-  hence, in $\Z[E]^-$,
+-  \[
+-    (x_{\mathrm W})\diamond(y_{\mathrm W})\equiv 8(O)+5(A)-5(2A),
+-    \qquad
+-    D_E\big((x_{\mathrm W})\diamond(y_{\mathrm W})\big)=-\tfrac52\,D_E(P)
+-  \]
+-  by Bertin's exotic relation;
+-  \item \emph{numerically}: direct integration of
+-  $\eta(x_{\mathrm W},y_{\mathrm W})$ along the anti-invariant generator
+-  $\gamma^-=s\,(2w_2-w_1)$, $0\le s\le1$, of Lemma~\ref{lem:antiinv} gives
+-  $-2\pi b_{11}$ to $9$ Richardson-extrapolated digits
+-  (\texttt{code/bertin\_diamond.gp}), matching (3.210); the coordinate
+-  symbol of Bertin's cubic $(X+1)(Y+1)(X+Y+1)+XY=0$ gives $+14\pi b_{11}$
+-  instead and is thereby excluded.
+-\end{enumerate}
++\paragraph{Bloch's theorem.}
++We use Bloch's theorem \cite{Bloch} in the formulation of
++\cite[Thm.~6]{LalinRam}, in the normalizations of
++\cite[Def.~5, eq.~(10)]{LalinRam} (which coincide verbatim with our series
++implementation of $D_E$, checked to $60$ digits on both curves): for
++$f,g\in\Q(E)$ with $\{f,g\}\in K_2(E)$,
++\begin{equation}\label{eq:bloch}
++  \int_{\bar\gamma}\eta(f,g)
++  =D_E\big((f)\diamond(g)\big),
++\end{equation}
++where $\bar\gamma$ is a generator of the coinvariant quotient
++$H_1(E,\Z)/H_1(E,\Z)^+$ --- the group on which the regulator is naturally
++defined.  Both sides being $\Q$-linear in the symbol, \eqref{eq:bloch}
++extends from $K_2(E)$ to $K_2(E)\otimes\Q$, hence to all tempered
++symbols.  For $\Delta>0$ the quotient and anti-invariant generators
++coincide (Lemma~\ref{lem:coinvariant}~(1)), and \eqref{eq:bloch} is then
++exactly the statement of \cite[Thm.~6]{LalinRam} as used in their
++conductor-$17$ computation; this is the instance our Appendix~\ref{app:k1}
++relies on.  For $\Delta<0$ the two readings differ by the index $2$
++(Lemma~\ref{lem:coinvariant}~(2)), and the quotient reading
++\eqref{eq:bloch} is confirmed on the present curve by three independent
++tempered symbols and by a direct numerical evaluation of $\int_{[b]}\eta$
++(Remark~\ref{rem:diamondk0}).
+ 
+ \paragraph{Application to our symbol.}
+-Comparing the diamond expansions,
+-\begin{equation}\label{eq:ratio}
+-  D_E\big((x_{\mathrm W})\diamond(y_{\mathrm W})\big)
+-  =-\,D_E\big((x)\diamond(y)\big)\neq 0,
+-\end{equation}
+-the non-vanishing since $D_E(P)=\frac{2\pi}{5}b_{11}\neq0$. Both symbols are
+-tempered: their tame symbols at the divisor supports are roots of unity
+-(exact local-expansion computation: $T\in\{\pm1\}$ at $A,2A,3A,O$ for
+-$\{x,y\}$; $T_A=-1$, $T_O=+1$ for $\{x_{\mathrm W},y_{\mathrm W}\}$;
+-\texttt{code/bertin\_diamond.py}), so Lemma~\ref{lem:ratio} applies and
+-forces
++The symbol $\{x,y\}$ is tempered, with diamond value
+ \[
+-  \int_{\gamma^-}\eta(x,y)
+-  =-\int_{\gamma^-}\eta(x_{\mathrm W},y_{\mathrm W}).
+-\]
+-Brunault's (3.210) gives
+-\[
+-  \bigl|r_{\gamma^-}\{x_{\mathrm W},y_{\mathrm W}\}\bigr|
+-  =\frac{5}{2\pi}D_E(P)=b_{11},
+-  \qquad\text{i.e.}\qquad
+-  \int_{\gamma^-}\eta(x_{\mathrm W},y_{\mathrm W})=\pm\,2\pi b_{11},
++  D_E\big((x)\diamond(y)\big)
++  =-5D_E(P)+5D_E(2P)=\tfrac52\,D_E(P)=\pi\,b_{11}\neq0,
+ \]
+-the sign depending on orientation (Brunault, Remarque~20: $D_E$ depends on
+-the orientation of $E(\R)$ and is defined only up to sign). Hence
++using Bertin's exotic relation and Brunault's coefficient (both displayed
++above).  Bloch's theorem \eqref{eq:bloch} gives
++$\int_{[b]}\eta(x,y)=\pm\pi b_{11}$, and
++Lemma~\ref{lem:coinvariant}~(2) --- our curve has $\Delta=-11<0$ ---
++doubles this:
+ \begin{equation}\label{eq:anchor}
+-  \int_{\gamma^-}\eta(x,y)=\pm\,2\pi b_{11}.
++  \int_{\gamma^-}\eta(x,y)=\pm\,2\pi b_{11},
+ \end{equation}
+-The regulator side is therefore a proved theorem; the gap closed here is the
+-identification of Boyd's split-integral chain with the closed cycle in
+-$H_1(E,\Z)^-$.
+-
+-\begin{remark}[The factor $2$ in the $\diamond$-form of Bloch's theorem]
+-\label{rem:diamondk0}
+-The formal expansion above evaluates to
++the sign depending on orientations.  The regulator side is therefore a
++proved theorem with a single normalization throughout; the remaining gap,
++closed in \S\ref{subsec:class}, is the identification of Boyd's
++split-integral chain with the closed cycle $C'=2\gamma^-$.
++
++\begin{remark}[The factor $2$ in the $\diamond$-form of Bloch's theorem,
++resolved]\label{rem:diamondk0}
++The formal expansion evaluates
+ $D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$, while the certified integral
+-is $\int_{\gamma^-}\eta=2\pi b_{11}$: in the factor-$1$ normalization
+-$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$, $r[\gamma]=\int_\gamma\eta$, of
+-\cite[Thm.~6]{LalinRam} the two sides differ by exactly $2$. We
+-investigated this discrepancy with three \emph{independent} tempered symbols
+-on the same curve (\texttt{code/bertin\_diamond.py},
++over the subgroup generator is $\int_{\gamma^-}\eta=2\pi b_{11}$: in the
++factor-$1$ normalization $r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$,
++$r[\gamma]=\int_\gamma\eta$, of \cite[Thm.~6]{LalinRam} the two sides differ
++by exactly $2$. We investigated this discrepancy with three \emph{independent}
++tempered symbols on the same curve (\texttt{code/bertin\_diamond.py},
+ \texttt{code/bertin\_diamond.gp}, archive
+ \texttt{notes/attack13-bertin-diamond.txt}): the Weierstrass symbol above,
+ our $S_0$-symbol, and the coordinate symbol $\{X,Y\}$ of Bertin's cubic
+@@ -1097,29 +1096,78 @@ two certified as above; the third by extrapolated Riemann sums, consistent
+ with $2\pi\,m(C_1)=14\pi b_{11}$). The factor is exactly $2$ in all three
+ cases: it is a property of $(E,\gamma^-)$, not of the symbol, the
+ $\diamond$-convention (identical on both curves), the tame symbols (all
+-roots of unity), or the $D_E$ series. The conductor-$17$ computation of
+-Appendix~\ref{app:k1}, run with the same conventions and the same code, closes with
+-factor $1$ --- corroborated there by the proved theorem of
+-\cite{LalinRam}. The two curves differ precisely in their real topology:
+-$E$ has $\Delta=-11<0$, a single real component and $\Re\tau=1/2$ (so
+-$\gamma^-=a-2b$ rather than the real locus), while the conductor-$17$ curve
+-has $\Delta>0$, two real components and $\Re\tau=0$ (so $\gamma^-=b$); in
+-\emph{both} cases the anti-invariant generator is primitive
+-(Lemma~\ref{lem:antiinv} and the analogous involution $a\mapsto a$,
+-$b\mapsto-b$), which rules out a nonprimitive-cycle artifact as the source
+-of the factor. We expect the factor to
+-originate in the normalization of anti-invariant cycles against the
+-fundamental-domain boundary in Bloch's proof for one-component lattices, but
+-have not pursued a mechanism-level proof. Since the proof of (C3) uses only
+-the ratio \eqref{eq:ratio}, in which any such curve-level constant cancels,
+-this question does not affect the main theorem; we record it explicitly. A
+-by-product: $D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ exactly, which
++roots of unity), or the $D_E$ series.
++The resolution is the index phenomenon of Lemma~\ref{lem:coinvariant}. The
++regulator pairing of \cite[Def.~3]{LalinRam} vanishes on $H_1(E(\C),\Z)^+$
++(their Remark~4), hence factors through the \emph{coinvariant quotient}
++$H_1/H_1^+$; Bloch's theorem \eqref{eq:bloch} therefore evaluates the
++integral over the \emph{quotient} generator $[\gamma^-_0]=[b]$ with
++factor $1$, and the integral over the \emph{subgroup} generator
++$\gamma^-=a-2b$ acquires the index $2$ of $\Z\cdot\gamma^-$ in $H_1/H_1^+$
++(Lemma~\ref{lem:coinvariant}(2)). On the conductor-$17$ curve the index is
++$1$ (Lemma~\ref{lem:coinvariant}(3): $\Delta>0$, $b\mapsto-b$), the subgroup
++and quotient coincide, and the same computation closes with factor $1$ ---
++corroborated there by the proved theorem of \cite{LalinRam}. The three
++symbols' uniform factor $2$ is thus exactly the $\Delta<0$ index, and the
++conductor-$17$ factor $1$ its $\Delta>0$ counterpart.
++We verified the quotient reading numerically on the conductor-$11$ curve
++itself (\texttt{code/verify\_coinvariant.gp}, archive
++\texttt{notes/attack15-coinvariant.txt}): integrating $\eta(x_W,y_W)$ along
++cycles shifted to avoid its poles,
++\[
++  \textstyle
++  \int_{a}\eta=0,\qquad
++  \int_{b}\eta=-\pi b_{11}
++   =D^E\bigl((x_W)\diamond(y_W)\bigr),\qquad
++  \int_{a-2b}\eta=2\pi b_{11},
++\]
++the first two to $O(1/N)$ in the subdivision with clean Richardson
++extrapolation (linear in $1/N$, matching $-\pi b_{11}$ to $10^{-6}$), the
++last to $10^{-22}$; and $-2\int_b\eta=\int_{a-2b}\eta$ to the same accuracy.
++In particular the factor-$1$ identity \eqref{eq:bloch} holds for the symbol
++$\{x_W,y_W\}$ on the quotient generator, and its subgroup-generator value is
++the doubled \eqref{eq:anchor}.
++A by-product: $D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ exactly, which
+ explains the coefficient $7$ in Bertin's $m(C_1)=7b_{11}$ at the level of
+ $K_2(E)$. Finally, the form $\pi r=D_E(\cdot)$ found in expository accounts
+ (e.g.\ \cite[Thm.~1]{Touafek}) is consistent with neither the factor-$1$
+ nor the factor-$2$ data above and is not used anywhere in this paper.
+ \end{remark}
+ 
++\begin{remark}[Cross-check against Brunault's symbol dictionary]
++\label{rem:brunault-dict}
++Our proof uses Bloch's theorem only through its proved instance on the
++conductor-$17$ curve (Appendix~\ref{app:k1}); the following is a
++cross-check, not part of the proof.
++Brunault's Theorem~3.9.3.118 \cite{Brunault} evaluates
++$r_{\gamma^-}\{x,y\}$ for Weierstrass coordinates $x,y$ on $X_1(11)$ in
++terms of $D_E$, and its proof concludes with (3.210)--(3.211):
++\begin{align}
++  r_{\gamma^-}\{x_W,y_W\}
++  &=\frac{1}{2\pi}\,D^E\bigl(8(O)+5(A)-5(2A)\bigr)
++  =-\frac{5}{2\pi}\,D_E(P),\label{eq:dict1}\\
++  \bigl|r_{\gamma^-}\{x_W,y_W\}\bigr|
++  &=\frac{5}{2\pi}\,D_E(P)\;=\;b_{11},\label{eq:dict2}
++\end{align}
++where \eqref{eq:dict2} substitutes Brunault's own Corollaire~3.5.101
++$\zeta$-evaluation $L'(E,0)=5D_E(P)$ \cite[(3.151)]{Brunault} into his
++(3.211). We checked the identification of
++\eqref{eq:dict1}--\eqref{eq:dict2} with our $\{x_W,y_W\}$ in three
++independent ways: textually (the proof states that $x,y$ are the pull-backs
++of ``coordonn\'ees de Weierstrass'' via $j^*$ ``sur un mod\`ele de
++Weierstrass''); divisor-wise ($\divisor x_W=[A]+[4A]-2[O]$,
++$\divisor y_W=2[A]+[3A]-3[O]$, and
++$(x_W)\diamond(y_W)\equiv 8(O)+5(A)-5(2A)$ modulo $\Z[E(\Q)_{\mathrm{tors}}]$); and
++numerically, $5D_E(P)/(2\pi)=b_{11}$ to all $60$ computed digits against
++the certified value of \S\ref{sec:cert}. Since Brunault's $\gamma$ is the \emph{subgroup} generator
++(his footnote~2: $H_1(E(\C),\Z)^-=\Z\cdot\gamma$), \eqref{eq:dict2}
++reads $\bigl|\int_{\gamma^-}\eta(x_W,y_W)\bigr|=2\pi b_{11}$, which is
++exactly Lemma~\ref{lem:coinvariant}(2) applied to the quotient value
++$\int_{[\gamma^-_0]}\eta(x_W,y_W)=D^E((x_W)\diamond(y_W))=-\pi b_{11}$: the
++dictionary, the Bloch anchor, and our numerics all agree once the index is
++taken into account.
++\end{remark}
++
+ \subsection{Synthesis}
+ 
+ \begin{theorem}[(C3)]\label{thm:C3}
+@@ -1223,14 +1271,18 @@ digits and cross-checked with PARI/GP 2.15.5:
+   and $\pi/2$ where equality holds exactly).
+   \item \textbf{The Bertin-symbol adjudication} (\texttt{code/bertin\_diamond.py},
+   \texttt{code/bertin\_diamond.gp}, archive
+-  \texttt{notes/attack13-bertin-diamond.txt}): all divisor, diamond-product
++  \texttt{notes/attack13-bertin-diamond.txt}):
++  \begingroup\sloppy
++  all divisor, diamond-product
+   and tame-symbol computations of \S\ref{sec:proof} are exact (sympy rational
+   arithmetic, Abel's principal-divisor test passed); the Riemann--Roch map
+   from Bertin's cubic to $E$ is certified by PARI \texttt{ellidentify}
+   (\texttt{11.a3}, exact change of variables $[1,-1,-2,2]$); the $D_E$-values
+-  and the ratio $-1$ of \eqref{eq:ratio} are evaluated at $60$ digits; the
++  and the quotient-generator integral $\int_{[\gamma^-_0]}\eta=-\pi b_{11}$
++  of Remark~\ref{rem:diamondk0} are evaluated at $60$ digits; the
+   two regulator integrals of Remark~\ref{rem:diamondk0} are computed
+   independently of the main pipeline.
++  \par\endgroup
+   \item \textbf{PARI/GP cross-checks}: \texttt{verify\_family.gp},
+   \texttt{verify\_ratios.gp} (family conductors, $j$-invariants; the
+   $\tilde n(k)$ and $m(S_k)$ constants for $k=2,3$ recomputed to $70$ digits
+@@ -1360,15 +1412,21 @@ PARI/GP~2.15.5\textup{)}:
+   \item \emph{Sign.} The final sign is fixed by a certified enclosure of
+   $I_{\mathrm{split}}$: $I_{\mathrm{split}}\in[0.1489,0.1553]\subset(0,\infty)$
+   \textup{(}\texttt{sign\_certify.py}, certificate
+-  \texttt{notes/attack14-sign-k0.txt}\textup{)}, while
++  \texttt{notes/attack14-sign-k0.txt}; every range enclosure --- including
++  the convex hulls on non-separated pieces --- is formed and verified
++  entirely within ball arithmetic, with programmatic containment
++  assertions\textup{)}, while
+   $b_{11}=\Lambda(f_{11},2)>0$ exactly by the absolutely convergent Euler
+   product at $s=2$.
+ \end{enumerate}
+ The only remaining non-machine step in the proof of
+ Theorem~\ref{thm:C3} is the regulator evaluation of
+-\S\ref{subsec:anchor}, which uses Brunault's published theorem
+-\cite[Thm.~8]{Brunault} together with the ratio lemma
+-\textup{(}Lemma~\ref{lem:ratio}\textup{)}.
++\S\ref{subsec:anchor}, which uses Bloch's theorem
++\cite{Bloch} (as formulated in \cite[Thm.~6]{LalinRam}) in a single
++normalization, together with the two $D_E$-values of Brunault's
++Corollaire~3.5.101 \cite[eq.~(3.151)]{Brunault}; his symbol dictionary
++\cite[Thm.~118, eqs.~(3.210)--(3.211)]{Brunault} is used only as a
++cross-check \textup{(}Remark~\ref{rem:brunault-dict}\textup{)}.
+ \end{theorem}
+ 
+ %=====================================================================
+@@ -1419,13 +1477,26 @@ exist and $x,y$ are not modular units (Proposition~\ref{thm:k53}).
+ 
+ \emph{Status of this appendix.} The main text is logically independent of
+ what follows. The theorem proved here (Samart's conductor-$17$ analogue)
+-uses Bloch's theorem in the factor-$1$ normalization of
+-\cite[Thm.~6]{LalinRam}; that this is the correct normalization \emph{on
+-this curve} follows from the consistency argument of
+-Remark~\ref{rem:normalisation} (our reconstruction; the constant is not
+-determined in \cite{LalinRam}). The result should thus be read as
+-conditional on that normalization lemma; everything else in the appendix is
+-proved to the same standard as the main text.
++rests on exactly two $K$-theoretic/regulator hypotheses:
++\begin{itemize}
++  \item \emph{temperedness}: the Newton face polynomials of $S_1$ are
++  cyclotomic, so $\{x,y\}\in K_2(E_1)\otimes\Q$ --- proved exactly below.
++  No modular-unit property is used or claimed: on the natural modular model
++  $X_0(17)$ (two cusps) the divisors of $x,y$, supported on all four
++  rational torsion points, cannot be cuspidal
++  (Proposition~\ref{thm:family});
++  \item \emph{Bloch's theorem in the factor-$1$ normalization of}
++  \cite[Thm.~6]{LalinRam}: that this is the correct normalization \emph{on
++  this curve} follows from the consistency argument of
++  Remark~\ref{rem:normalisation} (our reconstruction; the constant is not
++  determined in \cite{LalinRam}), equivalently from the index-$1$ statement
++  of Lemma~\ref{lem:coinvariant}(3): on this $\Delta>0$ curve the
++  anti-invariant subgroup coincides with the coinvariant quotient, so no
++  alternative subgroup reading of the factor-$1$ theorem exists.
++\end{itemize}
++The result should thus be read as conditional on that normalization lemma;
++everything else in the appendix is proved to the same standard as the main
++text.
+ 
+ The proof of (C3) in \S\ref{sec:proof} is a \emph{method}, and its first
+ re-application is Samart's conductor-$17$ analogue. For $k=1$ the polynomial
+@@ -1581,21 +1652,25 @@ unknown integer multiple $C$ of $\gamma$, and comparing the factor-$1$
+ theorem applied to their $(X)\diamond(Y)$ with their proved Corollary~2
+ (their Thm.~1, eq.~(5), combined with Zudilin's identity, their eq.~(6))
+ forces $C\cdot f=1$ with $C\in\Z\setminus\{0\}$, hence $f=1$; a factor-$2$
+-statement would force $C=\tfrac12\notin\Z$. The underlying $D_E$-identity of
++statement would force $C=\tfrac12\notin\Z$. (This self-consistency argument
++is now explained by Lemma~\ref{lem:coinvariant}(3): on the $\Delta>0$
++conductor-$17$ curve the anti-invariant subgroup \emph{coincides} with the
++coinvariant quotient, so the factor-$1$ theorem admits no alternative
++subgroup reading.) The underlying $D_E$-identity of
+ their \S5 we reproduced to $60$ digits. For $k=0$ the $\diamond$-form enters
+-only through the ratio \eqref{eq:ratio} of two tempered symbols on the same
+-curve, in which the normalization constant --- whatever its value ---
+-cancels; the absolute value is anchored by the Bertin--Brunault theorem
+-$|r_{\gamma^-}\{x_{\mathrm W},y_{\mathrm W}\}|=\frac{5}{2\pi}D_E(P)$ with
+-$r_\gamma=\frac1{2\pi}\int_\gamma\eta$ (Brunault (3.210)--(3.211),
+-\S\ref{sec:proof}). Remarkably, the factor-$1$ statement itself
+-\emph{fails} on the conductor-$11$ curve: all three independent tempered
+-symbols tested there satisfy
+-$\int_{\gamma^-}\eta=2\,D_E((\cdot)\diamond(\cdot))$,
+-a curve-level phenomenon discussed in Remark~\ref{rem:diamondk0}; this does
+-not affect either proof, since the conductor-$17$ argument is
+-self-contained on its own curve and the conductor-$11$ argument uses only
+-the ratio. The form $\pi r=D_E(\cdot)$ found in
++through the same quotient-generator reading: the factor-$1$ statement holds
++on the conductor-$11$ curve as well --- for the \emph{quotient} generator
++$[\gamma^-_0]=[b]$ one has
++$\int_{[\gamma^-_0]}\eta=D_E((\cdot)\diamond(\cdot))$, verified numerically
++in Remark~\ref{rem:diamondk0} --- while the \emph{subgroup} generator
++$\gamma^-=a-2b=-2[b]$ reads exactly twice as much
++(Lemma~\ref{lem:coinvariant}(2)), which accounts for the uniform factor $2$
++observed for all three independent tempered symbols of
++Remark~\ref{rem:diamondk0}. This does
++not affect either proof: the conductor-$17$ argument is
++self-contained on its own curve, and the conductor-$11$ argument anchors
++the quotient value at Bloch's theorem through the proved conductor-$17$
++instance. The form $\pi r=D_E(\cdot)$ found in
+ expository accounts is consistent with neither data set and is not
+ used anywhere in this paper.
+ \end{remark}
+@@ -1603,19 +1678,21 @@ used anywhere in this paper.
+ \label{app:code}
+ 
+ All scripts live in \texttt{code/}; raw outputs in
+-\texttt{notes/attack*.txt}. Dependencies: Python 3.12 with mpmath and
++\texttt{notes/attack*.txt}. Dependencies (\texttt{requirements.txt} at the
++repository root): Python $\ge3.10$ with mpmath and
+ sympy; PARI/GP 2.15.5; python-flint 0.9.0 (Arb) for the interval certification.
+ 
+ \paragraph{Permanence.}
+ The complete research repository --- all scripts, all raw output archives
+ (\texttt{notes/attack*.txt}), and the present source --- is version-controlled
+ with git and accompanies this paper as an electronic supplement; the version
+-of record is the tagged commit \texttt{rev2} (see the repository log). The
+-code is released under the MIT license. Filenames of the form
++of record is the tagged commit \texttt{rev3} (see the repository log). The
++code is released under the MIT license (\texttt{LICENSE} at the repository
++root). Filenames of the form
+ \texttt{attackN} below refer to that archive.
+ 
+ \begin{center}
+-\footnotesize
++\scriptsize
+ \begin{tabular}{@{}ll@{}}
+ \toprule
+ File & Purpose\\
+@@ -1641,20 +1718,27 @@ File & Purpose\\
+ \texttt{n1\_certify.py} / \texttt{n1\_certify.gp} & certification of $\class(C')=2\gamma^-$\\
+ \texttt{n1\_interval.py} & Arb ironclad proof of the period ratio\\
+ \texttt{branch\_certify.py} & branch assignments + modulus ordering (certified)\\
++\texttt{sign\_certify.py} & all-Arb sign certificate: $I_{\mathrm{split}}>0$\\
+ \texttt{k1\_pari/points/zvals.gp} & conductor-$17$ identification, torsion, $z$-values\\
+ \texttt{k1\_certify.py} & mpmath certification of the $k=1$ chain integrals\\
+ \texttt{k1\_branch\_certify.py} & $k=1$ branch assignments + modulus ordering (certified)\\
+ \texttt{k1\_interval.py} & Arb ironclad proof of the $k=1$ period ratio\\
++\texttt{k1\_sign\_certify.py} & all-Arb sign certificate: $\int_{\tilde\gamma}\eta<0$ ($k=1$)\\
+ \texttt{k1\_diamond.py} & exact diamond product for $k=1$ ($k=0$ control)\\
+ \texttt{k1\_dilog.py} & $D_E(A)$, $D_E(2A)$ for conductor $17$\\
+ \texttt{verify\_family.gp} & family conductors and $j$-invariants\\
+ \texttt{verify\_ratios.gp} & PARI \texttt{lfun} cross-check of ratios\\
+ \texttt{kfamily\_torsion.gp} & torsion, $\operatorname{ord}(0,0)$ for the family\\
++\texttt{verify\_coinvariant.gp} & quotient vs subgroup generator integrals
++  ($\int_b\eta=-\pi b_{11}$, $\int_{a-2b}\eta=2\pi b_{11}$)\\
+ \bottomrule
+ \end{tabular}
+ \end{center}
+ 
+-Reproduction:
++Reproduction (from a clean checkout:
++\texttt{python -m pip install -r requirements.txt}; any Python $\ge3.10$
++with mpmath/sympy/python-flint works --- the checked-in \texttt{.venv} is
++\emph{not} required and is not part of the archive):
+ {\footnotesize
+ \begin{verbatim}
+ cd code && python b11.py && python attack1.py && python attack2.py \
+@@ -1664,15 +1748,18 @@ cd code && python b11.py && python attack1.py && python attack2.py \
+   && python ntilde_family.py && python b_family.py && python winding.py \
+   && python dilog.py && python k53_attack.py && python kneg_m.py \
+   && python n1_certify.py
+-.venv/Scripts/python n1_interval.py    # Arb certification, k=0
+-.venv/Scripts/python branch_certify.py  # branch assignments + mod ordering
+-.venv/Scripts/python k1_interval.py     # Arb certification, conductor 17
+-.venv/Scripts/python k1_branch_certify.py  # k=1 branch assignments + ordering
++python n1_interval.py       # Arb certification, k=0
++python branch_certify.py    # branch assignments + mod ordering
++python sign_certify.py      # all-Arb sign certificate, k=0
++python k1_interval.py       # Arb certification, conductor 17
++python k1_branch_certify.py # k=1 branch assignments + ordering
++python k1_sign_certify.py   # all-Arb sign certificate, k=1
+ python k1_certify.py && python k1_diamond.py && python k1_dilog.py
+ gp -q verify_family.gp && gp -q verify_ratios.gp
+ gp -q winding.gp && gp -q dilog.gp
+ gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
+ gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
++gp -q verify_coinvariant.gp  # quotient vs subgroup generator integrals
+ \end{verbatim}
+ }
+ 

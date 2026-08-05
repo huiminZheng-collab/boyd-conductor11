@@ -27,18 +27,20 @@ integrand, range enclosures h_i * G_i, adaptive bisection, strict
 the fold th = c one has D = -4 EXACTLY on the principal-sqrt branch cut,
 so acb.sqrt returns a radius-~2 ball spanning both sides and the root
 balls never certify there.  On non-separable pieces we therefore use an
-ALGEBRAIC hull (no sqrt): |y|^2 <= |B||y| + |x|^3 and |y1 y2| = |x|^3
-imply  |x|^3/M <= |y| <= M,  M = (|B| + sqrt(|B|^2 + 4|x|^3))/2,  so
-log|y_small| lies in [3 log|x| - log M, log M], a ball whose radius is
-O(piece width) near the fold.  Budget: radius < 0.05.  Endpoint
-c = 2*pi/3 is an arb ball.
+ALGEBRAIC hull (no discriminant sqrt): |y|^2 <= |B||y| + |x|^3 and
+  |y1 y2| = |x|^3 imply  |x|^3/M <= |y| <= M,
+  M = (|B| + sqrt(|B|^2 + 4|x|^3))/2,  so log|y_small| lies between
+  L = 3 log|x| - log M and U = log M; the hull ball
+  LO + [0,1]*(HI - LO)  is formed entirely in arb ball arithmetic (no
+  float conversion, no empirical padding) with programmatic containment
+  assertions.  Its radius is O(piece width) near the fold.
+  Budget: radius < 0.05.  Endpoint c = 2*pi/3 is an arb ball.
 
 ASSERTION: certified ball for J_split has mid + rad < 0  ==>  J_split < 0
 (strictly).  Output archived to notes/attack14-sign-k1.txt.
 """
 from flint import acb, arb, ctx
 import heapq
-import math
 
 ctx.prec = 200   # ~60 digits; do NOT set ctx.dps (it would override prec)
 
@@ -71,19 +73,26 @@ def logabs_ball(th_ball):
     # one has D = -4 exactly ON the principal-sqrt branch cut, so acb.sqrt
     # returns a ball of radius ~2 spanning both sides and the root balls
     # always contain 0 -- the sqrt chain can NEVER certify near c.  Use an
-    # ALGEBRAIC hull instead (no sqrt at all): both roots of
-    # y^2 + B y + x^3 = 0 satisfy  |y|^2 <= |B||y| + |x|^3, hence
-    # |y| <= M := (|B| + sqrt(|B|^2 + 4|x|^3))/2,  and |y1 y2| = |x|^3
-    # gives  |y| >= |x|^3 / M.  So log|y_small| in [3 log|x| - log M, log M].
-    mB = float(abs(B).upper())
-    mxu = float(abs(x).upper())
-    mxl = float(abs(x).lower())
-    M = (mB + math.sqrt(mB * mB + 4 * mxu**3)) / 2
-    hi = math.log(M * 1.0000001 + 1e-30)          # padded upper bound
-    lo = 3 * math.log(mxl) - hi
-    lo = lo * 1.0000001 - 1e-30                   # padded lower bound (lo<0)
-    mid, rad = (lo + hi) / 2, (hi - lo) / 2
-    return arb(mid, rad), 'hull'
+    # ALGEBRAIC hull instead (no sqrt of the discriminant at all): both
+    # roots of  y^2 + B y + x^3 = 0  satisfy  |y|^2 <= |B||y| + |x|^3,
+    # hence  |y| <= M := (|B| + sqrt(|B|^2 + 4|x|^3))/2,  and
+    # |y1 y2| = |x|^3  gives  |y| >= |x|^3 / M.  So log|y_small| lies
+    # between L = 3 log|x| - log M and U = log M on the whole piece.
+    # Every step is evaluated in arb ball arithmetic (no float conversion,
+    # no empirical padding): the balls LO, HI contain the ranges of L, U
+    # on the piece, and  H = LO + [0,1]*(HI - LO)  contains the convex
+    # hull of LO and HI (ball subtraction contains all pairwise
+    # differences), hence the range of log|y_small|.  Containment is
+    # asserted programmatically.
+    aB = abs(B)
+    ax = abs(x)
+    M = (aB + (aB * aB + 4 * ax**3).sqrt()) / 2
+    HI = M.log()
+    LO = 3 * ax.log() - HI
+    t = arb("0.5", "0.5")
+    H = LO + t * (HI - LO)
+    assert H.contains(LO) and H.contains(HI), "hull failed to cover inputs"
+    return H, 'hull'
 
 
 def piece_contrib(a, b):

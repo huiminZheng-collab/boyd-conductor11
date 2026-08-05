@@ -1,0 +1,5 @@
+# Reproduction dependencies for code/ (see report/paper.tex, Appendix "Reproduction code").
+# Any Python >= 3.10. PARI/GP (>= 2.15) must be installed separately.
+mpmath>=1.3.0
+sympy>=1.12
+python-flint>=0.6.0

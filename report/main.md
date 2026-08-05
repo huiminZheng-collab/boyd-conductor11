@@ -307,11 +307,15 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
   $k=-3,-2,-1,0,1,2,3 \mapsto N=83,\,91=7\cdot13,\,53,\,11,\,17,\,37,\,79$。
 - $b$ 值双保险：我们的点计数管线（`code/b_family.py`）与 PARI `lfun` 对到 50+ 位。
 
-**命题（环面交，精确刻画）**：对**实** $k$，记 $x=e^{i\theta}$、$y=e^{i\phi}$。环面上的点 $(x,y)$ 落在 $S_k=0$ 上当且仅当
-$$(k+2\cos\theta)\sin(\theta/2)=0\quad\text{且}\quad |k+2\cos\theta|\,|\cos(\theta/2)|\le2.$$
-由此：(i) 环面与曲线相交 ⟺ $k\in[-4,2]$；(ii) $-2\le k\le2$ 时出现**折点** $\theta=\pm\arccos(-k/2)$（该处 $B=x^2+kx+1=0$，$y^2=-x^3$ 的两根模长均为 1）；(iii) $-4\le k\le0$ 时另有 $\theta=0$ 处的**分支交换交点**（$S_k(1,y)=y^2+(k+2)y+1$ 的两根都在单位圆上——$-4<k<0$ 时相异，$k=-4$（$y=1$）与 $k=0$（$y=-1$）处为重根即切触）；(iv) $k=2$ 时折点与边界 $\theta=\pi$ 合并（$S_2(-1,y)=y^2-1$）。这与 Samart 观察到的环面相交参数区间 $K\cap\mathbb R=[-4,2]$ 精确吻合。
+**命题（环面交，精确刻画）**：对**实** $k$，记 $x=e^{i\theta}$（$\theta\in[-\pi,\pi]$）。环面 $|x|=|y|=1$ 上的点 $(x,y)$ 落在 $S_k=0$ 上当且仅当 $\theta$ 落入下列两情形之一：
+(i) $\theta=0$ 且 $|k+2|\le2$；(ii) $k+2\cos\theta=0$（可解 ⟺ $|k|\le2$）。
+由此：(1) 环面与曲线相交 ⟺ $k\in[-4,2]$；(2) $-2\le k\le2$ 时出现**折点** $\theta=\pm\arccos(-k/2)$（该处 $B=x^2+kx+1=0$，$y^2=-x^3$ 的两根模长均为 1）；(3) $-4\le k\le0$ 时另有 $\theta=0$ 处的**分支交换交点**（$S_k(1,y)=y^2+(k+2)y+1$ 的两根都在单位圆上——$-4<k<0$ 时相异，$k=-4$（$y=1$）与 $k=0$（$y=-1$）处为重根即切触）；(4) $k=2$ 时折点与边界 $\theta=\pi$ 合并（$S_2(-1,y)=y^2-1$）。这与 Samart 观察到的环面相交参数区间 $K\cap\mathbb R=[-4,2]$ 精确吻合。
 
-*证明概要*：由 $x+x^{-1}=2\cos\theta$ 得 $B=x(k+2\cos\theta)$；方程 $e^{2i\phi}+Be^{i\phi}+e^{3i\theta}=0$ 除以 $e^{i\phi}$ 给出 $2\cos\psi\,e^{3i\theta/2}=-(k+2\cos\theta)\,e^{i\theta}$（$\psi:=\phi-3\theta/2\in\mathbb R$）；乘以 $e^{-i\theta}$ 后左端 $2\cos\psi\,e^{i\theta/2}$ 须等于实数 $-(k+2\cos\theta)$，遂得两条件；反之满足两条件的 $\theta$ 给出 $\cos\psi\in[-1,1]$，从而给出 $\phi$。在 $\theta\in[-\pi,\pi]$ 上 $\sin(\theta/2)=0$ 仅当 $\theta=0$（条件化为 $|k+2|\le2$，得 (iii)）；因子 $k+2\cos\theta=0$ 可解 ⟺ $|k|\le2$（得 (ii)）；两区间的并为 $[-4,2]$，退化情形直接读出。$\blacksquare$
+*证明*：记 $y=e^{i\phi}$。由 $x+x^{-1}=2\cos\theta$ 得 $B=x(k+2\cos\theta)$；方程 $e^{2i\phi}+Be^{i\phi}+e^{3i\theta}=0$ 除以 $e^{i\phi}$，并用 $e^{i\phi}+e^{i(3\theta-\phi)}=2\cos\psi\,e^{3i\theta/2}$（$\psi:=\phi-3\theta/2\in\mathbb R$），得
+$$2\cos\psi\,e^{i\theta/2}=-(k+2\cos\theta),$$
+其右端为实数。比较虚部与实部：
+$$\cos\psi\,\sin(\theta/2)=0,\qquad 2\cos\psi\,\cos(\theta/2)=-(k+2\cos\theta).$$
+第一式给出两个情形。(i) $\sin(\theta/2)=0$，即 $[-\pi,\pi]$ 上 $\theta=0$：第二式为 $2\cos\psi=-(k+2)$，可解 ⟺ $|k+2|\le2$，此时 $y=e^{i\phi}$（$\cos\phi=-(k+2)/2$）确为 $S_k(1,y)=y^2+(k+2)y+1$ 的根。(ii) $\cos\psi=0$：第二式迫使 $k+2\cos\theta=0$，可解 ⟺ $|k|\le2$；反之若 $k+2\cos\theta=0$，则 $B=0$、$S_k(e^{i\theta},y)=y^2+e^{3i\theta}$ 有两根 $y=\pm e^{i(3\theta+\pi)/2}$（模长均 1）——即折点，$\psi=\pm\pi/2$ 实现该式。两参数区间的并为 $[-4,0]\cup[-2,2]=[-4,2]$，得 (1)；(2)–(4) 直接读出（$k=2$ 时折点 $\arccos(-1)=\pi$；$k=-2$ 时折点 $\arccos(1)=0$ 与情形 (i) 的点重合）。$\blacksquare$
 
 | $k$ | $N$ | $w$ | 折点 $c/\pi$ | $\tilde n(k)$ vs $b_N=\lvert L'(E_k,0)\rvert$ | 证据标签 |
 |---|---|---|---|---|---|
@@ -319,7 +323,7 @@ $$(k+2\cos\theta)\sin(\theta/2)=0\quad\text{且}\quad |k+2\cos\theta|\,|\cos(\th
 | $-2$ | $91$ | $-1$ | 无 | 比值 $0.6339454\ldots$ | 未发现 (PSLQ) |
 | $-1$ | $53$ | $-1$ | $1/3$ | 比值 $0.7392026\ldots$ | 机制失效（命题，见下） |
 | $0$ | $11$ | $+1$ | $1/2$ | $\tilde n=-b_{11}$ | **已证**，(C3)，366 位 |
-| $1$ | $17$ | $+1$ | $2/3$ | $\tilde n=+b_{17}$ | **已证**，定理（附录 A）|
+| $1$ | $17$ | $+1$ | $2/3$ | $\tilde n=+b_{17}$ | **已证**（cond.），定理（附录 A）|
 | $2$ | $37$ | $-1$ | 无 | $m=\tilde n=2\,b_{37}$ | 数值，70 位 |
 | $3$ | $79$ | $-1$ | 无 | $m=\tilde n=b_{79}$ | 数值，70 位 |
 | $-4$ | $37$ | $-1$ | 无（相切） | $m=\frac72\,b_{37}$ | 数值，预测，25 位 |
@@ -367,14 +371,18 @@ $$(k+2\cos\theta)\sin(\theta/2)=0\quad\text{且}\quad |k+2\cos\theta|\,|\cos(\th
   | $k$ | $N$ | 扭子群 | $\operatorname{ord}(0,0)$ | Boyd 型恒等式 |
   |---|---|---|---|---|
   | $0$ | $11$ | $\mathbb Z/5$ | $5$ | 已证（modular units，(C3)） |
-  | $1$ | $17$ | $\mathbb Z/4$ | $4$ | 已证（$\tilde n=b_{17}$，附录 A） |
+  | $1$ | $17$ | $\mathbb Z/4$ | $4$ | 已证（cond.；tempered + 扭点支撑，附录 A） |
   | $-3,-2,-1,2,3$ | $83,91,53,37,79$ | 平凡 | $\infty$ | 非模单位（命题，见下） |
 
 - **修正后的结构二分——精确结构分析 + 数值证据（第四波）**：分野不是 $k$ 的符号，而是 **torus 交点结构**：
-  - **族中的模单位（精确）**：(i) $k=0$（$E=X_1(11)$，$E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/5$）与
-    $k=1$（$\mathbb Z/4$）时 $x,y$ 的除子支撑于有理扭点，而这些恰是模识别下的有理尖点
-    （$k=0$ 见 §7，$k=1$ 见附录 A），故 $x,y$ 是 modular units；这两种情形 Boyd 型恒等式**已证**
-    （(C3) 与附录 A 定理）。(ii) $k\in\{-3,-2,-1,2,3\}$ 时 $E_k$ 有理扭平凡（PARI `elltors`，精确），
+  - **族中的模单位与 temperedness（精确）**：(i) $k=0$（$E=X_1(11)$，
+    $E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/5$）时 $x,y$ 的除子支撑于有理扭点，而这些恰是模识别下
+    的有理尖点（§7），故 $x,y$ 是 modular units；此情形 Boyd 型恒等式**已证**（(C3)）。
+    $k=1$（$\mathbb Z/4$）时 $x,y$ 的除子支撑于有理扭点且 symbol $\{x,y\}$ tempered（Newton 面
+    多项式全分圆，附录 A），故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$——这是 conductor-17 证明
+    唯一用到的 K 理论输入；我们**不**断言 $k=1$ 时 $x,y$ 是 modular units：在自然模模型
+    $X_0(17)$（仅两个尖点）上，支撑于全部四个有理扭点的除子不可能尖点化，且未提供其他模识别。
+    (ii) $k\in\{-3,-2,-1,2,3\}$ 时 $E_k$ 有理扭平凡（PARI `elltors`，精确），
     $(0,0)\ne O$ 非扭；每条 $E_k$ 是其 conductor 的 strong Weil curve，$X_0(N)$ 的尖点映到
     $E_k$ 的扭点（Manin–Drinfeld）即映到 $O$，modular unit 的除子只能支撑于 $\{O\}$，而 $x=0$
     与 $S_k$ 交于 $(0,0)$ 与 $(0,-1)$。故这些 $k$ 的 $x,y$ **不是** modular units，模单位
@@ -385,7 +393,8 @@ $$(k+2\cos\theta)\sin(\theta/2)=0\quad\text{且}\quad |k+2\cos\theta|\,|\cos(\th
     $m(S_{-4})=\frac72|L'(E_{37},0)|$、$m(S_{-5})=\frac14|L'(E_{359},0)|$、
     $m(S_{-6})=\frac18|L'(E_{997},0)|$（25 位精确）；注意 $S_{-4}$ 与 $S_2$ 同为 conductor 37，
     给出同一曲线的 Rodriguez-Villegas 型关系。整数 $k$ 且 $-4<k<2$ 时，$x,y$ 为模单位的情形
-    恰是两个已证情形 $k=0,1$；$k=-1,-2,-3$（扭平凡、$\theta=0$ 处分支交换交点）在 PSLQ 界
+    只有 $k=0$；$k=1$ 有 tempered symbol 与扭点支撑的除子（但无模单位结构，见上条）；
+    $k=-1,-2,-3$（扭平凡、$\theta=0$ 处分支交换交点）在 PSLQ 界
     $10^8$ 内未发现有理关系。我们把这些记录为**猜想的证据，而非定理**。
 
 
@@ -410,7 +419,7 @@ $\eta(x,y)=\log|x|\,d\arg y-\log|y|\,d\arg x$；$\mathbb Z[E]^-$ 取 Lalín–Ra
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、$y^2+y$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
-| S5 | regulator 常数：Bertin–Brunault (3.210) 锚定 Weierstrass symbol $\{x_W,y_W\}$，经 $\diamond$ 比率 $-1$ 桥接（常数只依赖 $(E,\gamma^-)$）得 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1 第十波重修） | 闭合 |
+| S5 | regulator 常数：余商生成元上 Bloch 因子-1 锚定 $\int_{[b]}\eta=\pm\pi b_{11}$，经指数引理（$\Delta<0$，指数 2）翻倍得 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1） | 闭合 |
 
 ### 9.1 regulator 常数的显式计算（第三波，40 位）
 
@@ -440,96 +449,122 @@ $$D_E(P)=0.1911937370843316957549544343121738161012\ldots$$
 $$-5D_E(P)+5D_E(2P)=-5\Bigl(1-\frac32\Bigr)D_E(P)=\frac52\,D_E(P)=\pi\,b_{11},$$
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
 
-**regulator 的锚定（第十波重修；rev2 严格化）**：$\{x,y\}$ 沿 $\gamma^-$ 的 regulator
-评估依赖两个输入：一个与归一化无关的**比例引理**，和一个把文献中被锚定的 symbol
-识别出来的显式**字典**。
+**regulator 的锚定（第十波重修；第十二波：单一归一化 + 指数引理）**：$\{x,y\}$ 沿
+$\gamma^-$ 的 regulator 评估全程使用**单一固定归一化**下的 Bloch 定理，外加一条指数
+引理，比较 $\Delta<0$ 曲线上"$H_1(E,\mathbb Z)^-$"的两种标准含义。
 
-**比例引理**：固定 $E/\mathbb Q$、$H_1(E,\mathbb Z)^-$ 的生成元 $\gamma$ 与 $\eta$、
-$\mathbb Z[E]^-$、$D_E$ 的约定。设 Bloch 定理在这组数据上至多差一个约定常数：
-存在 $c\in\mathbb R^\times$ 使对每个 tempered symbol $\{f,g\}$，
-$$\int_\gamma\eta(f,g)=c\cdot D_E\big((f)\diamond(g)\big).$$
-则对任意两个 $\diamond$ 值非零的 tempered symbol，
-$$\frac{\displaystyle\int_\gamma\eta(f_1,g_1)}{\displaystyle\int_\gamma\eta(f_2,g_2)}
-\;=\;\frac{D_E\big((f_1)\diamond(g_1)\big)}{D_E\big((f_2)\diamond(g_2)\big)}.$$
-*证明*：假设的两端都是从 tempered symbol 群到 $(\mathbb R,+)$ 的同态（regulator 侧由
-积分的线性，$\diamond$ 侧由 $\diamond$ 的双线性与 $D_E$ 的可加性）；Bloch 定理即这两个
-同态的相等，更换约定只把每端缩放一个固定非零标量（$\gamma$ 的符号、$D_E$ 的定向符号、
-$\mathbb Z[E]^-$ 的商表示——后者下取值不变，因 $D_E$ 是奇函数），故比例假设即 Bloch
-定理本身，$c$ 吸收一切约定错配；特别地 $c$ 不依赖 symbol，两非零值相除即得结论。$\blacksquare$
+**指数引理（regulator 生成元与指数）**：设 $E/\mathbb R$ 为椭圆曲线，$c$ 为复共轭
+对合，$H_1(E,\mathbb Z)^\pm=\ker(c_*\mp1)$，$\{f,g\}$ 为 $E$ 上的 tempered symbol。
+配对 $\gamma\mapsto\int_\gamma\eta(f,g)$ 下降到**余商**（coinvariant quotient）
+$H_1(E,\mathbb Z)/H_1(E,\mathbb Z)^+$ 上：
 
-*附注*：conductor-17 曲线（附录 A）上同一组约定以 $c=1$ 闭合，是有 L–R 佐证的已证实例；
-本曲线上三个独立 tempered symbol 的认证积分恰给出 $c=2$（见下"因子 2"段）。引理只用
-$c$ 的存在性。
+1. 若 $\Delta>0$，则 $H_1(E,\mathbb Z)^-=\mathbb Z b$ 同构地映上余商 $\mathbb Z[b]$：
+   反不变生成元代表余商生成元（指数 $1$）；
+2. 若 $\Delta<0$，则 $H_1(E,\mathbb Z)^-=\mathbb Z\gamma^-$ 在余商 $\mathbb Z[b]$ 中的
+   像为 $2\mathbb Z[b]$（指数 $2$）：用反不变生成元引理（§9.2）的基，
+   $\gamma^-=a-2b\equiv-2[b]$，故对每个 tempered symbol
+   $$\int_{\gamma^-}\eta(f,g)=-2\int_{[b]}\eta(f,g).$$
 
-**Brunault–Bertin symbol 字典**：文献中的锚定并不涉及我们的 symbol。Brunault Thm. 8
-固定 $E=X_1(11):y^2+y=x^3-x^2$ 及其 Weierstrass 坐标函数；(3.211) 定义
-$r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g)$（$\gamma$ 生成
-$H_1(E(\mathbb C),\mathbb Z)^-$），(3.210)（引 Bertin 的 Crelle 版 Thm. 6 与 Cor. 6.1）
-评估该坐标对的 $r_{\gamma^-}$。记该对为 $\{x_W,y_W\}$。Brunault 的 symbol 与 Weierstrass
-坐标的识别有三重独立保障：
+*证明*：配对在 $H_1(E,\mathbb Z)^+$ 上平凡：若 $c(\gamma)=\gamma$，则由 $c^*\eta=-\eta$，
+$$\int_\gamma\eta=\int_{c(\gamma)}\eta=\int_\gamma c^*\eta=-\int_\gamma\eta$$
+（参见 Lalín–Ramamonjisoa Rem. 4），故下降到余商。$\Delta<0$ 时 $c_*:a\mapsto a$、
+$b\mapsto a-b$（反不变生成元引理），故 $H_1^+=\mathbb Z a$、余商 $=\mathbb Z[b]$，
+反不变类 $a-2b$ 投影为 $-2[b]$，指数 $2$；$\Delta>0$ 时 $c_*:a\mapsto a$、$b\mapsto-b$，
+故 $H_1^-=\mathbb Z b$，投影 $b\mapsto[b]$ 为同构。$\blacksquare$
 
-1. *文本*：Brunault §3.7–3.9 中名为 $x,y$ 的函数只有 Thm. 8 的坐标，且 (3.211) 是对
-   $E(\mathbb C)$ 上的函数陈述的，而非对 Bertin 平面三次上的函数；
-2. *除子*：极小模型上
-   $$\operatorname{div}(x_W)=[A]+[4A]-2[O],\qquad \operatorname{div}(y_W)=2[A]+[3A]-3[O],$$
-   故在 $\mathbb Z[E]^-$ 中 $(x_W)\diamond(y_W)\equiv8(O)+5(A)-5(2A)$，由 Bertin exotic
-   relation 得 $D_E(\diamond_W)=-\frac52D_E(P)$；
-3. *数值*：沿反不变生成元 $\gamma^-=s(2w_2-w_1)$（$0\le s\le1$）直接积分
-   $\eta(x_W,y_W)$，Richardson 外推 9 位得 $-2\pi b_{11}$（`code/bertin_diamond.gp`），
-   与 (3.210) 吻合；Bertin 三次 $(X+1)(Y+1)(X+Y+1)+XY=0$ 的坐标 symbol 给出的却是
-   $+14\pi b_{11}$，由此排除。
+**Bloch 定理**：本文用 Lalín–Ramamonjisoa Thm. 6 表述的 Bloch 定理，归一化取
+L–R Def. 5 eq. (10)（与我们 $D_E$ 的级数实现逐字一致，两条曲线上均 60 位核对）：
+对 $f,g\in\mathbb Q(E)$、$\{f,g\}\in K_2(E)$，
+$$\int_{\bar\gamma}\eta(f,g)=D_E\big((f)\diamond(g)\big)\qquad\text{(B)}$$
+其中 $\bar\gamma$ 是余商 $H_1(E,\mathbb Z)/H_1(E,\mathbb Z)^+$ 的生成元——regulator
+天然定义在其上的那个群。两端对 symbol 均 $\mathbb Q$-线性，故 (B) 从 $K_2(E)$ 延拓到
+$K_2(E)\otimes\mathbb Q$，即全部 tempered symbol。$\Delta>0$ 时余商与反不变生成元一致
+（指数引理 1），(B) 正是 L–R Thm. 6 在其 conductor-17 计算中所用的陈述——附录 A 依赖的
+正是这个**已证实例**；$\Delta<0$ 时两种读法差指数 $2$（指数引理 2），而余商读法 (B)
+在本曲线上由三个独立 tempered symbol 与 $\int_{[b]}\eta$ 的直接数值评估双重确认
+（见下"因子 2——已解决"段）。
 
-**应用到我们的 symbol**：比较 $\diamond$ 展开，
-$$D_E\big((x_W)\diamond(y_W)\big)=-D_E\big((x)\diamond(y)\big)\neq0$$
-（非零因 $D_E(P)=\frac{2\pi}{5}b_{11}\neq0$）。两个 symbol 都是 tempered 的：除子支撑处的
-tame 符号皆为单位根（精确局部展开，`code/bertin_diamond.py`：$\{x,y\}$ 在 $A,2A,3A,O$ 处
-$T\in\{\pm1\}$；$\{x_W,y_W\}$ 有 $T_A=-1$、$T_O=+1$），故比例引理适用并迫使
-$$\int_{\gamma^-}\eta(x,y)=-\int_{\gamma^-}\eta(x_W,y_W).$$
-Brunault (3.210) 给出
-$$|r_{\gamma^-}\{x_W,y_W\}|=\frac{5}{2\pi}D_E(P)=b_{11},
-\qquad\text{即}\qquad \int_{\gamma^-}\eta(x_W,y_W)=\pm2\pi b_{11},$$
-符号取决于定向（Brunault Remarque 20：$D_E$ 依赖 $E(\mathbb R)$ 的定向，只定义到符号）。故
-$$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}.$$
-**regulator 一侧由此成为已证定理**；旧稿"K₂ 秩 1 + 认证积分钉 $\lambda=1$"的循环
-论证已删除。exotic relation $D_E(2P)=\frac32D_E(P)$
+**应用到我们的 symbol**：symbol $\{x,y\}$ 是 tempered 的，$\diamond$ 值为
+$$D_E\big((x)\diamond(y)\big)=-5D_E(P)+5D_E(2P)=\tfrac52\,D_E(P)=\pi\,b_{11}\neq0$$
+（用 Bertin exotic relation 与 Brunault 的系数——Thm. 8 与 Cor. 101，eq. (3.151)——
+均见上文）。Bloch 定理 (B) 给出 $\int_{[b]}\eta(x,y)=\pm\pi b_{11}$；本曲线
+$\Delta=-11<0$，指数引理 2 把它翻倍：
+$$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}\qquad\text{(A)}$$
+（符号取决于定向）。**regulator 一侧由此成为单一归一化下的已证定理**；余下的缺口——
+Boyd 劈裂积分链与闭链 $C'=2\gamma^-$ 的等同——由 §9.2 的认证闭合。旧稿"K₂ 秩 1 +
+认证积分钉 $\lambda=1$"的循环论证已删除。exotic relation $D_E(2P)=\frac32D_E(P)$
 现同时引 Bertin 两篇：CRM Proc. Lecture Notes **36** (2004) 与
 J. Reine Angew. Math. **569** (2004) 175–188（后者即 Brunault 的参考文献 [10]）；
 证明出处为 CRM 版（**更正**维持：Crelle 版中此关系仍是猜想；zbMATH 书评与
 Touafek–Kerada、Mellit 三处佐证 CRM 版才是证明出处）。
 
-**归一化问题（第十波定论）**：conductor-17 的证明中 Bloch 定理用 Lalín–Ramamonjisoa
-Thm. 6 的归一化：$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、$r[\gamma]=\int_\gamma\eta$。
-该因子-1 陈述**在该曲线上**的正确性由自洽性论证保证（我们自己的重构；L–R 原文中
-该常数 $C$ 从未被确定）：L–R §7 中实闭链的类是 $\gamma$ 的先验未知整数倍 $C$，
-将因子-1 定理用于其 $(X)\diamond(Y)$ 并与其已证的 Corollary 2（其 Thm. 1 eq. (5)，
-结合 Zudilin 恒等式即其 eq. (6)）比较，迫使 $C\cdot f=1$ 且 $C\in\mathbb Z\setminus\{0\}$，
-故 $f=1$；因子-2 陈述则迫使 $C=1/2\notin\mathbb Z$。其 §5 的底层 $D_E$ 恒等式
-我们已 60 位复现。k=0 不用 $\diamond$-形式的绝对值：它只通过同一曲线上两个 tempered
-symbol 的**比率**（上段，常数无论取何值都消去）进入，绝对值由 Bertin–Brunault 在
-$\{x_W,y_W\}$ 上的定理锚定。值得注意的是，因子-1 陈述本身在 conductor-11 曲线上
-**失效**：那里检验的全部三个独立 tempered symbol 都满足
-$\int_{\gamma^-}\eta=2\,D_E((\cdot)\diamond(\cdot))$（曲线级现象，见下段）；这不影响
-任一证明——conductor-17 论证在自己的曲线上自洽，conductor-11 论证只用比率。
+**归一化问题（第十波定论；第十二波由指数引理解释）**：conductor-17 的证明中 Bloch 定理用
+Lalín–Ramamonjisoa Thm. 6 的归一化：$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、
+$r[\gamma]=\int_\gamma\eta$。该因子-1 陈述**在该曲线上**的正确性由自洽性论证保证
+（我们自己的重构；L–R 原文中该常数 $C$ 从未被确定）：L–R §7 中实闭链的类是 $\gamma$
+的先验未知整数倍 $C$，将因子-1 定理用于其 $(X)\diamond(Y)$ 并与其已证的 Corollary 2
+（其 Thm. 1 eq. (5)，结合 Zudilin 恒等式即其 eq. (6)）比较，迫使 $C\cdot f=1$ 且
+$C\in\mathbb Z\setminus\{0\}$，故 $f=1$；因子-2 陈述则迫使 $C=1/2\notin\mathbb Z$。
+（这一自洽性论证现由指数引理 1 解释：在 $\Delta>0$ 的 conductor-17 曲线上反不变子群
+**与余商重合**，故因子-1 定理不存在任何子群读法的歧义。）其 §5 的底层 $D_E$ 恒等式
+我们已 60 位复现。k=0 的 $\diamond$-形式经**同一个余商生成元读法**进入：因子-1 陈述在
+conductor-11 曲线上同样成立——对余商生成元 $[\gamma^-_0]=[b]$ 有
+$\int_{[\gamma^-_0]}\eta=D_E((\cdot)\diamond(\cdot))$（数值验证见下段），而子群生成元
+$\gamma^-=a-2b=-2[b]$ 的读数恰为其两倍（指数引理 2）——这正解释了全部三个独立
+tempered symbol 观测到的统一因子 2（见下段）。这不影响任一证明：conductor-17 论证在
+自己的曲线上自洽，conductor-11 论证经 conductor-17 已证实例把余商值锚定在 Bloch 定理上。
 旧笔记"$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）"与两组数据都不符，已弃用。
-**因子 2 之谜的新数据（第十波，`code/bertin_diamond.py` + `bertin_diamond.gp`，存档
-`notes/attack13-bertin-diamond.txt`）**：形式展开 $D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$，
-而认证积分 $\int_{\gamma^-}\eta=2\pi b_{11}$——因子-1 归一化下两边恰差 2。我们用同一曲线
-上三个**独立** tempered symbol 考察此事：Weierstrass symbol、我们的 $S_0$ symbol、以及
-Bertin (C1) 三次 $(X+1)(Y+1)(X+Y+1)+XY=0$ 的坐标 symbol $\{X,Y\}$（经显式 Riemann–Roch
-变换映到 $E$，PARI `ellidentify` 认证像为 `11.a3`，精确变量代换 $[1,-1,-2,2]$）。
-$\diamond$ 值分别为 $-\frac52$、$+\frac52$、$+\frac{35}{2}$ 倍 $D_E(P)$，而沿 $\gamma^-$
-直接积分 $\eta$ 给出 $-5$、$+5$、$+35$ 倍 $D_E(P)$（前两个如上认证；第三个由外推
-Riemann 和，与 $2\pi m(C_1)=14\pi b_{11}$ 一致）：**因子在三个情形都恰为 2**。故它是
-$(E,\gamma^-)$ 的曲线级性质，与 symbol、$\diamond$ 约定（两曲线上相同）、tame symbol
-（皆单位根）、$D_E$ 级数无关。conductor-17 的计算用同代码同约定闭合于因子 1
-（那里有 L–R 已证定理佐证）。两条曲线恰在实拓扑上不同：$E$ 有 $\Delta=-11<0$、
-单实分支、$\Re\tau=1/2$（故 $\gamma^-=a-2b$ 而非实轨迹），conductor-17 曲线有
-$\Delta>0$、双实分支、$\Re\tau=0$（故 $\gamma^-=b$）；**两种情形**下反不变生成元都本原
-（反不变生成元引理与 17 情形的类似对合 $a\mapsto a$、$b\mapsto-b$），排除了因子源于
-非本原闭链假象的可能。我们预期因子源于 Bloch 证明中单分支格的反不变
-闭链对基本域边界的归一化，但未做机理级证明。由于 (C3) 的证明只用比率（常数消去），
-此问题不影响主定理，如实记录。副产品：$D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$
-精确成立，在 $K_2(E)$ 层面解释了 Bertin $m(C_1)=7b_{11}$ 中的系数 7。
+**因子 2——已解决（指数现象；数据：`code/bertin_diamond.py` + `bertin_diamond.gp`，存档
+`notes/attack13-bertin-diamond.txt`；新验证 `code/verify_coinvariant.gp`，存档
+`notes/attack15-coinvariant.txt`）**：形式展开
+$D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$，而沿**子群**生成元的认证积分
+$\int_{\gamma^-}\eta=2\pi b_{11}$——因子-1 归一化（L–R Thm. 6）下两边恰差 2。我们用
+同一曲线上三个**独立** tempered symbol 考察此事：Weierstrass symbol、我们的 $S_0$
+symbol、以及 Bertin (C1) 三次 $(X+1)(Y+1)(X+Y+1)+XY=0$ 的坐标 symbol $\{X,Y\}$（经显式
+Riemann–Roch 变换映到 $E$，PARI `ellidentify` 认证像为 `11.a3`，精确变量代换
+$[1,-1,-2,2]$）。$\diamond$ 值分别为 $-\frac52$、$+\frac52$、$+\frac{35}{2}$ 倍
+$D_E(P)$，而沿 $\gamma^-$ 直接积分 $\eta$ 给出 $-5$、$+5$、$+35$ 倍 $D_E(P)$（前两个
+如上认证；第三个由外推 Riemann 和，与 $2\pi m(C_1)=14\pi b_{11}$ 一致）：**因子在三个
+情形都恰为 2**。故它是 $(E,\gamma^-)$ 的曲线级性质，与 symbol、$\diamond$ 约定（两曲线上
+相同）、tame symbol（皆单位根）、$D_E$ 级数无关。
+
+**解决**：这就是指数引理的指数现象。L–R Def. 3 的 regulator 配对在
+$H_1(E(\mathbb C),\mathbb Z)^+$ 上为零（其 Remark 4），故经**余商** $H_1/H_1^+$ 分解；
+Bloch 定理 (B) 因此以因子 1 评估**余商**生成元 $[\gamma^-_0]=[b]$ 上的积分，而**子群**
+生成元 $\gamma^-=a-2b$ 上的积分获得 $\mathbb Z\gamma^-$ 在 $H_1/H_1^+$ 中的指数 2
+（指数引理 2）。conductor-17 曲线上指数为 1（指数引理 1：$\Delta>0$、$b\mapsto-b$），
+子群与余商重合，同一计算以因子 1 闭合——那里有 L–R 已证定理佐证。三个 symbol 的统一
+因子 2 因此正是 $\Delta<0$ 指数，conductor-17 的因子 1 是其 $\Delta>0$ 对照。
+我们还在 conductor-11 曲线本身数值验证了余商读法（`code/verify_coinvariant.gp`，存档
+`notes/attack15-coinvariant.txt`）：沿平移以避开 $\eta(x_W,y_W)$ 极点的闭链积分，
+$$\textstyle\int_a\eta=0,\qquad
+\int_b\eta=-\pi b_{11}=D^E\big((x_W)\diamond(y_W)\big),\qquad
+\int_{a-2b}\eta=2\pi b_{11},$$
+前两个随细分以 $O(1/N)$ 收敛、Richardson 外推（$1/N$ 线性）与 $-\pi b_{11}$ 吻合到
+$10^{-6}$，最后一个到 $10^{-22}$；且 $-2\int_b\eta=\int_{a-2b}\eta$ 以同精度成立。
+特别地，因子-1 恒等式 (B) 对 $\{x_W,y_W\}$ 在余商生成元上成立，其子群生成元读数即
+加倍的 (A)。副产品：$D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ 精确成立，在 $K_2(E)$
+层面解释了 Bertin $m(C_1)=7b_{11}$ 中的系数 7。Touafek 转述的形式
+$\pi r=D_E(\diamond)$（其 Thm. 1）与因子-1、因子-2 两组数据都不相容，本文不用。
+
+**与 Brunault symbol 字典的交叉验证（核查，非证明的一部分）**：我们的证明只经 conductor-17
+已证实例（附录 A）使用 Bloch 定理；本段为交叉验证，不属于证明。Brunault
+Thm. 3.9.3.118 对 $X_1(11)$ 上的 Weierstrass 坐标 $x,y$ 以 $D_E$ 评估
+$r_{\gamma^-}\{x,y\}$，其证明终于 (3.210)–(3.211)：
+$$r_{\gamma^-}\{x_W,y_W\}=\frac1{2\pi}D^E\big(8(O)+5(A)-5(2A)\big)
+=-\frac{5}{2\pi}D_E(P),\qquad\text{(3.210)}$$
+$$\big|r_{\gamma^-}\{x_W,y_W\}\big|=\frac{5}{2\pi}D_E(P)=b_{11},\qquad\text{(3.211)}$$
+第二式把 Brunault 自己的 Cor. 3.5.101 $\zeta$ 值 $L'(E,0)=5D_E(P)$（(3.151)）代入其
+(3.211)。该坐标对与我们的 $\{x_W,y_W\}$ 的识别有三重独立核查：*文本*（证明中写明
+$x,y$ 是 "coordonnées de Weierstrass" 经 $j^*$ 在 "sur un modèle de Weierstrass" 上的
+拉回）；*除子*（$\operatorname{div}x_W=[A]+[4A]-2[O]$、
+$\operatorname{div}y_W=2[A]+[3A]-3[O]$，故 $(x_W)\diamond(y_W)\equiv8(O)+5(A)-5(2A)$
+mod $\mathbb Z[E(\mathbb Q)_{\mathrm{tors}}]$）；*数值*（$5D_E(P)/(2\pi)=b_{11}$ 与 §9.2
+认证值 60 位全符）。由于 Brunault 的 $\gamma$ 是**子群**生成元（其脚注 2：
+$H_1(E(\mathbb C),\mathbb Z)^-=\mathbb Z\gamma$），(3.211) 读作
+$\big|\int_{\gamma^-}\eta(x_W,y_W)\big|=2\pi b_{11}$——正是指数引理 2 作用于余商值
+$\int_{[\gamma^-_0]}\eta(x_W,y_W)=D^E((x_W)\diamond(y_W))=-\pi b_{11}$ 的结果：计入指数
+后，字典、Bloch 锚定与我们的数值三者一致。
 
 Samart 2023 仍将 (C3) 记录为开放恒等式，缺口不在 regulator 计算，而在于
 **Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 闭链的等同**——这一环由第五波的
@@ -602,12 +637,11 @@ $\eta=-\log|y|\,d\theta$ 沿 $C'$ 连续可积。
 $$\int_{\beta_0}\eta=2(J_1-J_2)=\int_{\tilde\gamma}\eta
 \qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,$$
 其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
-再由 §9.1 第十波重修的锚定：Brunault (3.210)/(3.211) 给出 Weierstrass symbol
-$|r_{\gamma^-}\{x_W,y_W\}|=\frac{5}{2\pi}D_E(P)=b_{11}$（$r=\frac1{2\pi}\int\eta$；
-并经 $\gamma^-=s(2w_2-w_1)$ 上的直接积分独立认证到 Richardson 9 位），两个 symbol 的
-$\diamond$ 值比率恰为 $-1$、Bloch 常数只依赖 $(E,\gamma^-)$ 而消去，故
-$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$（+ Brunault (3.151) $D_E(P)=\frac{2\pi}{5}b_{11}$
-+ Bertin exotic $D_E(2P)=\frac32D_E(P)$，均为定理）。合成：
+再由 §9.1 的锚定：$\{x,y\}$ 的 $\diamond$ 值 $\frac52D_E(P)=\pi b_{11}$
+（Brunault (3.151) $D_E(P)=\frac{2\pi}{5}b_{11}$ + Bertin exotic $D_E(2P)=\frac32D_E(P)$，
+均为定理），Bloch 因子-1 恒等式 (B) 给出余商值 $\int_{[b]}\eta(x,y)=\pm\pi b_{11}$，
+指数引理 2（本曲线 $\Delta=-11<0$，指数 2）把它翻倍，故
+$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$（(A)）。合成：
 $$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
 故由结构恒等式 $I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$（§6.3，已证）得
 $|I_{\mathrm{split}}|=b_{11}$。两个符号事实完成剩下的选择。**其一**，
@@ -664,11 +698,14 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
    唯一，故 $\mathrm{class}(C')=2\gamma^-$。
 6. **符号**：最终符号由 $I_{\mathrm{split}}$ 的认证包围固定：
    $I_{\mathrm{split}}\in[0.1489,0.1553]\subset(0,\infty)$（`sign_certify.py`，证书
-   `notes/attack14-sign-k0.txt`），而 $b_{11}=\Lambda(f_{11},2)>0$ 由 $s=2$ 处绝对收敛的
+   `notes/attack14-sign-k0.txt`；所有值域包围——含未分离段上的凸包——完全在球算术内
+   构造并验证，带程序化包含断言），而 $b_{11}=\Lambda(f_{11},2)>0$ 由 $s=2$ 处绝对收敛的
    Euler 乘积精确成立。
 
-主定理证明中唯一的非机器步骤是 §9.1 的 regulator 评估，它使用 Brunault 的已发表定理
-（Thm. 8）与比例引理。
+主定理证明中唯一的非机器步骤是 §9.1 的 regulator 评估，它使用**单一归一化**下的 Bloch
+定理（Lalín–Ramamonjisoa Thm. 6 的表述），连同 Brunault Cor. 3.5.101（eq. (3.151)）的
+两个 $D_E$ 值；其 symbol 字典（Thm. 118，eq. (3.210)–(3.211)）只作交叉验证
+（§9.1 末"与 Brunault symbol 字典的交叉验证"段）。
 
 ## 10. 总结
 
@@ -677,18 +714,30 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理；Brunault (3.210) 锚定的是 Weierstrass symbol $\{x_W,y_W\}$，经 $\diamond$ 比率 $-1$ 桥接到我们的 symbol，§9.1 第十波重修），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
-7. 族结果（第四波完成 + rev2 精确化）：$\tilde n(k)$ 表 + **精确结构分析 + 数值证据**框架——环面交精确刻画（命题：交 ⟺ $k\in[-4,2]$）与模单位轨迹精确刻画（恰 $k=0,1$）；$k\notin(-4,2)$ 时 Deninger 机制预期适用、$m(S_k)=r_k|L'(E_k,0)|$ 获数值确认（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式证于 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$），$k=-1,-2,-3$ PSLQ 阴性（界 $10^8$ 内未发现）。**conductor 53 机制失效**：闭链空间精确一维、生成元周期由 $1/u_++1/u_-\equiv0$ 恒等于 0（环面上无反不变闭链可实现）+ $x,y$ 非 modular units（精确除子论证：53.a1 为 strong Weil curve，$X_0(53)$ 尖点全映到 $O$，而 $\operatorname{div}(x),\operatorname{div}(y)$ 的支撑含非扭生成元）——机制不适用，在缺乏精确候选公式下**留作开放**（§8.4）。
+6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与单一归一化下的
+Bloch 定理 + Brunault (3.151) + Bertin exotic（均为定理；余商生成元上因子-1 锚定
+$\int_{[b]}\eta=\pm\pi b_{11}$，经指数引理（$\Delta<0$，指数 2）翻倍得
+$\int_{\gamma^-}\eta=\pm2\pi b_{11}$，§9.1），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$
+为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
+7. 族结果（第四波完成 + rev2/rev3 精确化）：$\tilde n(k)$ 表 + **精确结构分析 + 数值证据**框架——环面交精确刻画（命题：交 ⟺ $k\in[-4,2]$）与模单位/temperedness 结构精确刻画（模单位仅 $k=0$；$k=1$ 为 tempered + 扭点支撑，足以支撑 conductor-17 论证）；$k\notin(-4,2)$ 时 Deninger 机制预期适用、$m(S_k)=r_k|L'(E_k,0)|$ 获数值确认（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式证于 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$，conditional on 归一化引理），$k=-1,-2,-3$ PSLQ 阴性（界 $10^8$ 内未发现）。**conductor 53 机制失效**：闭链空间精确一维、生成元周期由 $1/u_++1/u_-\equiv0$ 恒等于 0（环面上无反不变闭链可实现）+ $x,y$ 非 modular units（精确除子论证：53.a1 为 strong Weil curve，$X_0(53)$ 尖点全映到 $O$，而 $\operatorname{div}(x),\operatorname{div}(y)$ 的支撑含非扭生成元）——机制不适用，在缺乏精确候选公式下**留作开放**（§8.4）。
 8. **conductor 17（第七波，附录 A）**：同一方法再应用于 $k=1$——链结构逐字平行（$c=2\pi/3$、跳跃值 $y=\pm i$ 精确）、$\mathrm{class}(C')=\pm2\gamma^-$ Arb 铁证、regulator 侧由 Lalín–Ramamonjisoa 已发表定理闭环——Samart 的 $\tilde n(1)=b_{17}$ 类比猜想成为定理，**conditional on 附录 A 讨论的归一化引理**。
-9. **rev2（第十一波）严格化**：比例引理（锚定常数与 symbol 无关，§9.1）+ 反不变生成元本原性引理（§9.2）+ 环面交/模单位的精确刻画（§8.4）+ 符号的认证区间包围（`sign_certify.py`、`k1_sign_certify.py`）+ 认证计算定理（§9.2 末六项清单）；k=1 材料移入附录 A 并标注 conditional。
+9. **rev2/rev3（第十一、十二波）严格化**：环面交/模单位的精确刻画（§8.4）+ 反不变生成元本原性引理（§9.2）+ 符号的认证区间包围（`sign_certify.py`、`k1_sign_certify.py`）+ 认证计算定理（§9.2 末六项清单）+（第十二波）因子 2 的源头定位——反不变子群在余商 $H_1/H_1^+$ 中的指数（$\Delta<0$ 时指数 2；指数引理，§9.1），Bloch 定理重述为余商生成元的因子-1 恒等式 (B)，直接锚定 (A) 取代已删除的比例引理，并新增 `verify_coinvariant.gp` 直接数值验证（$\int_b\eta=-\pi b_{11}$ 因子 1、$\int_{a-2b}\eta=2\pi b_{11}$）；Brunault Thm. 118 字典降为交叉验证；k=1 材料移入附录 A 并标注 conditional；LICENSE 与 requirements.txt 落定（§11）。
 
 
 ## 附录 A. k=1（conductor 17）：同一方法的再应用（第七波；conditional）
 
-**本附录的地位**：正文在逻辑上独立于本附录。这里证明的定理（Samart 的 conductor-17 类比）
-使用 Lalín–Ramamonjisoa Thm. 6 的因子-1 归一化下的 Bloch 定理；"这是该曲线上的正确归一化"
-来自下方归一化备注中的自洽性论证（我们自己的重构；L–R 原文并未确定该常数）。因此本结果
-应读作 **conditional on 该归一化引理**；附录中其余一切与正文同一标准证明。
+**本附录的地位**：正文在逻辑上独立于本附录。这里证明的定理（Samart 的 conductor-17 类比）建立在恰好两条假设之上：
+
+- **temperedness**：$S_1$ 的 Newton 面多项式全部是分圆多项式，因此
+  $\{x,y\}\in K_2(E_1)\otimes\mathbb{Q}$——这一定义性性质在本附录中**被精确证明**（K_2 一节）。
+  我们**不**使用、也**不**声称 modular-units 性质：在自然模模型 $X_0(17)$（仅两个尖点）上，
+  支撑集含全部四个有理扭点的除子不可能全部由尖点支撑（§8.4 的命题）。
+- **因子-1 归一化下的 Bloch 定理**（Lalín–Ramamonjisoa Thm. 6 的表述）。"这是该曲线上的正确归一化"
+  来自下方归一化备注中的自洽性论证（我们自己的重构；L–R 原文并未确定该常数）；等价地，
+  由指数引理 1 的指数-1 陈述：在此 $\Delta>0$ 曲线上反不变子群与余商重合，故因子-1 定理
+  不存在任何子群读法的歧义。
+
+因此本结果应读作 **conditional on 该归一化引理**；附录中其余一切与正文同一标准证明。
 
 完整细节见 `notes/proof-k1.md`。Samart 的 conductor-17 类比猜想 $\tilde n(1)=b_{17}$
 沿 §9.2 的同一条路线**全程打通并证毕**，认证级别与 k=0 相同：
@@ -714,11 +763,15 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
   认证区间包围（`code/k1_sign_certify.py`，证书 `notes/attack14-sign-k1.txt`）给出
   $\frac1{2\pi}\int_{\tilde\gamma}\eta\in[-0.3026,-0.2961]\subset(-\infty,0)$，故
   $\boxed{\tilde n(1)=+b_{17}}$（Samart conductor-17 类比猜想，证毕）。
-- **归一化备注（第八波定论）**：k=1 用的 Lalín 归一化（$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，
-  因子 1）经 conductor-17 自洽性论证确证为 Bloch 定理的正确形式（我们的重构：
-  因子-1 定理与 L–R 已证 Corollary 2 比较迫使 $C\cdot f=1$，$C\in\mathbb Z\setminus\{0\}$，
-  详见 §9.1；L–R 原文并未确定 $C$）；k=0 的证明不用 $\diamond$-形式，直接锚定
-  Bertin–Brunault (3.210)/(3.211) 的已证定理（§9.1）。
+- **归一化备注（第八波定论；第十二波由指数引理解释）**：k=1 用的 Lalín 归一化
+  （$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，因子 1）经 conductor-17 自洽性论证确证为
+  Bloch 定理的正确形式（我们的重构：因子-1 定理与 L–R 已证 Corollary 2 比较迫使
+  $C\cdot f=1$，$C\in\mathbb Z\setminus\{0\}$，详见 §9.1；L–R 原文并未确定 $C$）——
+  该论证现由指数引理 1 解释：在此 $\Delta>0$ 曲线上反不变子群与余商**重合**，因子-1
+  定理不存在其他子群读法；k=0 的证明经**同一个余商生成元读法**使用 $\diamond$-形式：
+  因子-1 陈述在 conductor-11 曲线上对余商生成元 $[\gamma^-_0]=[b]$ 同样成立
+  （§9.1 数值验证），子群生成元读数恰为其两倍（指数引理 2），余商值经 conductor-17
+  已证实例锚定于 Bloch 定理（§9.1）。
 
 
 ## 11. 复现方式
@@ -731,20 +784,24 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python dilog.py && python k53_attack.py && python k53_smith.py && python kneg_m.py \
   && python n1_certify.py && python bertin_diamond.py \
   && python sign_certify.py && python k1_sign_certify.py
-.venv/Scripts/python n1_interval.py    # Arb 区间算术铁证（需 python-flint）
-.venv/Scripts/python branch_certify.py  # 分支指派 + 模序认证
-.venv/Scripts/python k1_interval.py     # Arb 铁证，conductor 17
+python n1_interval.py    # Arb 区间算术铁证（需 python-flint）
+python branch_certify.py  # 分支指派 + 模序认证
+python k1_interval.py     # Arb 铁证，conductor 17
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp && gp -q bertin_diamond.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
+gp -q verify_coinvariant.gp  # 余商 vs 子群生成元积分（∫_b=-πb11 因子 1；∫_{a-2b}=2πb11）
 ```
 
-依赖：Python 3.12 + mpmath + sympy；区间铁证另需 python-flint 0.9.0（项目内 `.venv`）。
+依赖（仓库根目录 `requirements.txt`）：Python ≥3.10 + mpmath + sympy；区间铁证另需
+python-flint 0.9.0（Arb）。从干净 checkout 复现：`python -m pip install -r requirements.txt`——
+项目内 `.venv` **不**是必需的、也不在归档中。
 
 **Permanence（存档）**：完整研究仓库——全部脚本、全部原始输出存档（`notes/attack*.txt`）
 与本报告源文件——以 git 版本控制，并作为电子补充材料随本报告发布；记录版本为标签
-`rev2`（见仓库 log）。代码以 MIT license 发布。上文 `attackN` 形式的文件名均指该存档。
+`rev3`（见仓库 log）。代码以 MIT license 发布（仓库根目录 `LICENSE` 文件）。
+上文 `attackN` 形式的文件名均指该存档。
 
 ## 12. 文献导读（`literature/`）
 
