@@ -521,10 +521,12 @@ on $S_0$:
 \[
   2A=(0,-1),\qquad 4A=(1,0)=-A\ \Longrightarrow\ 5A=O.
 \]
-Hence, on the $S_0$-model (with $P_\infty$ its point at infinity),
+Hence, on the $S_0$-model --- whose projective closure has \emph{two} points
+at infinity, $O_1=[0:1:0]$ and $Q_\infty=[1:-1:0]$, the latter being the
+identity of the chord-tangent group law ---
 \[
-  \divisor(x)=[(0,0)]+[(0,-1)]-2[P_\infty],\qquad
-  \divisor(y)=3[(0,0)]-3[P_\infty]
+  \divisor(x)=[(0,0)]+[(0,-1)]-[O_1]-[Q_\infty],\qquad
+  \divisor(y)=3[(0,0)]-2[O_1]-[Q_\infty]
 \]
 are supported on $5$-torsion points ($E(\Q)_{\mathrm{tors}}=\Z/5\Z$, exactly
 the rational cusps of $X_1(11)$), so $x,y$ are \emph{modular units}
@@ -725,16 +727,18 @@ hence the \emph{exact} identity
 
 The divisor algebra (projective computation on the minimal cubic model
 $y^2+y=x^3-x^2$, to which the data are transported by the explicit birational
-change of variables; Abel's principal-divisor test passed) gives, with
+change of variables; note that the two points at infinity of $S_0$ map to
+\emph{different} points, $Q_\infty\mapsto O$ and $[0:1:0]\mapsto 3A$; Abel's
+principal-divisor test passed) gives, with
 $A=(0,0)$ the $5$-torsion point and $O=[0:1:0]$,
 \[
   \divisor(x)=[A]+[2A]-[O]-[3A],\qquad
-  \divisor(y)=3[A]-2[O]-[3A],
+  \divisor(y)=3[2A]-2[3A]-[O],
 \]
 hence the diamond product
 \[
-  (x)\diamond(y)=6(O)+5(A)-5(2A),\qquad
-  D_E\big((x)\diamond(y)\big)=5D_E(P)-5D_E(2P).
+  (x)\diamond(y)=6(O)-5(A)+5(2A),\qquad
+  D_E\big((x)\diamond(y)\big)=-5D_E(P)+5D_E(2P).
 \]
 The elliptic dilogarithm values (mpmath, $60$ digits; lattice basis
 $(w_1,w_1-w_2)$ so that $\tau=0.5+0.2299i$; $z(P)=0.6w_1$, $z(2P)=0.2w_1$
@@ -751,23 +755,45 @@ the literature) are
   \item \textbf{Bertin's exotic relation} \cite{Bertin}:
   $D_E(2P)=\frac32D_E(P)$ (note $\tfrac32$, not the naive $2$).
 \end{itemize}
-Closing the loop:
+
+The regulator of $\{x,y\}$ along $\gamma^-$ is now evaluated \emph{directly}
+by a theorem of Bertin and Brunault, without any normalization choice on our
+part. With Brunault's normalization \cite{Brunault}*{(3.211)}
 \[
-  5D_E(P)-5D_E(2P)=5\Bigl(1-\tfrac32\Bigr)D_E(P)=-\tfrac52D_E(P)=-\pi b_{11}.
+  r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g),\qquad
+  \gamma\ \text{generating }H_1(E,\Z)^-,
 \]
-By Bloch's theorem \cite{Bloch} in its original normalisation
-$r(\{f,g\})=\frac{1}{2\pi}\int_\gamma\eta(f,g)$ ($\gamma$ generating
-$H_1(E,\Z)^-$) one has $\pi\,r(\{f,g\})=D_E((f)\diamond(g))$
-\cite{Touafek}*{Thm.~1}, i.e.\
+Brunault's (3.210), quoting Bertin's \cite{Bertin}*{Th.~6 and Cor.~6.1},
+gives
 \[
-  \int_{\gamma^-}\eta=\pm 2\,D_E\big((x)\diamond(y)\big)=\mp 2\pi b_{11},
+  \bigl|r_{\gamma^-}\{x,y\}\bigr|=\frac{5}{2\pi}D_E(P)=b_{11},
+  \qquad\text{i.e.}\qquad
+  \int_{\gamma^-}\eta=\pm\,2\pi b_{11},
 \]
 the sign depending on orientation (Brunault, Remarque~20: $D_E$ depends on
-the orientation of $E(\R)$ and is defined only up to sign). In fact Brunault's
-(3.210)--(3.211), quoting Bertin, already give
-$|r_{\gamma^-}\{x,y\}|=\frac{5}{2\pi}D_E(P)=b_{11}$ directly: the regulator
-side is a proved theorem; the gap closed here is the identification of Boyd's
-split-integral chain with the closed cycle in $H_1(E,\Z)^-$.
+the orientation of $E(\R)$ and is defined only up to sign). The regulator
+side is therefore a proved theorem; the gap closed here is the
+identification of Boyd's split-integral chain with the closed cycle in
+$H_1(E,\Z)^-$.
+
+\begin{remark}[The diamond product and normalizations of Bloch's theorem]
+\label{rem:diamondk0}
+Combining the above with Bloch's theorem in the normalization
+$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$, $r[\gamma]=\int_\gamma\eta$, of
+\cite{LalinRam}*{Thm.~6} --- the normalization forced by the conductor-$17$
+integrality argument, see Remark~\ref{rem:normalisation} --- gives
+$D^E((x)\diamond(y))=\pm5D_E(P)=\pm2\pi b_{11}$. The formal expansion above,
+with Bertin's exotic relation, evaluates to
+$D_E((x)\diamond(y))=\pm\frac52D_E(P)=\pm\pi b_{11}$, smaller by exactly a
+factor $2$; the factor lives in the $\mathbb{Z}[E]^-$ symbol conventions of
+the diamond-product literature (it cannot come from the divisors, the $D_E$
+series, or the cycle, all of which were verified). Since the proof uses the
+Bertin--Brunault evaluation directly, this convention question does not
+affect the main theorem; we record it explicitly. In particular, the
+factor-$2$ form $\pi r=D_E(\cdot)$ found in expository accounts (e.g.\
+\cite{Touafek}*{Thm.~1}) is inconsistent with the normalization of
+\cite{LalinRam}*{Thm.~6} and is not used anywhere in this paper.
+\end{remark}
 
 \subsection{Synthesis}
 
@@ -936,15 +962,24 @@ structural identity $\tilde n(1)=-\frac1{2\pi}\int_{\tilde\gamma}\eta$
 $\tilde n(1)=b_{17}$.
 \end{proof}
 
-\begin{remark}\label{rem:normalisation}
-The $k=0$ proof (\S\ref{sec:proof}) quotes Bloch's theorem through
-Brunault's regulator $r_{\gamma}$, with the factor $\int\eta=\pm2D_E(\cdot)$
-certified there by Brunault's (3.210)--(3.211); the present proof quotes the
-Lal\'in normalisation with factor $1$, certified here by the published
-conductor-$17$ identities of \cite{LalinRam} and \cite{Zudilin}. The two
-formulations differ only in the conventional factor in the definition of
-$r_\gamma$ versus $D^E$; each is used with the published formula that pins
-its normalisation on the respective curve.
+\begin{remark}[The normalization of Bloch's theorem]\label{rem:normalisation}
+Bloch's theorem is used in this paper only in the normalization of
+\cite{LalinRam}*{Thm.~6}: $r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$ with
+$r[\gamma]=\int_\gamma\eta$, $\gamma$ a generator of $H_1(E,\Z)^-$. That
+this (and not a factor-$2$ variant) is the correct statement is forced by
+the conductor-$17$ case itself: in \cite{LalinRam}*{\S7} the class of the
+real cycle is an \emph{a priori} unknown integer multiple $C$ of $\gamma$,
+and the factor-$1$ theorem yields $C=1$ (their published eq.~(20), which we
+reproduced to $60$ digits), whereas a factor-$2$ statement would force
+$C=\tfrac12\notin\Z$. For $k=0$ we do not use the $\diamond$-form at all:
+the regulator is evaluated directly by the Bertin--Brunault theorem
+$|r_{\gamma^-}\{x,y\}|=\frac{5}{2\pi}D_E(P)$ with
+$r_\gamma=\frac1{2\pi}\int_\gamma\eta$ (Brunault (3.210)--(3.211),
+\S\ref{sec:proof}). The factor-$2$ form $\pi r=D_E(\cdot)$ found in
+expository accounts is inconsistent with the $C=1$ constraint and is not
+used anywhere in this paper; see Remark~\ref{rem:diamondk0} for the
+residual factor-$2$ question in the $\diamond$-product conventions, which
+does not affect either proof.
 \end{remark}
 
 %=====================================================================

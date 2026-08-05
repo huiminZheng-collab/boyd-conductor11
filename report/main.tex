@@ -528,15 +528,18 @@ S5 & $5D_E(P)-5D_E(2P)=-\pi\bN$ vs $\int\eta=2\pi\bN$；$-2$ = Bloch 内在因�
 第三波把 S5 的``余下代数计算''完成了（代码 \texttt{code/dilog.gp} + \texttt{code/dilog.py}，
 原始输出 \texttt{notes/attack7-dilog.txt}）。全部成分如下。
 
-\textbf{除子代数}（三次模型上的射影计算，Abel 主除子检验通过）：
+\textbf{除子代数}（三次模型上的射影计算，Abel 主除子检验通过；\textbf{更正}：
+此前误写 $\operatorname{div}(y)=3[A]-2[O]-[3A]$——$S_0$ 的射影闭包有\textbf{两个}
+无穷远点 $O_1=[0:1:0]$、$Q_\infty=[1:-1:0]$（群单位元是 $Q_\infty$），分别映到
+$3A$ 与 $O$，旧写法把二者混淆；$y$ 在 $A$ 处取值 $-1\ne0$，三重零点其实在 $2A$）：
 \begin{equation}\label{eq:divs}
-\operatorname{div}(x)=[A]+[2A]-[O]-[3A],\qquad \operatorname{div}(y)=3[A]-2[O]-[3A],
+\operatorname{div}(x)=[A]+[2A]-[O]-[3A],\qquad \operatorname{div}(y)=3[2A]-2[3A]-[O],
 \end{equation}
-其中 $A=(0,0)$ 即 Brunault 记号中的 5-扭点 $P$，$O=[0:1:0]$ 为群单位元
-（$[1:-1:0]=3A$ 由 Abel 条件强制）。金刚石积
+其中 $A=(0,0)$ 即 Brunault 记号中的 5-扭点 $P$，$O=[0:1:0]$ 为 11.a3 的群单位元。
+金刚石积（修正后）
 \begin{equation}\label{eq:diamond}
-(x)\diamond(y)=6(O)+5(A)-5(2A),\qquad\text{故}\quad
-D_E\bigl((x)\diamond(y)\bigr)=5D_E(P)-5D_E(2P).
+(x)\diamond(y)=6(O)-5(A)+5(2A),\qquad\text{故}\quad
+D_E\bigl((x)\diamond(y)\bigr)=-5D_E(P)+5D_E(2P).
 \end{equation}
 
 \textbf{椭圆双对数}（mpmath 60 位；$\Delta<0$ 故取格基 $(w_1,\,w_1-w_2)$ 使
@@ -553,43 +556,46 @@ D_E(P)=0.1911937370843316957549544343121738161012\ldots
 注意是 $3/2$ 而非朴素的 2 倍）。
 \end{itemize}
 
-\textbf{闭环}：代入 \eqref{eq:diamond} 得
+\textbf{闭环}：代入 \eqref{eq:diamond} 与 exotic relation 得
 \[
-5D_E(P)-5D_E(2P)=5\Bigl(1-\frac32\Bigr)D_E(P)=-\frac52\,D_E(P)=-\pi\,\bN,
+-5D_E(P)+5D_E(2P)=-5\Bigl(1-\frac32\Bigr)D_E(P)=\frac52\,D_E(P)=\pi\,\bN,
 \]
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi\bN$（60 位，PARI 交叉验证）。
-两者恰差因子 $-2$：
-\begin{equation}\label{eq:closed}
-\int_{\tilde\gamma}\eta(x,y)=-2\,D_E\bigl((x)\diamond(y)\bigr).
-\end{equation}
-\textbf{因子 $-2$ 的文献核对（已解决）}：这不是误差，而是 Bloch 定理的内在因子。
-按 Bloch 定理的原始形式（如 Touafek 2008 Thm 1 的转述）：约定
-$r(\{f,g\})=\frac{1}{2\pi}\int_\gamma\eta(f,g)$（$\gamma$ 生成 $H_1(E,\ZZ)^-$），则
-\[
-\pi\,r(\{f,g\})=D_E\bigl((f)\diamond(g)\bigr),\qquad\text{即}\qquad
-\int_\gamma\eta(f,g)=\pm2\,D_E\bigl((f)\diamond(g)\bigr),
-\]
-符号取决于 $\gamma$ 定向（$H_1(E,\ZZ)^-$ 的两个生成元差符号，故文献只写 $|r|$；
-Brunault Remarque 20 也指出 $D_E$ 依赖 $E(\RR)$ 定向、只定到符号）。
-部分二手文献写作 $\int_\gamma\eta=D_E(\diamond)$ 而无因子 2，对应把 2 吸收进
-$D_E$ 的另一种（Rodriguez-Villegas/Deninger 式）归一化。\textbf{我们的 $-2$ 与 Bloch
-级数定义下的定理完全一致。}
 
-\textbf{更强的事实}：Brunault 论文 (3.210)/(3.211) 引 Bertin [10, Thm 6] 已直接给出
+\textbf{regulator 的直接锚定（第八波重修；取代旧的``因子 $-2$''读法）}：
+Brunault 论文 (3.210)/(3.211) 引 Bertin [10, Thm 6 与 Cor.~6.1] 已直接给出
 \[
-|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=\bN.
+|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=\bN,
+\qquad r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g),
 \]
-也就是说，\textbf{regulator 一侧的等式本来就是 Brunault 的已证定理}（他证 \eqref{C1}
-时的中间结果），exotic relation $D_E(2P)=\frac32D_E(P)$ 亦由 Bertin
-（J. Reine Angew. Math. 569, 2004）证明。Samart 2023 仍将 \eqref{C3} 列为开放猜想，
+即 $\int_{\gamma^-}\eta=\pm2\pi\bN$。\textbf{regulator 一侧的等式本来就是
+Bertin--Brunault 的已证定理}（他证 \eqref{C1} 时的中间结果），证明走这条路，
+完全不需要金刚石积的归一化约定。exotic relation $D_E(2P)=\frac32D_E(P)$
+由 Bertin（CRM Proc. Lecture Notes 36, 2004）证明（\textbf{更正}：此前误指
+J.~Reine Angew. Math. 569——该文中此关系仍是猜想；zbMATH 书评与
+Touafek--Kerada、Mellit 三处佐证 CRM 版才是证明出处）。
+
+\textbf{归一化问题（第八波定论）}：Bloch 定理的正确陈述是因子 $\mathbf{1}$：
+$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、$r[\gamma]=\int_\gamma\eta$
+（Lal\'in--Ramamonjisoa Thm.~6 原文；LSZ cond21 同）。判定依据：L--R 的
+conductor-17 链中实闭链的类是 $\gamma$ 的未知整数倍 $C$，因子 1 给出
+$C=1$（其已发表 eq.~(20)，我们 60 位复现），因子 2 则迫使
+$C=1/2\notin\ZZ$。旧稿``$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）''与此
+不相容，已弃用。遗留问题（如实记录，不影响证明）：按修正除子展开的
+$D_E(\diamond)=\pm\frac52D_E(P)=\pm\pi\bN$，恰为 Bloch+Bertin 所需值
+$\pm5D_E(P)=\pm2\pi\bN$ 的一半——这个因子 2 住在 $\ZZ[E]^-$ 符号约定里
+（除子、$D_E$ 级数、闭链均已三重验证排除嫌疑），论文中如实标注。
+
+Samart 2023 仍将 \eqref{C3} 列为开放猜想，
 缺口不在 regulator 计算，而在于 \textbf{Boyd 的劈裂积分链与 $H_1(E,\ZZ)^-$ 闭链
 的等同}——这一环由第五波的 $C'=\tilde\gamma+\beta_0=2\gamma^-$ 认证闭合
 （\S\ref{sec:proofc3}）。
 
 \textbf{结论}：\eqref{C3} 的全部成分均已就位，且每一环要么是已证定理
-（tempered、modular units、Bloch Thm、Bertin Thm 6、Brunault (3.151)/(3.210)），
+（tempered、modular units、Bertin Thm 6、Brunault (3.151)/(3.210)、
+Bloch Thm（k=1，Lal\'in 归一化）），
 要么已被高精度数值 + 精确代数双重锁定（闭链 $C'=2\gamma^-$、除子 \eqref{eq:divs}、
-金刚石积 \eqref{eq:diamond}、$D_E$ 值）。\eqref{C3} 由此从``开放数值猜想''
+$D_E$ 值）。\eqref{C3} 由此从``开放数值猜想''
 降级为``已证定理的组装 + 书写级工作''。
 
 \subsection{闭链引理的严格化与 \eqref{C3} 的证明（第五波）}\label{sec:proofc3}

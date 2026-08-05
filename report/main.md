@@ -358,18 +358,21 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
-| S5 | regulator 常数：$5D_E(P)-5D_E(2P)=-\pi b_{11}$ vs $\int\eta=2\pi b_{11}$；因子 $-2$ = Bloch 定理内在因子 2 × 定向（§9.1，已核） | 闭合 |
+| S5 | regulator 常数：Bertin–Brunault (3.210)/(3.211) 直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1，第八波重修后不再依赖金刚石积归一化） | 闭合 |
 
 ### 9.1 regulator 常数的显式计算（第三波，40 位）
 
 第三波把 S5 的"余下代数计算"完成了（代码 `code/dilog.gp` + `code/dilog.py`，
 原始输出 `notes/attack7-dilog.txt`）。全部成分如下。
 
-**除子代数**（三次模型上的射影计算，Abel 主除子检验通过）：
-$$\operatorname{div}(x)=[A]+[2A]-[O]-[3A],\qquad \operatorname{div}(y)=3[A]-2[O]-[3A],$$
-其中 $A=(0,0)$ 即 Brunault 记号中的 5-扭点 $P$，$O=[0:1:0]$ 为群单位元
-（$[1:-1:0]=3A$ 由 Abel 条件强制）。金刚石积
-$$(x)\diamond(y)=6(O)+5(A)-5(2A),\qquad\text{故}\quad D_E\bigl((x)\diamond(y)\bigr)=5D_E(P)-5D_E(2P).$$
+**除子代数**（三次模型上的射影计算，Abel 主除子检验通过；**更正**：此前误写
+$\operatorname{div}(y)=3[A]-2[O]-[3A]$——$S_0$ 的射影闭包有**两个**无穷远点
+$O_1=[0:1:0]$、$Q_\infty=[1:-1:0]$（群单位元是 $Q_\infty$），分别映到 $3A$ 与 $O$，
+旧写法把二者混淆；$y$ 在 $A$ 处取值 $-1\ne0$，三重零点其实在 $2A$）：
+$$\operatorname{div}(x)=[A]+[2A]-[O]-[3A],\qquad \operatorname{div}(y)=3[2A]-2[3A]-[O],$$
+其中 $A=(0,0)$ 即 Brunault 记号中的 5-扭点 $P$，$O=[0:1:0]$ 为 11.a3 的群单位元。
+金刚石积（修正后）
+$$(x)\diamond(y)=6(O)-5(A)+5(2A),\qquad\text{故}\quad D_E\bigl((x)\diamond(y)\bigr)=-5D_E(P)+5D_E(2P).$$
 
 **椭圆双对数**（mpmath 60 位；$\Delta<0$ 故取格基 $(w_1,\,w_1-w_2)$ 使 $\tau=0.5+0.2299i$
 落在上半平面，$q=e^{2\pi i\tau}\approx-0.2359$ 为负实数；$z(P)=0.6w_1$、$z(2P)=0.2w_1$ 由 PARI `ellpointtoz` 给出）：
@@ -381,34 +384,41 @@ $$D_E(P)=0.1911937370843316957549544343121738161012\ldots$$
 - **exotic relation**：$D_E(2P)=\frac32\,D_E(P)$（Bertin 已证此类关系；
   注意是 $3/2$ 而非朴素的 2 倍）。
 
-**闭环**：代入得
-$$5D_E(P)-5D_E(2P)=5\Bigl(1-\frac32\Bigr)D_E(P)=-\frac52\,D_E(P)=-\pi\,b_{11},$$
+**闭环**：代入 exotic relation 得
+$$-5D_E(P)+5D_E(2P)=-5\Bigl(1-\frac32\Bigr)D_E(P)=\frac52\,D_E(P)=\pi\,b_{11},$$
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
-两者恰差因子 $-2$：
-$$\int_{\tilde\gamma}\eta(x,y)=-2\,D_E\bigl((x)\diamond(y)\bigr).$$
 
-**因子 $-2$ 的文献核对（已解决）**：这不是误差，而是 Bloch 定理的内在因子。
-按 Bloch 定理的原始形式（如 Touafek 2008 Thm 1 的转述）：约定
-$r(\{f,g\})=\frac{1}{2\pi}\int_\gamma\eta(f,g)$（$\gamma$ 生成 $H_1(E,\mathbb Z)^-$），则
-$$\pi\,r(\{f,g\})=D_E\bigl((f)\diamond(g)\bigr),\qquad\text{即}\qquad
-\int_\gamma\eta(f,g)=\pm2\,D_E\bigl((f)\diamond(g)\bigr),$$
-符号取决于 $\gamma$ 定向（$H_1(E,\mathbb Z)^-$ 的两个生成元差符号，故文献只写 $|r|$；
-Brunault Remarque 20 也指出 $D_E$ 依赖 $E(\mathbb R)$ 定向、只定到符号）。
-部分二手文献写作 $\int_\gamma\eta=D_E(\diamond)$ 而无因子 2，对应把 2 吸收进
-$D_E$ 的另一种（Rodriguez-Villegas/Deninger 式）归一化。**我们的 $-2$ 与 Bloch 级数
-定义下的定理完全一致。**
+**regulator 的直接锚定（第八波重修；取代旧的"因子 −2"读法）**：Brunault 论文
+(3.210)/(3.211) 引 Bertin [10, Thm 6 与 Cor. 6.1] 已直接给出
+$$|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=b_{11},
+\qquad r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g),$$
+即 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$。**regulator 一侧的等式本来就是
+Bertin–Brunault 的已证定理**（他证 (C1) 时的中间结果），证明走这条路，
+完全不需要金刚石积的归一化约定。exotic relation $D_E(2P)=\frac32D_E(P)$
+由 Bertin（CRM Proc. Lecture Notes 36, 2004）证明（**更正**：此前误指
+J. Reine Angew. Math. 569——该文中此关系仍是猜想；zbMATH 书评与
+Touafek–Kerada、Mellit 三处佐证 CRM 版才是证明出处）。
 
-**更强的事实**：Brunault 论文 (3.210)/(3.211) 引 Bertin [10, Thm 6] 已直接给出
-$$|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=b_{11}.$$
-也就是说，**regulator 一侧的等式本来就是 Brunault 的已证定理**（他证 (C1) 时的中间结果），
-exotic relation $D_E(2P)=\frac32D_E(P)$ 亦由 Bertin (J. Reine Angew. Math. 569, 2004) 证明。
+**归一化问题（第八波定论）**：Bloch 定理的正确陈述是因子 **1**：
+$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、$r[\gamma]=\int_\gamma\eta$
+（Lalín–Ramamonjisoa Thm. 6 原文；LSZ cond21 同）。判定依据：L–R 的
+conductor-17 链中实闭链的类是 $\gamma$ 的未知整数倍 $C$，因子 1 给出
+$C=1$（其已发表 eq. (20)，我们 60 位复现），因子 2 则迫使 $C=1/2\notin\mathbb Z$。
+旧笔记"$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）"与此不相容，已弃用。
+遗留问题（如实记录，不影响证明）：按修正除子展开的
+$D_E(\diamond)=\pm\frac52D_E(P)=\pm\pi b_{11}$，恰为 Bloch+Bertin 所需值
+$\pm5D_E(P)=\pm2\pi b_{11}$ 的一半——这个因子 2 住在 $\mathbb Z[E]^-$
+符号约定里（除子、$D_E$ 级数、闭链均已三重验证排除嫌疑），论文
+Remark 5.2/4.x 如实标注。
+
 Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而在于
 **Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 闭链的等同**——这一环由第五波的
 $C'=\tilde\gamma+\beta_0=2\gamma^-$ 认证闭合（§9.2）。
 
 **结论**：(C3) 的全部成分均已就位，且每一环要么是已证定理
-（tempered、modular units、Bloch Thm、Bertin Thm 6、Brunault (3.151)/(3.210)），
-要么已被高精度数值 + 精确代数双重锁定（闭链 $C'=2\gamma^-$、除子、金刚石积、$D_E$ 值）。
+（tempered、modular units、Bertin Thm 6、Brunault (3.151)/(3.210)、
+Bloch Thm（k=1，Lalín 归一化）），
+要么已被高精度数值 + 精确代数双重锁定（闭链 $C'=2\gamma^-$、除子、$D_E$ 值）。
 (C3) 由此从"开放数值猜想"降级为"已证定理的组装 + 书写级工作"。
 
 ### 9.2 闭链引理的严格化与 (C3) 的证明（第五波）
@@ -440,8 +450,9 @@ $\mathrm{class}(C')=2\gamma^-$（第六波 Arb 铁证：比值球含 $-2$、半�
 $$\int_{\beta_0}\eta=2(J_1-J_2)=\int_{\tilde\gamma}\eta
 \qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,$$
 其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
-再由 Bloch（$\pi r=D_E(\diamond)$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}b_{11}$）
-+ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）+ 金刚石积 $5(A)-5(2A)$（§9.1）：
+再由 Bertin–Brunault (3.210)/(3.211)（$|r_{\gamma^-}\{x,y\}|=\frac{5}{2\pi}D_E(P)=b_{11}$，
+$r=\frac1{2\pi}\int\eta$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}b_{11}$）
++ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）（均为定理，§9.1 第八波重修）：
 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$。合成：
 $$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
 符号由一次数值评估（$+2\pi b_{11}$，$b_{11}>0$）钉死。由结构定理
@@ -481,9 +492,10 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定
 - **合成**：$\int_{\tilde\gamma}\eta=\frac12\cdot2\cdot(\pm2\pi b_{17})$，符号由
   数值（$-2\pi b_{17}$）钉死，结构恒等式给出
   $\boxed{\tilde n(1)=b_{17}}$（Samart conductor-17 类比猜想，证毕）。
-- **归一化备注**：k=0 证明引 Bloch–Brunault 的 $r_\gamma$ 归一化（$\int\eta=\pm2D_E$），
-  k=1 引 Lalín 归一化（因子 1）；两者只是 $r_\gamma$ 与 $D^E$ 定义中的常规因子之差，
-  各自被该曲线上的已发表公式钉死（Brunault (3.210)–(3.211)；L–R + Zudilin）。
+- **归一化备注（第八波定论）**：k=1 用的 Lalín 归一化（$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，
+  因子 1）经 L–R 的 $C=1$ 整数性论证确证为 Bloch 定理的正确形式；k=0 的证明随后
+  相应重修——不再引 Touafek 的因子-2 转述，改为直接锚定 Bertin–Brunault
+  (3.210)/(3.211) 的已证定理（§9.1）。
 
 ## 10. 总结
 
