@@ -19,7 +19,9 @@ Sixth wave, (b).  Everything below is rigorous:
     adaptively; on each piece we use either sqrt(D) or i*sqrt(-D) (an analytic
     square root of D whenever the piece's D-image avoids (-inf,0] resp.
     [0,+inf), CERTIFIED per piece by ball evaluation), and propagate the
-    overall sign across nodes with a certified matching test.
+    overall sign across nodes with a certified matching test; the initial
+    sign (fixed by branch_sign relative to the PRINCIPAL sqrt) is converted
+    to the first piece's variant by the same certified matching test.
   * w_anti = 2*i*RF(0, e2-e1, e3-e1) (Carlson RF, certified) for the
     Weierstrass model y^2 + y = x^3 - x^2 (11.a3), same period lattice as the
     quartic model (birational over Q, invariant differential dx/u, kappa = 1;
@@ -35,7 +37,10 @@ from flint import acb, arb, acb_poly, ctx
 import sys
 
 ctx.prec = 300
-ctx.dps = 50
+# NOTE: do NOT set ctx.dps here -- in python-flint >= 0.9 setting dps
+# overrides prec (dps = 50 would silently drop the working precision to
+# ~169 bits).  The certification below is meant to run at 300 bits
+# (~90 digits); the tolerances TOL_REL/TOL_ABS are unchanged.
 
 PI = arb.pi()
 C2 = PI / 2                        # c = pi/2
@@ -131,7 +136,30 @@ def arc_integral(t_lo, t_hi, th_fn, jac_fn, want_big):
         n *= 2
         if n > 1 << 14:
             raise RuntimeError("subdivision failed on [%s,%s]" % (t_lo, t_hi))
-    sig = branch_sign(th_fn(acb((nodes[0] + nodes[1]) / 2)).mid(), want_big)
+    # branch_sign gives sigma relative to the PRINCIPAL sqrt; the first piece
+    # may use the 'r' variant i*sqrt(-D), which equals +sqrt(D) or -sqrt(D)
+    # depending on the side of the cut.  Convert: match sig*sqrt(D) against
+    # +/- variant_sqrt(D, kinds[0]) at the same midpoint (certified test).
+    # (For k=0 the first piece always turned out to be 'p', so this latent
+    # bug never fired; ported back from k1_interval.py, referee item.)
+    th_mid = th_fn(acb((nodes[0] + nodes[1]) / 2)).mid()
+    sig = branch_sign(th_mid, want_big)
+    _, Dm = D_and_x(acb(th_mid))
+    u_want = Dm.sqrt()
+    if sig == -1:
+        u_want = -u_want
+    kind0 = kinds[0]
+    sep = abs(variant_sqrt(Dm, kind0)).lower()
+    best = None
+    for cand in (1, -1):
+        u_c = variant_sqrt(Dm, kind0)
+        if cand == -1:
+            u_c = -u_c
+        if abs(u_c - u_want).upper() < sep:
+            assert best is None, "ambiguous initial branch conversion"
+            best = cand
+    assert best is not None, "initial branch conversion failed"
+    sig = best
     total = acb(0)
     for j in range(n):
         a, b, kind = nodes[j], nodes[j + 1], kinds[j]
@@ -192,7 +220,21 @@ def certify_poly_roots(coeffs_asc, starts=None):
     dp = lambda z: sum(k * c * z**(k - 1) for k, c in enumerate(coeffs_asc) if k)
     if starts is None:
         starts = [r.mid() for r in acb_poly(coeffs_asc).roots()]
-    return [certify_root(p, dp, refine_newton(p, dp, s)) for s in starts]
+    roots = [certify_root(p, dp, refine_newton(p, dp, s)) for s in starts]
+    # completeness certificate (referee item): the certified root balls are
+    # (a) pairwise disjoint -- certified distance between the discs > 0,
+    #     i.e. centre distance > sum of radii (each ball contains ONE root),
+    # (b) exhaustive -- exactly deg many, so every root is accounted for.
+    # Both the tip-analyticity bound (zeros of D outside |t| <= rho) and the
+    # Carlson RF root identification (e1, e2, e3 ordering) rely on this.
+    deg = len(coeffs_asc) - 1
+    assert len(roots) == deg, \
+        "root count %d != polynomial degree %d" % (len(roots), deg)
+    for i in range(deg):
+        for j in range(i + 1, deg):
+            assert abs(roots[i] - roots[j]).lower() > 0, \
+                "certified root balls %d and %d are not disjoint" % (i, j)
+    return roots
 
 
 # ---------------------------------------------------------------------------

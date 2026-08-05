@@ -1,0 +1,47 @@
+=== branch certification, S_0 (k=0) -- referee item M2 ===
+working precision: ctx.prec = 300 bits (no dps override)
+exact endpoint points:
+  P       on S_0: residual |y^2+By+x^3| <= [4.6734097578200936200252728345663027033035172912559471558054474393857832714717012326367986e-90 +/- 5.16e-180]  (contains 0)
+  -P      on S_0: residual |y^2+By+x^3| <= [4.6734097578200936200252728345663027033035172912559471558054474393857832714717012326367986e-90 +/- 5.16e-180]  (contains 0)
+  P-bar   on S_0: residual |y^2+By+x^3| <= [4.6734097578200936200252728345663027033035172912559471558054474393857832714717012326367986e-90 +/- 5.16e-180]  (contains 0)
+  -P-bar  on S_0: residual |y^2+By+x^3| <= [4.6734097578200936200252728345663027033035172912559471558054474393857832714717012326367986e-90 +/- 5.16e-180]  (contains 0)
+  theta=0: p(-1) = 0 and p'(-1) = 0 EXACTLY (double root y = -1)
+
+(A) closed-chain endpoint branch assignments
+  eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-6 +/- 4.41e-97]:
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
+  y_big(c^-)      -P           1.062e-06                      3.999992  True
+  y_big(c^+)      P            2.318e-06                      3.999992  True
+  y_big(-c^+)     -P-bar       1.062e-06                      3.999992  True
+  y_big(-c^-)     P-bar        2.318e-06                      3.999992  True
+  y_small(c^-)    P            2.318e-06                      3.999992  True
+  y_small(c^+)    -P           1.062e-06                      3.999992  True
+  y_small(-c^+)   P-bar        2.318e-06                      3.999992  True
+  y_small(-c^-)   -P-bar       1.062e-06                      3.999992  True
+  eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-9 +/- 4.48e-100]:
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
+  y_big(c^-)      -P           1.062e-09                      4.000000  True
+  y_big(c^+)      P            2.318e-09                      4.000000  True
+  y_big(-c^+)     -P-bar       1.062e-09                      4.000000  True
+  y_big(-c^-)     P-bar        2.318e-09                      4.000000  True
+  y_small(c^-)    P            2.318e-09                      4.000000  True
+  y_small(c^+)    -P           1.062e-09                      4.000000  True
+  y_small(-c^+)   P-bar        2.318e-09                      4.000000  True
+  y_small(-c^-)   -P-bar       1.062e-09                      4.000000  True
+  continuity argument: D != 0 on each closing interval (above),
+  the two exact roots at theta0 are 2 apart, pin distance < 1/10
+  ==> the one-sided limit is the claimed point, in all 8 cases.
+  VERDICT (A): ALL 8 ASSIGNMENTS CERTIFIED
+
+(B) Proposition 3.1: |y_-(th)| <= 1 <= |y_+(th)| on [0, pi],
+    equality |y_-| = 1 only at th = 0 and th = pi/2
+  strict balls (D != 0, |y_small| < 1 < |y_big| certified): 153
+  special ball [0.000000, 0.000767]: |y| balls [1e+0 +/- 0.0349], [1.0 +/- 0.0346] (contain 1)
+  special ball [1.570029, 1.570796]: |y| balls [1.0 +/- 1.89e-3], [1.00 +/- 1.89e-3] (contain 1)
+  special ball [1.570796, 1.571563]: |y| balls [1.00 +/- 1.89e-3], [1.0 +/- 1.89e-3] (contain 1)
+  equality at the special points is EXACT algebra:
+    th = 0:    double root y = -1, |y| = 1  (p(-1)=p'(-1)=0)
+    th = pi/2: B(i) = 0, y^2 = i, |y| = 1
+  VERDICT (B): CERTIFIED
+
+OVERALL VERDICT: ALL CERTIFIED. QED.

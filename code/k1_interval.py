@@ -42,7 +42,8 @@ from flint import acb, arb, acb_poly, ctx
 import sys
 
 ctx.prec = 300
-ctx.dps = 50
+# NOTE: do NOT set ctx.dps here — in python-flint >= 0.9, dps overrides prec
+# and would silently drop the working precision to ~50 digits.
 
 PI = arb.pi()
 C2 = 2 * PI / 3                    # c = 2 pi/3  (fold angle for k=1)

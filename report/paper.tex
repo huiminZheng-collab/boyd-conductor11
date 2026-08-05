@@ -25,6 +25,7 @@
 \DeclareMathOperator{\class}{class}
 \DeclareMathOperator{\divisor}{div}
 \DeclareMathOperator{\Imz}{Im}
+\emergencystretch=3em
 
 \title[Boyd's conductor-$11$ conjecture]{Boyd's conductor-$11$ Mahler measure
 conjecture:\\ proof of the split-integral identity \textup{(C3)},
@@ -58,15 +59,20 @@ $C'=\tilde\gamma+\beta_0$, and prove that its homology class is $2\gamma^-$,
 where $\gamma^-$ generates $H_1(E,\Z)^-$: the period ratio
 $\period(C')/w_{\mathrm{anti}}$ is a-priori a non-zero integer, and a
 ball-arithmetic (Arb) computation with certified error bounds pins it to
-$-2$. Combined with the exact integral identity
+$2$. Combined with the exact integral identity
 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$ and the theorems of Bloch,
 Brunault and Bertin, this yields $I_{\mathrm{split}}=b_{11}$, in agreement
-with the $149$-digit numerical value. We also prove a structural theorem for
+with the $149$-digit numerical value. The same method proves Samart's
+conductor-$17$ analogue $\tilde n(1)=b_{17}$, where the regulator side is
+closed by a published theorem of Lal\'in--Ramamonjisoa and the homology class
+is again pinned by an interval-arithmetic period-ratio computation. We also
+prove a structural theorem for
 the whole family $S_k=y^2+(x^2+kx+1)y+x^3$: the dividing line is the
 torus-intersection structure, not the sign of $k$; we confirm numerically
-(60 digits, with PARI/GP cross-checks) new Boyd-type identities for
-$k=2,3,-4,-5,-6$, and we adjudicate negatively the conductor-$53$ analogue
-suggested by Samart. All computations are reproducible from the accompanying
+new Boyd-type identities for $k=2,3$ (60 digits, PARI/GP cross-checked) and
+for $k=-4,-5,-6$ (25 digits), and we adjudicate negatively the
+conductor-$53$ analogue suggested by Samart. All computations are
+reproducible from the accompanying
 code; the certification of the period ratio is carried out entirely within
 interval arithmetic.
 \end{abstract}
@@ -141,6 +147,13 @@ Samart \cite{Samart2023} lists (C3) explicitly as an open conjecture.
   rigorous by a ball-arithmetic (Arb) computation of the period ratio with
   certified error bounds (\S\ref{subsec:rigour}). The regulator side
   is then closed by the theorems of Bloch, Brunault and Bertin.
+  \item \textbf{Proof of the conductor-$17$ analogue.} The same method proves
+  Samart's conductor-$17$ conjecture $\tilde n(1)=b_{17}$
+  (Theorem~\ref{thm:k1}): the chain construction is verbatim parallel (fold
+  angle $2\pi/3$, exact jump values $y=\pm i$ at $x=e^{2\pi i/3}$), the
+  homology class $2\gamma^-$ is again certified in interval arithmetic, and
+  the regulator side is closed by a published theorem of
+  Lal\'in--Ramamonjisoa \cite{LalinRam}.
   \item \textbf{High-precision numerics.} (C3) is confirmed to $149$ digits:
   $|I_{\mathrm{split}}-b_{11}|=4.85\times10^{-149}$ (previous public record:
   Boyd's $50$ digits). (C1) and (C2) are independently reproduced to $52$
@@ -152,8 +165,9 @@ Samart \cite{Samart2023} lists (C3) explicitly as an open conjecture.
   (Proposition~\ref{prop:structural}).
   \item \textbf{A structural theorem for the family $S_k$.} For
   $S_k=y^2+(x^2+kx+1)y+x^3$ the dividing line is the torus-intersection
-  structure: for $|k|\ge 2$ the classical Deninger mechanism applies and
-  $m(S_k)=r_k|L'(E_k,0)|$; for $-4<k<2$ a Boyd-type identity holds if and
+  structure: for $k\notin(-4,2)$ (no torus intersection) the classical
+  Deninger mechanism applies and $m(S_k)=r_k|L'(E_k,0)|$; for $-4<k<2$ a
+  Boyd-type identity holds if and
   only if the curve has torsion making $x,y$ modular units, which happens
   only for $k=0$ and $k=1$ (Theorem~\ref{thm:family}).
   \item \textbf{New numerically confirmed identities} (60 digits, PARI/GP
@@ -177,7 +191,8 @@ Section~\ref{sec:family} proves the structural identity for $S_0$ and the
 structural theorem for the family $S_k$, and adjudicates the conductor-$53$
 case. Section~\ref{sec:proof} contains the proof of (C3): the closed chain
 lemma, the homology class computation, the regulator synthesis.
-Section~\ref{sec:cert} describes the numerical certification, including the
+Section~\ref{sec:k1} applies the same method to the conductor-$17$ case
+$k=1$. Section~\ref{sec:cert} describes the numerical certification, including the
 ball-arithmetic proof of the period ratio (\S\ref{subsec:rigour}).
 Section~\ref{sec:conjectures} states the conjectures suggested by our
 computations. Appendix~\ref{app:code} lists the reproduction code. All
@@ -230,9 +245,10 @@ $a_p=p+1-\#E(\mathbb{F}_p)$ at good primes; the conductor $N$ measures bad
 reduction. The minimal possible conductor is $11$, and there is a single
 isogeny class (LMFDB \cite{LMFDB} \texttt{11.a1--a3}), containing
 \[
-  X_1(11):\ y^2+y=x^3-x^2\ (\texttt{11.a3}),
-  \qquad
-  X_0(11):\ y^2+y=x^3-x^2-10x-20\ (\texttt{11.a1}).
+\begin{aligned}
+  X_1(11)&:\ y^2+y=x^3-x^2\ (\texttt{11.a3}),\\
+  X_0(11)&:\ y^2+y=x^3-x^2-10x-20\ (\texttt{11.a1}).
+\end{aligned}
 \]
 By modularity, $L(E,s)$ comes from a weight-$2$ cusp form, which for
 conductor $11$ has the eta-product expression
@@ -313,7 +329,7 @@ $|y_+y_-|=|x^3|=1$ on the torus,
 
 \begin{proof}
 The modulus ordering on $[0,\pi]$ is certified numerically
-(\texttt{code/attack2.py}: $\log|y_-|$ is negative on $(0,\pi)$ except at the
+(script \texttt{attack2.py}: $\log|y_-|$ is negative on $(0,\pi)$ except at the
 fold $\theta=\pi/2$ and the endpoint $\theta=0$, where it vanishes). Since
 $y_+y_-=x^3$ has modulus $1$ on the torus, $\log|y_+|=-\log|y_-|\ge 0$
 pointwise, so $\log^+|y_+|=\log|y_+|$ and $\log^+|y_-|=0$ in Jensen's
@@ -342,11 +358,18 @@ Consider
 \[
   S_k=y^2+(x^2+kx+1)y+x^3,
 \]
-with associated elliptic curve $E_k$. Fold points (where a root branch
-crosses the unit circle) exist if and only if $|k|<2$, at the exact angles
-$c=\arccos(-k/2)$ (from $2\cos\theta+k=0$, verified numerically to $40$
-digits). The conductors, confirmed by PARI \cite{PARI} \texttt{ellfromeqn} and
-\texttt{ellglobalred}, are
+with associated elliptic curve $E_k$. Two kinds of torus intersections occur:
+\emph{fold points} (where a root branch crosses the unit circle) exist if and
+only if $|k|<2$, at the exact angles $c=\arccos(-k/2)$ (from
+$2\cos\theta+k=0$); and a \emph{branch-exchange intersection} at $\theta=0$,
+where $S_k(1,y)=y^2+(k+2)y+1=0$ has both roots on the unit circle, exists if
+and only if $-4\le k\le 0$ (a double root, i.e.\ a tangency, at $k=-4$ and
+$k=0$). Altogether the torus meets the curve exactly for $k\in[-4,2]$, the
+endpoints being degenerate (tangent at $k=-4$; at $k=2$ the fold coalesces
+with the boundary $\theta=\pi$, where $S_2(-1,y)=y^2-1$); this matches
+Samart's observation $K\cap\R=[-4,2]$ for the torus-intersection parameter
+interval \cite{Samart2023}. The conductors, confirmed by PARI \cite{PARI}
+\texttt{ellfromeqn} and \texttt{ellglobalred}, are
 \[
   k=-3,-2,-1,0,1,2,3\ \longmapsto\ N=83,\ 91=7\cdot13,\ 53,\ 11,\ 17,\ 37,\ 79.
 \]
@@ -356,7 +379,7 @@ Denote by $\tilde n(k)$ the modified Mahler measure along the signed chain
 Table~\ref{tab:family}.
 
 \begin{table}[ht]
-\centering
+\centering\footnotesize
 \begin{tabular}{@{}cclcll@{}}
 \toprule
 $k$ & $N$ & root number & fold $c/\pi$ & result & status (digits)\\
@@ -370,15 +393,17 @@ $1$ & $17$ & $+1$ & $2/3$ & $\tilde n=+b_{17}$ & $60$ digits\\
 $2$ & $37$ & $-1$ & none & $m=\tilde n=2\,b_{37}$ & new identity, $60$ digits\\
 $3$ & $79$ & $-1$ & none & $m=\tilde n=b_{79}$ & new identity, $60$ digits\\
 $-4$ & $37$ & $-1$ & none (tangent) & $m=\tfrac72\,b_{37}$
-  & new, predicted-then-confirmed, $25$ digits\\
+  & new, predicted, $25$ digits\\
 $-5$ & $359$ & $-1$ & none & $m=\tfrac14\,b_{359}$
-  & new, predicted-then-confirmed, $25$ digits\\
+  & new, predicted, $25$ digits\\
 $-6$ & $997$ & $-1$ & none & $m=\tfrac18\,b_{997}$
-  & new, predicted-then-confirmed, $25$ digits\\
+  & new, predicted, $25$ digits\\
 \bottomrule
 \end{tabular}
 \caption{The family $S_k$: conductors and Boyd-type evaluations.
-$b_N:=|L'(E_k,0)|$.}
+Here $b_N:=|L'(E_k,0)|\ge0$ and $\tilde n(k)$ is Samart's signed
+split-integral; for $k=0$ one has $\tilde n(0)=-I_{\mathrm{split}}$ in the
+notation of \textup{(C3)}, so the proved identity appears with a minus sign.}
 \label{tab:family}
 \end{table}
 
@@ -386,7 +411,7 @@ The torsion data (PARI \texttt{elltors}/\texttt{ellorder}) reveal the true
 dichotomy:
 
 \begin{table}[ht]
-\centering
+\centering\small
 \begin{tabular}{@{}ccccc@{}}
 \toprule
 $k$ & $N$ & torsion & $\operatorname{ord}(0,0)$ & Boyd-type identity\\
@@ -402,11 +427,11 @@ $-3,-2,-1,2,3$ & $83,91,53,37,79$ & trivial & $\infty$ & see below\\
 
 \begin{theorem}[Structural theorem for $S_k$, numerically established]
 \label{thm:family}
-For the family $S_k$, the dividing line is the torus-intersection structure,
-not the sign of $k$:
+For the family $S_k$ (integer $k$), the dividing line is the
+torus-intersection structure, not the sign of $k$:
 \begin{enumerate}
-  \item If $|k|\ge 2$ (no genuine torus intersection; tangential degeneracy
-  at $k=\pm 4$), the classical Deninger mechanism applies directly and
+  \item If $k\notin(-4,2)$ (no genuine torus intersection; tangent degeneracy
+  at $k=-4$), the classical Deninger mechanism applies directly and
   $m(S_k)=r_k\,|L'(E_k,0)|$ for a small rational $r_k$: confirmed for
   $k=2,3$ and \emph{predicted then confirmed} for $k=-4,-5,-6$ with
   $r=2,1,\tfrac72,\tfrac14,\tfrac18$. Note $S_{-4}$ and $S_2$ both have
@@ -416,10 +441,10 @@ not the sign of $k$:
   split integral is needed), a Boyd-type identity holds \emph{if and only if}
   the curve has torsion making $x,y$ modular units: in the whole family only
   $k=0$ ($\Z/5\Z$, $X_1(11)$) and $k=1$ ($\Z/4\Z$); for $k=-1,-2,-3$ the
-  torsion is trivial and there is no solution.
+  torsion is trivial and there is no solution. (These three have
+  branch-exchange intersections at $\theta=0$: exactly the cases where the
+  torus meets the curve but no modular units exist.)
 \end{enumerate}
-This matches Samart's observation $K\cap\R=[-4,2]$ for the torus-intersection
-parameter interval.
 \end{theorem}
 
 \begin{remark}
@@ -433,34 +458,38 @@ adjudication}
 
 Samart \cite{Samart2023}*{\S 4} mentions a conductor-$53$ analogue (for
 $k=-1$) in a single sentence, with no formula, precision, or reference. We
-show it cannot hold.
+present three independent obstructions indicating that it cannot hold.
 
-\begin{theorem}\label{thm:k53}
-For $S_{-1}$ (curve \emph{\texttt{53.a1}}) no Boyd-type split-integral
-identity $I_{\mathrm{split}}=r\,b_{53}$ can hold:
+\begin{theorem}[Negative adjudication of the conductor-$53$ case]
+\label{thm:k53}
+For $S_{-1}$ (curve \emph{\texttt{53.a1}}), no Boyd-type identity of the
+\emph{(C3)} shape --- a split-integral identity on the torus proved via the
+anti-invariant closed cycle and the Beilinson--Brunault mechanism --- can
+exist, and the natural numerical candidates fail:
 \begin{enumerate}
   \item \emph{Topological obstruction.} On $|x|=1$ the torus intersections
   are $\theta=0$ (where the two branches \emph{exchange}) and
-  $\theta=\pm\pi/3$. Enumerating all closed anti-invariant chains with
-  breakpoints at the intersections and big/small branch choices, the unique
-  solution $(1,1,1,1)$ has period $0$: there is \emph{no non-trivial
-  anti-invariant closed cycle on the torus}, so the generator of
+  $\theta=\pm\pi/3$. The space of closed anti-invariant chains with
+  breakpoints at the intersections and big/small branch choices is
+  $\Z\cdot(1,1,1,1)$ (the linear system has a one-dimensional solution
+  space), and the generator $(1,1,1,1)$ has period $0$: there is \emph{no
+  non-trivial anti-invariant closed cycle on the torus}, so the generator of
   $H_1(E,\Z)^-$ cannot be realised there and the Boyd-type torus integral
   object does not exist. (A continuous root closes only after \emph{two}
   turns of the circle, and the two-turn period is also $0$.)
   \item \emph{Algebraic obstruction.} \texttt{53.a1} has trivial torsion and
   rank $1$, and $(0,0)$ is a Mordell--Weil \emph{generator} (PARI
-  \texttt{ellorder} $=0$): $x,y$ are \emph{not} modular units, the
+  \texttt{ellorder} $=0$): $x,y$ are \emph{not} modular units, so the
   Beilinson--Brunault mechanism does not apply, and no closed-cycle regulator
   pairing has any reason to be a rational multiple of $b_{53}$.
   \item \emph{Numerical verdict.} For the natural candidate (the half-loop
   $L_1$, an open chain), the period ratio $0.5492906\ldots$ with
   $w_{\mathrm{anti}}$ is not in the period lattice, and the regulator
-  integral over $2\pi b_{53}$ equals $0.7392026\ldots$, irrational (PSLQ
-  negative).
+  integral over $2\pi b_{53}$ equals $0.7392026\ldots$, for which PSLQ
+  searches find no rational relation.
 \end{enumerate}
-Hence Samart's conductor-$53$ remark is most likely a low-precision numerical
-false positive.
+We conclude that Samart's conductor-$53$ remark is most likely a
+low-precision numerical false positive.
 \end{theorem}
 
 %=====================================================================
@@ -480,7 +509,7 @@ on $S_0$:
 \[
   2A=(0,-1),\qquad 4A=(1,0)=-A\ \Longrightarrow\ 5A=O.
 \]
-Hence
+Hence, on the $S_0$-model (with $P_\infty$ its point at infinity),
 \[
   \divisor(x)=[(0,0)]+[(0,-1)]-2[P_\infty],\qquad
   \divisor(y)=3[(0,0)]-3[P_\infty]
@@ -502,13 +531,18 @@ $\theta=\pm c$, $c=\pi/2$:
   =+\,[y_{\mathrm{big}}\text{ on }[-c,c]]
   \;-\;[y_{\mathrm{big}}\text{ on the two outer arcs}].
 \]
-The corrected Mahler measure along $\tilde\gamma$ satisfies the exact
-identities (verified to $44$ digits, \texttt{code/closedness\_check.py})
+The corrected Mahler measure along $\tilde\gamma$ satisfies exact
+identities. On the torus $\eta(x,y)=-\log|y|\,d\theta$, and since
+$y_{\mathrm{big}}y_{\mathrm{small}}=x^3$ has modulus $1$,
+$\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$ pointwise; comparing the
+signed weights of $\tilde\gamma$ with the definition of $I_{\mathrm{split}}$
+gives
 \[
   \tilde n=-I_{\mathrm{split}},\qquad
-  \int_{\tilde\gamma}\eta(x,y)=2\pi\,I_{\mathrm{split}},
+  \int_{\tilde\gamma}\eta(x,y)=2\pi\,I_{\mathrm{split}}
 \]
-so that
+(numerically confirmed to $44$ digits,
+\texttt{code/closedness\_check.py}), so that
 \[
   \text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}.
 \]
@@ -612,10 +646,16 @@ $c(C')=-C'$.}
 \label{subsec:class}
 
 In genus $1$ with $\Delta<0$, $H_1(E,\Z)^-=\Z\gamma^-$, the pairing with
-$\omega$ is injective (period lattice isomorphism), and
-$\period(\gamma^-)=\pm w_{\mathrm{anti}}$ with
-$w_{\mathrm{anti}}=2i\,\Imz\,\omega_2$. Therefore
-$\period(C')/w_{\mathrm{anti}}$ is \emph{a priori} a non-zero integer.
+$\omega$ is injective (period lattice isomorphism), and the period of the
+anti-invariant generator is the (unique up to sign) purely imaginary period
+of $E$. We fix the sign convention
+{\footnotesize
+\[
+  w_{\mathrm{anti}}:=-2.9176332338769904586617792258073505143184868579\ldots\,i
+  \qquad(\text{PARI \texttt{11.a3}}),
+\]}
+and choose $\gamma^-$ with $\period(\gamma^-)=w_{\mathrm{anti}}$. Therefore
+$\period(C')/w_{\mathrm{anti}}$ is \emph{a priori} an integer.
 
 The computation (\texttt{code/n1\_certify.py}, mpmath at $60$ and $80$
 digits, cross-checked against PARI \texttt{11.a3} \texttt{E.omega}) gives
@@ -627,12 +667,13 @@ digits, cross-checked against PARI \texttt{11.a3} \texttt{E.omega}) gives
   \frac{\period(C')}{w_{\mathrm{anti}}}=1.9999999999999999\ldots,\qquad
   \big|\period(C')-2w_{\mathrm{anti}}\big|=2.5\times10^{-16},
 \]
-where $I_{\mathrm{signed}}=-2.917633233876990458\ldots i$ is the period of
-the open signed chain and $A_{s,\mathrm{outer}},A_{s,\mathrm{inner}}$ are the
-period integrals of the compensating arcs; the $60$- and $80$-digit runs
-agree, the residual error coming from the $1/\sqrt\theta$ endpoint
-singularity at $\theta=0$. A-priori integrality $+$ distance-to-nearest-integer
-$2.5\times10^{-16}\ll 1$ imply the certified equality
+where $I_{\mathrm{signed}}=-2.917633233876990458\ldots i=w_{\mathrm{anti}}$
+is the period of the open signed chain and
+$A_{s,\mathrm{outer}},A_{s,\mathrm{inner}}$ are the period integrals of the
+compensating arcs; the $60$- and $80$-digit runs agree, the residual error
+coming from the $1/\sqrt\theta$ endpoint singularity at $\theta=0$. A-priori
+integrality, the distance-to-nearest-integer $2.5\times10^{-16}\ll 1$, and
+the ball-arithmetic certification of \S\ref{subsec:rigour} imply
 \[
   \boxed{\class(C')=2\,\gamma^-}.
 \]
@@ -668,9 +709,10 @@ hence the \emph{exact} identity
 
 \subsection{Regulator constants: Bloch, Brunault, Bertin}
 
-The divisor algebra (projective computation on the cubic model, Abel's
-principal-divisor test passed) gives, with $A=(0,0)$ the $5$-torsion point
-and $O=[0:1:0]$,
+The divisor algebra (projective computation on the minimal cubic model
+$y^2+y=x^3-x^2$, to which the data are transported by the explicit birational
+change of variables; Abel's principal-divisor test passed) gives, with
+$A=(0,0)$ the $5$-torsion point and $O=[0:1:0]$,
 \[
   \divisor(x)=[A]+[2A]-[O]-[3A],\qquad
   \divisor(y)=3[A]-2[O]-[3A],
@@ -727,14 +769,158 @@ By \eqref{eq:double} and $\class(C')=2\gamma^-$
   =\frac12\cdot 2\cdot(\pm 2\pi b_{11})=\pm 2\pi b_{11}.
 \]
 The sign is pinned by a single numerical evaluation:
-$\int_{\tilde\gamma}\eta=+0.9559686854\ldots=+2\pi b_{11}$ with $b_{11}>0$.
-Finally, by the structural identity
+$\int_{\tilde\gamma}\eta=+0.9559686854\ldots$ ${}=+2\pi b_{11}$ with $b_{11}>0$.
+Finally, by the identity
 $I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$
-(Section~\ref{sec:family}),
+of \S\ref{sec:proof},
 \[
   I_{\mathrm{split}}=b_{11}. \qedhere
 \]
 \end{proof}
+
+%=====================================================================
+\section{The conductor-$17$ case: $k=1$}
+\label{sec:k1}
+
+The proof of (C3) in \S\ref{sec:proof} is a \emph{method}, and its first
+re-application is Samart's conductor-$17$ analogue. For $k=1$ the polynomial
+\[
+  S_1=y^2+(x^2+x+1)y+x^3
+\]
+defines an elliptic curve of conductor $17$ (PARI \texttt{ellfromeqn} gives
+$E_1: y^2+xy-y=x^3-x^2$, $\Delta=17$; \texttt{ellglobalred} confirms the
+conductor), with $E_1(\Q)_{\mathrm{tors}}=\Z/4\Z$ generated by $A=(0,0)$,
+which has order $4$ --- the exact parallel of the $5$-torsion point of the
+$k=0$ case. Every step of \S\ref{sec:proof} goes through, and the regulator
+side is in fact \emph{easier}: the key $D_E$-value is a published theorem of
+Lal\'in--Ramamonjisoa \cite{LalinRam}.
+
+\subsection{The closed cycle}
+
+The torus-intersection (fold) angle is
+$c=\arccos(-k/2)\big|_{k=1}=2\pi/3$. At $\theta=c$, $x=\omega=e^{2\pi i/3}$
+satisfies $x^2+x+1=0$, so $S_1$ reduces to $y^2+1=0$: the branch jump values
+are \emph{exactly} $y=\pm i$ (the $k=0$ analogue was $y^2=i$). Writing
+$P=(\omega,i)$, the signed chain $\tilde\gamma$ (big branch on $[-c,c]$ minus
+the big branch on the two outer arcs) has boundary
+\[
+  \partial\tilde\gamma=[P]-[\bar P]+[-P]-[-\bar P],
+\]
+and the same
+small-branch compensating arc $\beta_0$ closes it to a cycle
+$C'=\tilde\gamma+\beta_0$ with $\partial C'=0$, $c(C')=-C'$.
+
+One structural difference from $k=0$: here $\Delta=+17>0$, so $E(\R)$ has
+two connected components, $\overline{w_2}=-w_2$ holds on the nose, and the
+primitive anti-invariant period is simply
+\[
+  w_{\mathrm{anti}}=w_2=-2.7457391180897536720341879\ldots\,i
+\]
+(for $k=0$, $\Delta<0$ forced $w_{\mathrm{anti}}=2w_2-w_1$).
+
+\subsection{Homology class: interval-arithmetic proof}
+
+As in \S\ref{subsec:class}, $\period(C')/w_{\mathrm{anti}}$ is a-priori a
+non-zero integer. The Arb certification (script \texttt{code/k1\_interval.py};
+output \texttt{attack11-k1-interval.txt}, $300$-bit working precision)
+is simpler than for $k=0$ because
+$D(z)=z^4-2z^3+3z^2+2z+1$ has \emph{no zeros on $|z|=1$}
+($\min_{|z|=1}|D|=4>0$, certified): there is no endpoint singularity and no
+tip-estimate machinery. The period $w_{\mathrm{anti}}$ is certified
+independently of PARI via Newton--Rouch\'e isolation of the roots of
+$4x^3-3x^2-2x+1=(x-1)(4x^2+x-1)$ and the two-component Carlson $R_F$
+formulas. The resulting ratio ball is
+\[
+  [-2.00\pm2.4\times10^{-14}]+[\pm2.4\times10^{-14}]\,i,
+  \qquad |\mathrm{ratio}+2|\le3.4\times10^{-14}<\tfrac12,
+\]
+(the radius is set by the integration tolerance, not by the arithmetic).
+Choosing $\gamma^-$ with $\period(\gamma^-)=w_{\mathrm{anti}}$, the a-priori
+integrality upgrades to the exact equality
+\[
+  \class(C')=2\gamma^-
+  \qquad(\text{the script uses }-w_{\mathrm{anti}},\text{ displaying }-2).
+\]
+
+\subsection{The regulator side}
+
+The integral algebra of \S\ref{sec:proof} is unchanged: the pointwise
+identity $\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$ on $|x|=1$ gives
+$\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$, hence
+$\int_{C'}\eta=2\int_{\tilde\gamma}\eta$. The divisors have the same shape
+\[
+  \divisor(x)=[A]+[2A]-[O]-[3A],\qquad
+  \divisor(y)=3[A]-2[O]-[3A],
+\]
+now verified \emph{four} ways: local expansions, PARI, code expansion, and an
+explicit birational map $X=-(x+y)$, $Y=x(x+y)$ from $S_1$ to
+$E_1:Y^2+XY-Y=X^3-X^2$. The diamond product (definition as in \cite{LSZ})
+expands exactly to
+\[
+  (x)\diamond(y)\equiv 6(O)+4(A)-6(2A)\qquad\text{in }\Z[E]^-.
+\]
+The two $D_E$-values are settled:
+\begin{itemize}
+  \item $D_E(2A)=0$ \emph{rigorously}: $2A$ is $2$-torsion, $q$ is a positive
+  real, and the Bloch--Wigner series vanishes termwise at $z_q=-1$;
+  \item $D_E(A)=\dfrac{17}{8\pi}L(E_1,2)$ is a \emph{published theorem}:
+  Lal\'in--Ramamonjisoa \cite{LalinRam}*{\S5} prove
+  $L(E_{17},2)=\frac{8\pi}{17}D^E(P)$ for the $4$-torsion generator $P$ of
+  their model, in the $D^E$-normalisation (their Def.~5, eq.~(10)) that
+  coincides verbatim with our series implementation; we reproduced the value
+  independently to $60$ digits.
+\end{itemize}
+Hence
+\[
+\begin{aligned}
+  D_E\big((x)\diamond(y)\big)&=4D_E(A)=\frac{17}{2\pi}L(E_1,2)=2\pi b_{17},\\
+  b_{17}&=L'(E_1,0)=\frac{17}{4\pi^2}L(E_1,2).
+\end{aligned}
+\]
+
+\subsection{Synthesis}
+
+We use Bloch's theorem in the normalisation of \cite{LalinRam}*{Thm.~6}: for
+$\{x,y\}\in K_2(E)\otimes\Q$ and $\gamma^-$ generating $H_1(E,\Z)^-$,
+\[
+  \int_{\gamma^-}\eta(x,y)=\pm D^E\big((x)\diamond(y)\big).
+\]
+The temperedness hypothesis holds: the four face polynomials of $S_1$ are
+$x^3+x^2y$, $x^2y+y^2$, $x^3+y^2$ and $y(x^2+x+1)$, all cyclotomic since
+$x^2+x+1=\Phi_3(x)$. This normalisation has published precedent on this very
+curve: the conductor-$17$ identity of \cite{LalinRam} combined with
+Zudilin's $m=2b_{17}$ closes with the same factor.
+
+\begin{theorem}[Samart's conductor-$17$ analogue]\label{thm:k1}
+$\tilde n(1)=b_{17}$.
+\end{theorem}
+
+\begin{proof}
+By the above,
+\[
+  \int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta
+  =\frac12\cdot 2\cdot\big(\pm D_E((x)\diamond(y))\big)=\pm 2\pi b_{17},
+\]
+and the sign is pinned by a single numerical evaluation:
+\[
+  \int_{\tilde\gamma}\eta=-1.8809066251248561\ldots=-2\pi b_{17}.
+\]
+The
+structural identity $\tilde n(1)=-\frac1{2\pi}\int_{\tilde\gamma}\eta$
+(the $k=1$ instance of the pointwise argument of \S\ref{sec:proof}) gives
+$\tilde n(1)=b_{17}$.
+\end{proof}
+
+\begin{remark}\label{rem:normalisation}
+The $k=0$ proof (\S\ref{sec:proof}) quotes Bloch's theorem through
+Brunault's regulator $r_{\gamma}$, with the factor $\int\eta=\pm2D_E(\cdot)$
+certified there by Brunault's (3.210)--(3.211); the present proof quotes the
+Lal\'in normalisation with factor $1$, certified here by the published
+conductor-$17$ identities of \cite{LalinRam} and \cite{Zudilin}. The two
+formulations differ only in the conventional factor in the definition of
+$r_\gamma$ versus $D^E$; each is used with the published formula that pins
+its normalisation on the respective curve.
+\end{remark}
 
 %=====================================================================
 \section{Numerical certification}
@@ -757,10 +943,14 @@ digits and cross-checked with PARI/GP 2.15.5:
   with terms decaying like $e^{-1.894n}$; $200$ terms suffice for $300$
   digits.
   \item \textbf{(C3) to $149$ digits} (\texttt{code/attack3.py}):
+  {\small
   \[
+  \begin{aligned}
     I_{\mathrm{split}}
-    =0.152147141725918049486227297478634495628143589164226122809889823882023289695302776676\ldots,
-  \]
+    ={}&0.15214714172591804948622729747863449562814\\
+       &3589164226122809889823882023289695302776676\ldots,
+  \end{aligned}
+  \]}
   \[
     |I_{\mathrm{split}}-b_{11}|=4.85\times10^{-149}.
   \]
@@ -785,14 +975,20 @@ digits and cross-checked with PARI/GP 2.15.5:
   vs.\ \texttt{lfun} to $50+$ digits), \texttt{winding.gp},
   \texttt{dilog.gp}, \texttt{k53.gp}, \texttt{k53b.gp},
   \texttt{kfamily\_torsion.gp}.
+  \item \textbf{Conductor-$17$ certification} (scripts \texttt{code/k1\_*},
+  listed individually in Appendix~\ref{app:code}): PARI curve identification
+  and $z$-values; mpmath $60/80$-digit chain integrals (ratio
+  $2.0000000000000002$); exact diamond-product expansion with the $k=0$ case
+  as control; $D_E(A)$, $D_E(2A)$ to $60$ digits; and the Arb ironclad proof
+  of the period ratio (\S\ref{sec:k1}).
 \end{itemize}
 
 \subsection{Level of rigour: interval certification}
 \label{subsec:rigour}
 
 The integer identification in \S\ref{subsec:class} has been made fully
-interval-rigorous (\texttt{code/n1\_interval.py}, python-flint/Arb ball
-arithmetic \cite{Arb}, $300$-bit working precision; output
+interval-rigorous (script \texttt{code/n1\_interval.py}, python-flint/Arb
+ball arithmetic \cite{Arb}, $300$-bit working precision; output in
 \texttt{notes/attack10-interval.txt}).  All three arc integrals were
 recomputed with Arb's certified adaptive Gauss--Legendre integration:
 \begin{itemize}
@@ -804,7 +1000,8 @@ recomputed with Arb's certified adaptive Gauss--Legendre integration:
   is summed by the Cauchy estimate $\int_{0}^{\delta}f=a_{0}\delta+R$,
   $|R|\le H\delta^{3}/3$, where $H$ is derived from
   $M=\max_{|t|=\rho}|f|=1.3075\ldots$, itself certified by covering the
-  circle with $4096$ balls (per-tip radius $2.18\times10^{-3}$);
+  circle with $4096$ balls (per-tip Cauchy remainder bound
+  $H\delta^{3}/3=2.18\times10^{-3}$);
   \item $D(\theta)$ crosses the negative real axis once on $(c,\pi)$ and once
   on $(-\pi,-c)$, where the principal square root is not analytic: the arcs
   are subdivided adaptively, on each piece either $\sqrt{D}$ or $i\sqrt{-D}$
@@ -812,18 +1009,21 @@ recomputed with Arb's certified adaptive Gauss--Legendre integration:
   propagated across the nodes by a certified matching test;
   \item $w_{\mathrm{anti}}$ is certified independently of PARI: the roots of
   $4x^{3}-4x^{2}+1$ are isolated by Newton iteration plus a Rouch\'e
-  certificate, and Carlson's $R_{F}$ gives
-  $w_{\mathrm{real}}=6.34604652139776710844397\ldots$ ($\pm2.3\times10^{-45}$)
-  and $w_{\mathrm{anti}}=2.91763323387699045866178\ldots i$
-  ($\pm6.8\times10^{-47}$), agreeing with PARI to $45$ digits.
+  certificate, and Carlson's $R_{F}$ (DLMF \S19) gives
+  $w_{\mathrm{real}}=6.34604652139776710844397\ldots$ and the purely
+  imaginary period $2.91763323387699045866178\ldots i$ --- which is
+  $-w_{\mathrm{anti}}$ in the convention of \S\ref{subsec:class} --- with
+  certified radii $6.7\times10^{-48}$ and $4.9\times10^{-49}$, agreeing with
+  PARI to $45$ digits.
 \end{itemize}
-The resulting ratio ball is
-$[-2.00\pm3.13\times10^{-3}]+[\pm2.99\times10^{-3}]\,i$: it contains $-2$ and
-$|\mathrm{ratio}+2|\le4.33\times10^{-3}<1/2$.  The a-priori integrality of
+Against $w_{\mathrm{anti}}$ the resulting ratio ball is
+$[2.00\pm3.13\times10^{-3}]+[\pm2.99\times10^{-3}]\,i$: it contains $2$ and
+$|\mathrm{ratio}-2|\le4.33\times10^{-3}<1/2$.  The a-priori integrality of
 \S\ref{subsec:class} therefore upgrades to the exact equality
-$\mathrm{period}(C')=-2\,w_{\mathrm{anti}}$ (the sign is an orientation
-convention, $|\class(C')|=2\gamma^{-}$), and Theorem~\ref{thm:C3} holds
-without any certification-level caveat.
+$\mathrm{period}(C')=2\,w_{\mathrm{anti}}$, i.e.\ $\class(C')=2\gamma^{-}$.
+(The script itself works with the opposite sign of the period throughout, so
+the raw output in \texttt{notes/attack10-interval.txt} displays the ratio
+ball centred at $-2$; the two formulations are equivalent.)
 
 %=====================================================================
 \section{Conjectures}
@@ -833,8 +1033,8 @@ The family identities established numerically here are stated as conjectures
 pending analytic proof:
 
 \begin{conjecture}\label{conj:family}
-For $S_k=y^2+(x^2+kx+1)y+x^3$ with $|k|\ge 2$, there is a small rational
-number $r_k$ such that
+For $S_k=y^2+(x^2+kx+1)y+x^3$ with $k\notin(-4,2)$ (integer $k$), there is a
+small rational number $r_k$ such that
 \[
   m(S_k)=r_k\,|L'(E_k,0)|.
 \]
@@ -851,10 +1051,11 @@ the predicted values. Note that $S_{-4}$ and $S_2$ share conductor $37$,
 yielding Rodr\'iguez Villegas--type rational relations \cite{RV,LalinRam}
 between two different polynomial models of the same curve.
 
-\begin{conjecture}[Samart's conductor-$17$ analogue, independently confirmed]
-For $k=1$ (conductor $17$), $\tilde n(1)=b_{17}$, i.e.\ the signed
-split-integral of $S_1$ equals $|L'(E_{17},0)|$ (60 digits).
-\end{conjecture}
+\begin{remark}[Samart's conductor-$17$ analogue: now a theorem]
+The conjecture $\tilde n(1)=b_{17}$ for $k=1$ (conductor $17$), suggested by
+Samart and confirmed numerically to $60$ digits, is proved as
+Theorem~\ref{thm:k1} in \S\ref{sec:k1}.
+\end{remark}
 
 \begin{remark}
 By Theorem~\ref{thm:k53}, no such conjecture can be formulated for $k=-1$
@@ -868,15 +1069,16 @@ $x,y$ are not modular units.
 \label{app:code}
 
 All scripts live in \texttt{code/}; raw outputs in
-\texttt{notes/attack*-results.txt}. Dependencies: Python 3.12 with mpmath and
+\texttt{notes/attack*.txt}. Dependencies: Python 3.12 with mpmath and
 sympy; PARI/GP 2.15.5; python-flint 0.9.0 (Arb) for the interval certification.
 
 \begin{center}
+\footnotesize
 \begin{tabular}{@{}ll@{}}
 \toprule
 File & Purpose\\
 \midrule
-\texttt{b11.py} & $b_{11}=L'(E_{11},0)$ to 300 digits via approximate functional equation\\
+\texttt{b11.py} & $b_{11}=L'(E_{11},0)$, 300 digits (functional equation)\\
 \texttt{attack1.py} & reproduce (C1), (C2) to 52 digits\\
 \texttt{attack2.py} & $m(S_0)$, PSLQ negative results\\
 \texttt{attack3.py} & (C3) to 149 digits\\
@@ -887,20 +1089,27 @@ File & Purpose\\
 \texttt{ntilde\_family.py} & $\tilde n(k)$ family table, 50--80 digits\\
 \texttt{b\_family.py} & $b_N$ for the family via point counting\\
 \texttt{winding.py} / \texttt{winding.gp} & period pairings, winding-number heuristics\\
-\texttt{dilog.py} / \texttt{dilog.gp} & elliptic dilogarithm $D_E(P)$, Brunault/Bertin constants\\
+\texttt{dilog.py} / \texttt{dilog.gp} & elliptic dilogarithm $D_E(P)$, Brunault constants\\
 \texttt{k53\_attack.py} & conductor-$53$ obstruction analysis\\
 \texttt{k53.gp} / \texttt{k53b.gp} & PARI checks for \texttt{53.a1}\\
 \texttt{kneg\_m.py} & $m(S_k)$ for $k=-4,-5,-6$ (predicted identities)\\
 \texttt{n1\_certify.py} / \texttt{n1\_certify.gp} & certification of $\class(C')=2\gamma^-$\\
-\texttt{n1\_interval.py} & Arb ball-arithmetic ironclad proof of the period ratio\\
-\texttt{verify\_family.gp} & PARI cross-check of family conductors and $j$-invariants\\
+\texttt{n1\_interval.py} & Arb ironclad proof of the period ratio\\
+\texttt{branch\_certify.py} & branch assignments + modulus ordering (certified)\\
+\texttt{k1\_pari/points/zvals.gp} & conductor-$17$ identification, torsion, $z$-values\\
+\texttt{k1\_certify.py} & mpmath certification of the $k=1$ chain integrals\\
+\texttt{k1\_interval.py} & Arb ironclad proof of the $k=1$ period ratio\\
+\texttt{k1\_diamond.py} & exact diamond product for $k=1$ ($k=0$ control)\\
+\texttt{k1\_dilog.py} & $D_E(A)$, $D_E(2A)$ for conductor $17$\\
+\texttt{verify\_family.gp} & family conductors and $j$-invariants\\
 \texttt{verify\_ratios.gp} & PARI \texttt{lfun} cross-check of ratios\\
-\texttt{kfamily\_torsion.gp} & torsion subgroups and $\operatorname{ord}(0,0)$ for the family\\
+\texttt{kfamily\_torsion.gp} & torsion, $\operatorname{ord}(0,0)$ for the family\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 Reproduction:
+{\footnotesize
 \begin{verbatim}
 cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
@@ -908,11 +1117,15 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
   && python dilog.py && python k53_attack.py && python kneg_m.py \
   && python n1_certify.py
-.venv/Scripts/python n1_interval.py    # Arb interval certification (needs python-flint)
+.venv/Scripts/python n1_interval.py    # Arb certification, k=0
+.venv/Scripts/python branch_certify.py  # branch assignments + mod ordering
+.venv/Scripts/python k1_interval.py     # Arb certification, conductor 17
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
+gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 \end{verbatim}
+}
 
 %=====================================================================
 \begin{thebibliography}{99}
