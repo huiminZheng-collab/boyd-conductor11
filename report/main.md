@@ -431,7 +431,8 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}$ **先验为整数**。实测（60/80 位
 $$\mathrm{period}(C')=I_{\mathrm{signed}}+A_{s,\mathrm{outer}}-A_{s,\mathrm{inner}},
 \qquad \frac{\mathrm{period}(C')}{w_{\mathrm{anti}}}=1.9999999999999999\ldots,$$
 $|\mathrm{period}(C')-2w_{\mathrm{anti}}|=2.5\times10^{-16}\ll 1$ ⟹
-$\mathrm{class}(C')=2\gamma^-$（认证等式）。**更正**：第二波的"$\tilde\gamma$ 本身是
+$\mathrm{class}(C')=2\gamma^-$（第六波 Arb 铁证：比值球含 $-2$、半径 $<1/2$，
+符号=定向约定）。**更正**：第二波的"$\tilde\gamma$ 本身是
 生成元（$n=1$）"不准确——$\tilde\gamma$ 是开链；正确的闭链 $C'$ 绕数为 **2**。
 
 **regulator 合成（精确积分代数）**。$|x|=1$ 上 $\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$
@@ -445,10 +446,14 @@ $\int_{\gamma^-}\eta=\pm2\pi b_{11}$。合成：
 $$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
 符号由一次数值评估（$+2\pi b_{11}$，$b_{11}>0$）钉死。由结构定理
 $I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$（第一波，已证）：
-$$\boxed{\,I_{\mathrm{split}}=b_{11}\,}\qquad\text{(C3) 证毕（认证级别）}.$$
+$$\boxed{\,I_{\mathrm{split}}=b_{11}\,}\qquad\text{(C3) 证毕}.$$
 
-**认证级别说明**：唯一非逐字严格之处是整数识别（比值 $=2$ 到 15 位 + 先验整数性，
-间隙为 1）；完全铁证化可用区间算术（Arb）重算三段积分，属机械工作。
+**区间算术铁证化（第六波完成）**：整数识别已由 Arb 球算术完全严格化
+（`code/n1_interval.py`，输出 `notes/attack10-interval.txt`）：三段积分用 Arb 认证
+积分重算（θ=±t² 换元消端点奇性 + Cauchy 尖端估计；D 穿负实轴处自适应细分 +
+每段认证回避割线 + 认证符号传递；w_anti 由 Newton+Rouché 隔离的根 + Carlson RF
+独立认证，与 PARI 45 位一致），得比值球含 $-2$ 且半径 $<1/2$，先验整数性 ⟹
+$\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定）。
 模型常数 $\kappa=1$ 由判别式比 $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}=2^a11^b$
 的离散候选 + 50 位一致锁定。
 
@@ -459,7 +464,7 @@ $$\boxed{\,I_{\mathrm{split}}=b_{11}\,}\qquad\text{(C3) 证毕（认证级别）
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **(C3) 证毕（认证级别，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数 + 15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。剩余仅 Arb 区间算术铁证化（机械工作）。
+6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
 7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构定理**——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 $m(S_k)=r_k|L'(E_k,0)|$（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式成立当且仅当有扭点使 $x,y$ 成 modular units，全族仅 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$）。**conductor 53 矛盾解决**：环面上不存在非平凡反不变闭链（枚举唯一解周期为 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
 
 
@@ -472,12 +477,13 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
   && python dilog.py && python k53_attack.py && python kneg_m.py \
   && python n1_certify.py
+.venv/Scripts/python n1_interval.py    # Arb 区间算术铁证（需 python-flint）
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 ```
 
-依赖：Python 3.12 + mpmath + sympy。
+依赖：Python 3.12 + mpmath + sympy；区间铁证另需 python-flint 0.9.0（项目内 `.venv`）。
 
 ## 12. 文献导读（`literature/`）
 

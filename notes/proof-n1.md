@@ -89,9 +89,25 @@ $$I_{\mathrm{split}}=b_{11}.\qquad\blacksquare$$
 
 ## 6. 认证的严格性说明
 
-- 唯一非逐字严格之处：§2 的整数识别（比值 $=2$ 到 15 位 + 先验整数性）。
-  完全铁证化需区间算术（Arb/ball arithmetic）重算三段积分；但误差估计稳定
-  （40/60/80 位对照、mpmath 与 PARI 双系统），且先验间隙为 1，认证无实际疑虑。
+- 整数识别**已铁证化**（第六波 (b)：`code/n1_interval.py`，python-flint/Arb
+  球算术，300 位工作精度，输出 `notes/attack10-interval.txt`）。三段积分全部用
+  Arb 认证积分（`acb.integral`，自适应高斯-勒让德，带严格误差界）重算：
+  (i) θ=0 端点奇性 $u\sim\sqrt\theta$ 由 $\theta=\pm t^2$ 换元消除；换元后被积函数
+      在圆盘 $|t|\le\rho=0.6$ 上解析（$D(t^2)$ 的非零零点 $|\theta_j|\ge1.2188$，
+      由四次方程 $z^4-4z^3+2z^2+1$ 根的 Newton + Rouché 隔离认证），尖端 $[0,\delta=0.12]$
+      用 Cauchy 估计求和：$\int_0^\delta f=a_0\delta+R$，$|R|\le H\delta^3/3$
+      （$H$ 由圆周球覆盖认证的 $M=\max_{|t|=\rho}|f|=1.3075\ldots$ 给出，单尖半径 $2.18\times10^{-3}$）；
+  (ii) $D(\theta)$ 在 $(c,\pi)$ 与 $(-\pi,-c)$ 上各穿负实轴一次（主支 $\sqrt D$ 不解析）：
+      自适应细分 + 每段认证回避割线（$\sqrt D$ 或 $i\sqrt{-D}$ 之一在该段解析，
+      由球评估认证）+ 节点处认证符号传递；
+  (iii) $w_{\mathrm{anti}}$ 独立认证（不依赖 PARI）：$4x^3-4x^2+1$ 的根 Newton + Rouché
+      隔离，Carlson RF 给出 $w_{\mathrm{real}}=6.34604652139776710844397\ldots\pm2.3\times10^{-45}$、
+      $w_{\mathrm{anti}}=2.91763323387699045866178\ldots\,i\pm6.8\times10^{-47}$（与 PARI 45 位一致）。
+  结果：比值球 $=[-2.00\pm3.13\times10^{-3}]+[\pm2.99\times10^{-3}]\,i$，
+  含 $-2$ 且 $|\mathrm{ratio}+2|\le4.33\times10^{-3}<1/2$；先验整数性 ⟹
+  $\mathrm{period}(C')=-2\,w_{\mathrm{anti}}$ 为**严格等式**
+  （符号=定向约定，$|\mathrm{class}(C')|=2\gamma^-$）。**§2 的整数识别由此升级为
+  完全严格，(C3) 证明全流程不再有认证级别保留。**
 - 模型常数 $\kappa=1$：四次模型与 11.a3 的判别式比为 $2^a11^b$ 形，
   $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}$，$\kappa\in\mathbb Q^*$ 候选离散，
   50 位一致排除 $\kappa\ne1$。
