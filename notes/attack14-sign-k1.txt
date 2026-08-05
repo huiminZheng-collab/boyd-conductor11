@@ -1,0 +1,28 @@
+=== ball-arithmetic sign certification, S_1 (k=1, conductor 17) ===
+working precision: ctx.prec = 200 bits
+per-integral radius target: [0.0050000 +/- 1e-12]
+
+J1 = int_0^{2pi/3} log|y_small| dth
+  int ball: mid = [-1.26593383433616778398432455901 +/- 5.64e-31]  rad <= [0.0049998 +/- 1.24e-8]
+  pieces evaluated (cumulative): 11940
+
+J2 = int_{2pi/3}^{pi} log|y_small| dth
+  int ball: mid = [-0.325454043535962564033111848498 +/- 1.05e-31]  rad <= [0.0049996 +/- 1.09e-8]
+  pieces evaluated (cumulative): 1498
+
+J_split = J1 - J2
+  mid = [-0.940479790800205219951212710512 +/- 4.59e-31]
+  rad <= [0.0099994 +/- 1.50e-9]
+  mid + rad = [-0.9304803922797560435205105 +/- 1.04e-27]
+  mpmath reference: J_split = -0.9404533125624281...
+
+derived structural quantities:
+  int_{gamma~} eta = 2*J_split: mid = [-1.88095958160041043990242542102 +/- 3.09e-30]  rad <= [0.019999 +/- 2.03e-7]
+    mpmath reference: -1.8809066251248561... = -2 pi b_17
+  ntilde(1) = -J_split/pi: mid = 0.299364015460014343261718750000  rad <= [0.0031829 +/- 8.53e-9]
+    mpmath reference: +0.2993555868829154... = b_17
+  pieces: separated = 13403  convex-hull = 35
+
+PASS: certified ball for J_split lies STRICTLY in (-inf, 0).
+      Hence int_{gamma~} eta < 0 and ntilde(1) = +b_17 > 0 are
+      theorems (ball arithmetic, not a float).
