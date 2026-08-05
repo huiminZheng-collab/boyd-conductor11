@@ -1,0 +1,53 @@
+=== branch certification, S_1 (k=1, conductor 17) -- referee item M2 / finding 16 ===
+working precision: ctx.prec = 300 bits (no dps override)
+exact corner points (c = 2 pi/3, omega = e^{2 pi i/3}):
+  P       on S_1: residual |y^2+By+x^3| <= [3.3061425789297171296866718310838541347361937087272396316426112326835576401742257336092489e-89 +/- 2.25e-178]  (contains 0)
+  -P      on S_1: residual |y^2+By+x^3| <= [3.0165287542216042787932138465638481378766520866503835733104724627934255644931948986174044e-89 +/- 1.58e-178]  (contains 0)
+  P-bar   on S_1: residual |y^2+By+x^3| <= [8.6964908787432381902584955515211803504498719981038270028794687975625327592533097245356822e-89 +/- 1.10e-178]  (contains 0)
+  -P-bar  on S_1: residual |y^2+By+x^3| <= [8.4934193981089985605984572227362820979951690791898415722157750283411982770190372671694816e-89 +/- 4.51e-178]  (contains 0)
+  theta=c: omega^2+omega+1 = 0 and omega^3 = 1 certified
+           (|.| <= [1.3622771717200358463535546015348019850510232400481547360528319452562572411723090716430225e-89 +/- 1.89e-178], [1.9439245850618284535612844567218462651878506226725320474400800754275982735779035952824208e-89 +/- 5.14e-179]), so y^2 = -x^3 = -1, y = +/- i
+           D(omega) = [-4.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 +/- 8.70e-89] + [+/- 7.40e-89]j  (contains -4; min_{|z|=1}|D| = 4)
+
+(A) closed-chain endpoint branch assignments
+  eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-6 +/- 4.41e-97]:
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
+  y_big(c^-)      -P           1.304e-06                      3.999981  True
+  y_big(c^+)      P            2.073e-06                      3.999981  True
+  y_big(-c^+)     -P-bar       1.304e-06                      3.999981  True
+  y_big(-c^-)     P-bar        2.073e-06                      3.999981  True
+  y_small(c^-)    P            2.073e-06                      3.999981  True
+  y_small(c^+)    -P           1.304e-06                      3.999981  True
+  y_small(-c^+)   P-bar        2.073e-06                      3.999981  True
+  y_small(-c^-)   -P-bar       1.304e-06                      3.999981  True
+  eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-9 +/- 4.48e-100]:
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
+  y_big(c^-)      -P           1.304e-09                      4.000000  True
+  y_big(c^+)      P            2.073e-09                      4.000000  True
+  y_big(-c^+)     -P-bar       1.304e-09                      4.000000  True
+  y_big(-c^-)     P-bar        2.073e-09                      4.000000  True
+  y_small(c^-)    P            2.073e-09                      4.000000  True
+  y_small(c^+)    -P           1.304e-09                      4.000000  True
+  y_small(-c^+)   P-bar        2.073e-09                      4.000000  True
+  y_small(-c^-)   -P-bar       1.304e-09                      4.000000  True
+  continuity argument: D != 0 on each closing interval (above),
+  the two exact roots at theta0 are 2 apart (y = +/- i),
+  pin distance < 1/10
+  ==> the one-sided limit is the claimed point, in all 8 cases.
+  VERDICT (A): ALL 8 ASSIGNMENTS CERTIFIED
+
+(B) Proposition 3.1: |y_-(th)| <= 1 <= |y_+(th)| on [0, pi],
+    equality |y_-| = 1 only at th = c = 2 pi/3 (and, by
+    conjugate symmetry, at th = -c on [-pi, 0]); NO theta = 0
+    degeneracy for k = 1 (D(1) = 5 != 0)
+  strict balls (D != 0, |y_small| < 1 < |y_big| certified): 113
+  special ball [2.093884, 2.094395]: |y| balls [+/- 1.01], [+/- 1.01] (contain 1)
+  special ball [2.094395, 2.094906]: |y| balls [+/- 1.01], [+/- 1.01] (contain 1)
+  equality at the special point is EXACT algebra:
+    th = c = 2 pi/3: B(omega) = omega^2+omega+1 = 0, omega^3 = 1,
+    so y^2 = -x^3 = -1, y = +/- i, |y| = 1
+    (no th = 0 special ball: D(1) = 5, y = (-3 +/- sqrt(5))/2,
+     moduli (3 -/+ sqrt(5))/2 -- certified strict by bisection)
+  VERDICT (B): CERTIFIED
+
+OVERALL VERDICT: ALL CERTIFIED. QED.
