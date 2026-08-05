@@ -1,0 +1,42 @@
+disc(f) = -2816 = 2 * 2 * 2 * 2 * 2 * 2 * 2 * 2 * 11
+
+--- reduction of P = (i, 2 zeta8) modulo good primes p == 1 (mod 8) ---
+p= 17:  zeta8 =   9 (order 8 in F_p^*),  disc(f) mod p = 6,  #E(F_p) = 20,  ord(P mod p) = 20   (divides #E: True)
+p= 41:  zeta8 =  38 (order 8 in F_p^*),  disc(f) mod p = 13,  #E(F_p) = 50,  ord(P mod p) = 50   (divides #E: True)
+p= 73:  zeta8 =  10 (order 8 in F_p^*),  disc(f) mod p = 31,  #E(F_p) = 70,  ord(P mod p) = 70   (divides #E: True)
+p= 89:  zeta8 =  37 (order 8 in F_p^*),  disc(f) mod p = 32,  #E(F_p) = 75,  ord(P mod p) = 3   (divides #E: True)
+p= 97:  zeta8 =  64 (order 8 in F_p^*),  disc(f) mod p = 94,  #E(F_p) = 105,  ord(P mod p) = 105   (divides #E: True)
+
+ord(P mod 17) = 20,  ord(P mod 89) = 3,  gcd = 1
+torsion-order argument (injectivity of prime-to-p torsion reduction):
+  17-part of N | 89-free part of N | ord(P mod 89) = 3   ==> no 17-part
+  89-part of N | 17-free part of N | ord(P mod 17) = 20  ==> no 89-part
+  rest of N divides gcd(20, 3) = 1  ==> N = 1, i.e. P = O
+  but ord(P mod 17) = 20 > 1: contradiction
+
+--- independent exact confirmation over Q(zeta_8) ---
+P = (z^2, 2z) lies on u^2 = f(x) exactly: OK
+ord(T) = 5 over Q(zeta_8): OK (exact)
+3*P != O exactly (affine point, e = 0, max numerator digits = 10)
+20*P != O exactly (affine point, e = 0, max numerator digits = 361)
+60*P != O exactly (affine point, e = 0, max numerator digits = 3317)
+3P != O, 20P != O, 60P != O exactly over Q(zeta_8): OK
+
+VERDICT: N | 20 and N | 3 with cross-parts excluded  ==>  N = 1.
+P = (i, e^{i pi/4}) is NOT a torsion point on S_0 over Q(zeta_8). QED
+
+--- independent PARI cross-check ---
+PARI one-off script (deleted after use):
+  Ep = ellinit([0,-1,1,0,0]*Mod(1,p));  i = Mod(z^2,p); u = Mod(2*z,p);
+  F = u+i^2-2*i; G = i*(F-1);  kappa(Pb) = [(F+1)/2, (G-F-1)/2]   (kappa_exact.py map)
+  T0 = [Mod(1,p),Mod(0,p)];  psi = ellsub(Ep, kappa(Pb), T0);  ellorder(Ep, psi)
+NOTE: kappa is a CURVE iso with O+ -> O and O- -> (1,0) =: T0 (2-torsion);
+the GROUP iso (C, O-) -> (E, O) is psi(P) = kappa(P) - T0.  The raw
+kappa-image order ellorder(Ep, kappa(Pb)) differs at p = 89, 97 by the
+translation (15 vs 3, 21 vs 105); psi recovers the S_0-law orders.
+p=17  psi(P) = [Mod(12, 17), Mod(4, 17)]  ord = 20  (kappa-image ord = 20)
+p=41  psi(P) = [Mod(35, 41), Mod(15, 41)]  ord = 50  (kappa-image ord = 50)
+p=73  psi(P) = [Mod(36, 73), Mod(39, 73)]  ord = 70  (kappa-image ord = 70)
+p=89  psi(P) = [Mod(18, 89), Mod(62, 89)]  ord = 3  (kappa-image ord = 15)
+p=97  psi(P) = [Mod(11, 97), Mod(81, 97)]  ord = 105  (kappa-image ord = 21)
+PARI confirms all five orders of endpoint_torsion3.py exactly.

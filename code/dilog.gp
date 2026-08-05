@@ -11,13 +11,19 @@ E = ellinit([0,-1,1,0,0]);
 w1 = E.omega[1]; w2 = E.omega[2];
 w3 = w1 - w2;   /* basis with Im tau > 0 (Delta < 0: conj(w2) = w1 - w2 in lattice) */
 tau = w3/w1;
-printf("tau = %.30f\n", tau);
+print("tau = ", tau);
 printf("check Im(tau) > 0: %d\n", imag(tau) > 0);
 zP  = ellpointtoz(E, [0,0]);
 z2P = ellpointtoz(E, [1,-1]);
 printf("z(P)  = %.30f\n", zP);
 printf("z(2P) = %.30f\n", z2P);
-printf("5 z(P) mod lattice (should be ~0): %.3e\n", abs(5*zP - round(real(5*zP)) ));
+/* correct lattice reduction: 5 z(P) is real, so reduce mod w1*Z
+   (the old check reduced mod Z -- subtracting the integer 19 instead of
+   the lattice element 3*w1 = 19.0381... -- hence the spurious 3.8e-2) */
+w1z = 5*zP/w1;
+m = round(real(w1z));
+printf("5 z(P)/w1 = %.30f  (should be an integer)\n", w1z);
+printf("5 z(P) - %d w1 mod lattice (should be ~0): %.3e\n", m, abs(5*zP - m*w1));
 write("dilog_zvals.txt", zP, " ", z2P, " ", tau);
 L2 = lfun(E, 2);
 b11 = 11/(4*Pi^2)*L2;

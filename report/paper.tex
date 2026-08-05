@@ -69,7 +69,7 @@ is again pinned by an interval-arithmetic period-ratio computation. We also
 prove a structural theorem for
 the whole family $S_k=y^2+(x^2+kx+1)y+x^3$: the dividing line is the
 torus-intersection structure, not the sign of $k$; we confirm numerically
-new Boyd-type identities for $k=2,3$ (60 digits, PARI/GP cross-checked) and
+new Boyd-type identities for $k=2,3$ (70 digits, PARI/GP cross-checked) and
 for $k=-4,-5,-6$ (25 digits), and we adjudicate negatively the
 conductor-$53$ analogue suggested by Samart. All computations are
 reproducible from the accompanying
@@ -170,7 +170,7 @@ Samart \cite{Samart2023} lists (C3) explicitly as an open conjecture.
   Boyd-type identity holds if and
   only if the curve has torsion making $x,y$ modular units, which happens
   only for $k=0$ and $k=1$ (Theorem~\ref{thm:family}).
-  \item \textbf{New numerically confirmed identities} (60 digits, PARI/GP
+  \item \textbf{New numerically confirmed identities} (70 digits, PARI/GP
   cross-checked): $m(S_2)=2|L'(E_{37},0)|$, $m(S_3)=|L'(E_{79},0)|$, and the
   predicted-then-confirmed identities
   $m(S_{-4})=\tfrac72|L'(E_{37},0)|$,
@@ -306,7 +306,8 @@ measured.
 
 The (C1)--(C2) proof chain is: modular units $+$ cusp-to-cusp path $+$ BMZ.
 For (C3) the integration path ends at the torus-intersection point
-$P_{\pi/2}=(i,e^{i\pi/4})$, which is \emph{not} a torsion point, so the naive
+$P_{\pi/2}=(i,e^{i\pi/4})$, which is \emph{not} a torsion point (proved
+rigorously by reduction at good primes, \S\ref{sec:cert}), so the naive
 boundary divisor is not cuspidal. The resolution, developed in
 Section~\ref{sec:proof}, is that the correct object is not the open path but
 a \emph{closed signed chain} on the full circle: closedness is a topological
@@ -376,7 +377,7 @@ interval \cite{Samart2023}. The conductors, confirmed by PARI \cite{PARI}
 \]
 Denote by $\tilde n(k)$ the modified Mahler measure along the signed chain
 (when no fold points exist, $\tilde n(k)=m(S_k)$). The numerics
-(60 digits; PARI/GP cross-checks) are summarised in
+(70 digits; PARI/GP cross-checks) are summarised in
 Table~\ref{tab:family}.
 
 \begin{table}[ht]
@@ -391,8 +392,8 @@ $-1$ & $53$ & $-1$ & $1/3$ & ratio $0.7392026\ldots$ & none
   (Theorem~\ref{thm:k53})\\
 $0$ & $11$ & $+1$ & $1/2$ & $\tilde n=-b_{11}$ & (C3), $149$ digits\\
 $1$ & $17$ & $+1$ & $2/3$ & $\tilde n=+b_{17}$ & $60$ digits\\
-$2$ & $37$ & $-1$ & none & $m=\tilde n=2\,b_{37}$ & new identity, $60$ digits\\
-$3$ & $79$ & $-1$ & none & $m=\tilde n=b_{79}$ & new identity, $60$ digits\\
+$2$ & $37$ & $-1$ & none & $m=\tilde n=2\,b_{37}$ & new identity, $70$ digits\\
+$3$ & $79$ & $-1$ & none & $m=\tilde n=b_{79}$ & new identity, $70$ digits\\
 $-4$ & $37$ & $-1$ & none (tangent) & $m=\tfrac72\,b_{37}$
   & new, predicted, $25$ digits\\
 $-5$ & $359$ & $-1$ & none & $m=\tfrac14\,b_{359}$
@@ -499,7 +500,7 @@ low-precision numerical false positive.
 
 Throughout, $E: S_0=0$ with invariant differential $\omega=dx/u$,
 $u=2y+x^2+1$ (quartic model $u^2=x^4-4x^3+2x^2+1$; the model constant
-$\kappa=1$ is fixed in \S\ref{sec:cert}).
+$\kappa=1$ is proved exactly in \S\ref{sec:cert}).
 
 \subsection{Modular units}
 
@@ -966,14 +967,24 @@ digits and cross-checked with PARI/GP 2.15.5:
   argument has an a-priori gap of $1$ against a residual of
   $2.5\times10^{-16}$.
   \item \textbf{Exact algebraic checks}: group law and torsion
-  (\texttt{code/torsion.py}, \texttt{code/endpoint\_torsion2.py}) use exact
+  (\texttt{code/torsion.py}) use exact
   rational arithmetic over $\Q$, $\Q(\sqrt2)$, $\Q(\zeta_8)$---no numerical
-  approximation; the model constant $\kappa=1$ is fixed by the discrete
-  candidates $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}=2^a11^b$
-  plus $50$-digit agreement.
+  approximation. Non-torsion of the endpoint $P$ is proved \emph{rigorously}
+  (\texttt{code/endpoint\_torsion3.py}) by reduction at good primes:
+  $\operatorname{ord}(P\bmod 17)=20$ and $\operatorname{ord}(P\bmod 89)=3$
+  with $\gcd(20,3)=1$, so $P$ cannot have finite order (reduction is
+  injective on prime-to-$p$ torsion, Silverman VII.3.1); cross-checked by
+  exact $\Q(\zeta_8)$ arithmetic and PARI \texttt{ellorder}. The model
+  constant $\kappa=1$ is an \emph{exact rational identity}
+  (\texttt{code/kappa\_exact.py}): an explicit birational map to the minimal
+  model, derived by Riemann--Roch and composed with PARI's exact minimal
+  transform, satisfies $2Y+1=u\,dX/dx$ as a polynomial identity, hence
+  $\omega_{\min}=dX/(2Y+1)=dx/u$ exactly (sympy-verified, including the
+  inverse round-trip).
   \item \textbf{PARI/GP cross-checks}: \texttt{verify\_family.gp},
-  \texttt{verify\_ratios.gp} (family conductors, $j$-invariants, $b$-values
-  vs.\ \texttt{lfun} to $50+$ digits), \texttt{winding.gp},
+  \texttt{verify\_ratios.gp} (family conductors, $j$-invariants; the
+  $\tilde n(k)$ and $m(S_k)$ constants for $k=2,3$ recomputed to $70$ digits
+  and matched against PARI \texttt{lfun} to all $70$ digits), \texttt{winding.gp},
   \texttt{dilog.gp}, \texttt{k53.gp}, \texttt{k53b.gp},
   \texttt{kfamily\_torsion.gp}.
   \item \textbf{Conductor-$17$ certification} (scripts \texttt{code/k1\_*},
@@ -1039,7 +1050,7 @@ small rational number $r_k$ such that
 \[
   m(S_k)=r_k\,|L'(E_k,0)|.
 \]
-Confirmed numerically: $r_2=2$, $r_3=1$ (60 digits), and
+Confirmed numerically: $r_2=2$, $r_3=1$ (70 digits), and
 $r_{-4}=\tfrac72$ (conductor $37$), $r_{-5}=\tfrac14$ (conductor $359$),
 $r_{-6}=\tfrac18$ (conductor $997$) (25 digits each).
 \end{conjecture}
@@ -1084,7 +1095,8 @@ File & Purpose\\
 \texttt{attack2.py} & $m(S_0)$, PSLQ negative results\\
 \texttt{attack3.py} & (C3) to 149 digits\\
 \texttt{torsion.py} & exact group law: $5A=O$, modular units\\
-\texttt{endpoint\_torsion2.py} & exact check: endpoint $P$ non-torsion\\
+\texttt{endpoint\_torsion3.py} & rigorous non-torsion of $P$ (reduction mod $p$)\\
+\texttt{kappa\_exact.py} & exact proof $\kappa=1$ (birational map, $2Y+1=u\,dX/dx$)\\
 \texttt{boundary\_torsion.py} & boundary-divisor torsion analysis\\
 \texttt{closedness\_check.py} & $\tilde n=-I_{\mathrm{split}}$, regulator $=2\pi I_{\mathrm{split}}$\\
 \texttt{ntilde\_family.py} & $\tilde n(k)$ family table, 50--80 digits\\
@@ -1113,7 +1125,8 @@ Reproduction:
 {\footnotesize
 \begin{verbatim}
 cd code && python b11.py && python attack1.py && python attack2.py \
-  && python attack3.py && python torsion.py && python endpoint_torsion2.py \
+  && python attack3.py && python torsion.py && python endpoint_torsion3.py \
+  && python kappa_exact.py \
   && python boundary_torsion.py && python closedness_check.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
   && python dilog.py && python k53_attack.py && python kneg_m.py \

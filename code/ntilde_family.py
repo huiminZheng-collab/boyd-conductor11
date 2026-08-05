@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, ".")
 from b11 import b11
 
-mp.dps = 50
+mp.dps = 80
 
 def make_ybig(k):
     def ybig(th):
@@ -86,7 +86,7 @@ def meas(k):
     return m, nt, tag, [nstr(c, 12) for c in cs]
 
 print(f"{'k':>3} | {'m(k)':>27} | {'ntilde(k)':>27} | crossings(0,pi)")
-b = b11(50)
+b = b11(80)
 results = {}
 for k in [-3, -2, -1, 0, 1, 2, 3]:
     try:
@@ -108,3 +108,9 @@ for k, (m, nt) in results.items():
         continue
     r = pslq([nt, b, pi, log(2), log(3), mpf(1)], tol=mpf('1e-18'), maxcoeff=10**8)
     print(f"  k={k:>2}: {r}")
+
+print("\nfull-precision values for verify_ratios.gp (70 digits):")
+for k in [1, 2, 3]:
+    m, nt = results[k]
+    print(f"  nt{k} = {nstr(nt, 70)}")
+    print(f"  m{k}  = {nstr(m, 70)}")

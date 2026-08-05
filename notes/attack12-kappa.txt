@@ -1,0 +1,19 @@
+(1) G^2 - 2FG - (F^3-F^2-F+1)/2 mod (u^2-f): A = 0  B = 0
+(2) Y^2+Y - X^3 + X^2 on C:  numerator mod (u^2-f): A = 0  B = 0
+(3) x(X,Y) - x on C:  numerator mod (u^2-f): A = 0  B = 0
+    u(X,Y) - u on C:  numerator mod (u^2-f): A = 0  B = 0
+(4) 2Y+1 = u*x - u + x**3 - 3*x**2 + x
+    u*dX/dx = u*x - u + x**3 - 3*x**2 + x
+    => omega_min = dX/(2Y+1) = (dX/dx)/(2Y+1) dx = dx/u   EXACTLY (kappa = 1)
+(5) C-point (0,1) -> (1,-1) on 11.a3: True
+(5) C-point (1,0) -> (0,-1) on 11.a3: True
+(5) C-point (0,-1) -> (0,0) on 11.a3: True
+
+VERDICT: explicit birational isomorphism C ~ 11.a3 verified symbolically;
+pullback of dX/(2Y+1) equals dx/u EXACTLY  ==>  kappa = 1 (exact, not 32/50-digit).
+
+REMARK (neutrals): as a map of curves, O+ (u/x^2 -> +1) maps to O, while
+O- (S_0's group neutral [0:1:0]) maps to (1,0), a 2-torsion point; the map
+is a group isomorphism (C, O+) ~ (11.a3, O).  The differential identity
+kappa = 1 is neutral-independent (invariant differentials are
+translation-invariant), so the conclusion is unaffected.
