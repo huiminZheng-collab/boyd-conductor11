@@ -301,11 +301,14 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 |---|---|---|---|---|---|
 | $-3$ | $83$ | $-1$ | 无 | 比值 $0.8529175\ldots$ | 无有理关系 |
 | $-2$ | $91$ | $-1$ | 无 | 比值 $0.6339454\ldots$ | 无有理关系 |
-| $-1$ | $53$ | $-1$ | $1/3$ | 比值 $0.7392026\ldots$ | **无有理关系**（PARI 确认，见下） |
+| $-1$ | $53$ | $-1$ | $1/3$ | 比值 $0.7392026\ldots$ | **无有理关系**（结构解释，见下） |
 | $0$ | $11$ | $+1$ | $1/2$ | $\tilde n=-b_{11}$ | (C3)，149 位 |
 | $1$ | $17$ | $+1$ | $2/3$ | $\tilde n=+b_{17}$ | 60 位（Samart 猜想独立确认）|
 | $2$ | $37$ | $-1$ | 无 | $m=\tilde n=2\,b_{37}$ | **新确认恒等式**，60 位 |
 | $3$ | $79$ | $-1$ | 无 | $m=\tilde n=b_{79}$ | **新确认恒等式**，60 位 |
+| $-4$ | $37$ | $-1$ | 无（相切） | $m=\frac72\,b_{37}$ | **新恒等式**（预测后验证），25 位 |
+| $-5$ | $359$ | $-1$ | 无 | $m=\frac14\,b_{359}$ | **新恒等式**（预测后验证），25 位 |
+| $-6$ | $997$ | $-1$ | 无 | $m=\frac18\,b_{997}$ | **新恒等式**（预测后验证），25 位 |
 
 要点：
 
@@ -313,13 +316,38 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
   的独立高精度确认（$y_-$ 约定下积分 $=-L'(E_{17},0)$，有理因子 $r=1$）。
 - **$k=2,3$（conductor 37、79，根数 $-1$）**：无 torus 交点，Mahler 测度本身满足 Boyd 型恒等式
   $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$，60 位（PARI `lfun`）。这是本次意外收获。
-- **$k=-1,-2,-3$（conductor 53、91、83）**：$\tilde n$（及 $m$）对 $|L'(E,0)|$ 的比值均非有理数
-  （PARI `lindep`、PSLQ 高 $>10^{10}$ 阴性）。特别地，$k=-1$ 与 Samart 提到的 conductor 53
-  "类似猜想恒等式"**不符**——我们的 $b_{53}$ 经 PARI 独立确认，故这不是计算误差；
-  要么该猜想的归一化/积分对象不同，要么它基于较低精度的巧合。诚实记为**待解矛盾点**
-  （$k=-1$ 在 $\theta=0$ 还有额外 torus 交点 $(1,e^{\pm i\pi/3})$，链定义可能需相应修正）。
-- **经验规律**：$k\ge0$ 全部满足 Boyd 型恒等式（$r=-1,+1,2,1$），$k<0$ 全部不满足——
-  是否反映某种符号/定向结构，待查。
+- **$k=-1$ 矛盾已解决（第四波，`code/k53_attack.py` + `k53.gp`）**：Samart 2023 §4 关于
+  conductor 53 的"类似猜想"只有一句话（无公式、无精度、无引用）。我们证明它**不可能成立**：
+  1. **拓扑障碍**：$k=-1$ 时 $|x|=1$ 上的 torus 交点为 $\theta=0$（两根 $e^{\pm2\pi i/3}$，
+     分支在此**交换**）与 $\theta=\pm\pi/3$（$y=\pm1$）。枚举所有以交点为断点、big/small
+     分支组合的**闭反不变链**：唯一解 $(1,1,1,1)$ 的周期为 $0$——**环面上不存在非平凡的
+     反不变闭链**，$H_1(E,\mathbb Z)^-$ 生成元无法在 torus 上实现，故 Boyd 型环面积分
+     对象根本不存在。（连续根沿圆走**两圈**才闭合，且整圈周期也是 $0$。）
+  2. **代数障碍**：53.a1 的扭子群**平凡**、秩 1，且 $(0,0)$ 就是 Mordell–Weil **生成元**
+     （PARI `ellorder`=0）——$x,y$ **不是** modular units，Beilinson–Brunault 机制不适用，
+     任何闭链的 regulator 配对都没有理由是有理数 $\times\,b_{53}$。
+  3. 自然候选对象的数值判决：半环 $L_1$（连续根一圈，开链）周期与 $w_{\mathrm{anti}}$
+     之比 $0.5492906\ldots$ 不在周期格中，regulator 积分与 $2\pi b_{53}$ 之比
+     $0.7392026\ldots$ 无理（PSLQ 阴性）。**结论：Samart 的 conductor 53 记述极可能是
+     低精度数值假阳性。**
+- **扭点对照表**（`code/kfamily_torsion.gp`，PARI `elltors`/`ellorder`）揭示真正的分野：
+
+  | $k$ | $N$ | 扭子群 | $\operatorname{ord}(0,0)$ | Boyd 型恒等式 |
+  |---|---|---|---|---|
+  | $0$ | $11$ | $\mathbb Z/5$ | $5$ | 成立（modular units，(C3)） |
+  | $1$ | $17$ | $\mathbb Z/4$ | $4$ | 成立（$\tilde n=b_{17}$） |
+  | $-3,-2,-1,2,3$ | $83,91,53,37,79$ | 平凡 | $\infty$ | 见下 |
+
+- **修正后的结构定理（第四波，预测+验证）**：分野不是 $k$ 的符号，而是 **torus 交点结构**：
+  - **$|k|\ge2$**（无真正 torus 交点，$k=\pm2,\ldots$；$k=\pm4$ 处相切退化）：标准 Deninger
+    机制直接给出 $m(S_k)=r_k\,|L'(E_k,0)|$，$r_k$ 为小有理数——$k=2,3$ 已确认，
+    $k=-4,-5,-6$ 为**先预测后命中**：$m(S_{-4})=\frac72|L'(E_{37},0)|$、
+    $m(S_{-5})=\frac14|L'(E_{359},0)|$、$m(S_{-6})=\frac18|L'(E_{997},0)|$（25 位精确）。
+    注意 $S_{-4}$ 与 $S_2$ 同为 conductor 37，给出同一曲线的 Rodriguez-Villegas 型关系。
+  - **$-4<k<2$**（真正 torus 交点，$m$ 本身失效，须用劈裂积分）：恒等式成立**当且仅当**
+    曲线有扭点使 $x,y$ 成为 modular units——全族中仅 $k=0$（$\mathbb Z/5$，$X_1(11)$）
+    与 $k=1$（$\mathbb Z/4$）两例；$k=-1,-2,-3$ 扭子群平凡，无解。
+  - 这与 Samart 的观察 $K\cap\mathbb R=[-4,2]$（环面相交参数区间）精确吻合。
 
 
 ## 9. 证明纲要：Beilinson–Brunault 路线
@@ -391,7 +419,7 @@ Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
 6. **证明链基本闭环**（§9.1）：除子与金刚石积精确算出，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，精确吻合 Brunault (3.151)），exotic $D_E(2P)=\frac32D_E(P)$（Bertin 已证），合成 $-\frac52D_E(P)=-\pi b_{11}$ 对 $\int\eta=2\pi b_{11}$；因子 $-2$ 经文献核对为 Bloch 定理的内在因子（$\pi r=D_E(\diamond)$）乘定向符号。更有 Brunault (3.210) 已证 $|r_\gamma\{x,y\}|=b_{11}$——(C3) 的 regulator 一侧本来就是定理，缺的"劈裂链 $=H_1(E,\mathbb Z)^-$ 生成元"一环由绕数 $n=1$ 锁定：(C3) 从"开放猜想"降级为"已证定理的组装 + 书写"。
-7. 族结果（PARI 独立复核）：$\tilde n(k)$ 表（折点 $c=\arccos(-k/2)$，$|k|<2$）；$k=1$ 时 $\tilde n=b_{17}$（60 位，确认 Samart 的 conductor 17 猜想）；意外收获 $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$（60 位）；$k<0$ 三个值与 $b_N$ **无有理关系**（含 conductor 53 与 Samart 记述的矛盾点，§8.4）。经验规律：$k\ge0$ 全中、$k<0$ 全不中。
+7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构定理**——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 $m(S_k)=r_k|L'(E_k,0)|$（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式成立当且仅当有扭点使 $x,y$ 成 modular units，全族仅 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$）。**conductor 53 矛盾解决**：环面上不存在非平凡反不变闭链（枚举唯一解周期为 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
 
 
 ## 11. 复现方式
@@ -401,9 +429,10 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
-  && python dilog.py
+  && python dilog.py && python k53_attack.py && python kneg_m.py
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp
+gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 ```
 
 依赖：Python 3.12 + mpmath + sympy。

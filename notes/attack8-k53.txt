@@ -1,0 +1,16 @@
+closed anti-invariant chains on |x|=1 (n in [-2,2]):
+  n=(-2, -2, -2, -2):  P = (0.0 + 0.0j)   R = 0.0
+  n=(-1, -1, -1, -1):  P = (0.0 + 0.0j)   R = 0.0
+  n=(1, 1, 1, 1):  P = (0.0 + 0.0j)   R = 0.0
+  n=(2, 2, 2, 2):  P = (0.0 + 0.0j)   R = 0.0
+  => all closed anti-invariant chains are homologically TRIVIAL
+
+half-loop L1 (continuous root, one revolution, OPEN chain):
+  P(L1) = (0.0 - 1.692464096951006377137204j)
+  P(L1)/w_anti = (0.54929064863140688644 + 0.0j)
+  R(L1) = 2.921290355059586373328984
+  R(L1)/(2 pi b53) = 0.73920262348979964194
+  PSLQ P vs w_anti: None    PSLQ R vs 2 pi b53: None
+
+old ntilde chain: NOT closed (boundary at 4 points), period not in lattice:
+  P(old)/w_anti = -0.54929064863140688644

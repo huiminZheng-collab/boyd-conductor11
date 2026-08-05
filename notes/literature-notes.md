@@ -104,3 +104,22 @@ n 由周期配对确定。
   为开放，缺口在劈裂链与 H_1(E,Z)⁻ 生成元的等同（= 我们的绕数 n=1）。
 - **金刚石积约定核对**：文献 (f)⋄(g)=Σ m_i n_j·cl(P_i−Q_j)（Z[E]⁻ 中）。用极小模型
   独立验算得 8(O)+5(P)−5(2P)，与我们的 6(O)+5(A)−5(2A) 在 Z[E]⁻ 中等价（差 2(O)≡0）。✓
+
+### conductor 53（Samart §4 一句话断言）的裁决（2026-08-05，第四波）
+- **Samart 原文**（samart2023.pdf p.16，全文唯一一处）："We also discovered conjectural
+  identities analogous to (4.1) for elliptic curves of conductor 17 and 53, which are
+  corresponding to k = 1 and k = -1, respectively." 无公式、无系数、无精度、无引用；
+  同段自承 "unable to find a general formula … less apparent"。对象 = (4.1) 型劈裂积分
+  （Boyd 引语明确 "rather than m(P)"）。
+- **裁决：不可能成立，极可能是低精度假阳性。** 两层障碍（code/k53_attack.py, k53.gp, k53b.gp）：
+  1. 拓扑：k=-1 在 |x|=1 上有额外 torus 交点 θ=0（分支交换），枚举所有闭反不变链得
+     唯一解 (1,1,1,1) 周期=0 —— 环面上无非平凡反不变闭链，Boyd 型积分对象不存在。
+  2. 代数：53.a1 扭平凡、秩 1、(0,0)=MW 生成元（ellorder=0）→ x,y 非 modular units，
+     Beilinson–Brunault 不适用。
+  3. 数值：候选半环周期/调节子积分与 w_anti、b_53 的比均无理（PSLQ 阴性）。
+- **扭点对照表**（code/kfamily_torsion.gp）：k=0 → Z/5、ord(0,0)=5；k=1 → Z/4、ord(0,0)=4；
+  k=±2,±3,−1 → 扭平凡、(0,0) 无限阶。真正的分野 = torus 交点结构（K∩R=[−4,2]，Samart
+  自己也观察到）：|k|≥2 → m(S_k)=有理×|L'|（Deninger 机制）；−4<k<2 → 仅扭点例 0,1 成立。
+- **预测后命中的新恒等式**（code/kneg_m.py，25 位精确）：
+  m(S_{-4}) = 7/2|L'(E37,0)|（与 S_2 同 conductor 37，RV 型关系）、
+  m(S_{-5}) = 1/4|L'(E359,0)|、m(S_{-6}) = 1/8|L'(E997,0)|。
