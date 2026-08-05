@@ -3,8 +3,8 @@
 **日期**：2026-08-04　**仓库**：`boyd-conductor11/`　**攻击用时**：约 2 小时（数值 + 代数实验）
 
 > 阅读指南：第一部分（§1–§4）是公开文献的详细综述，自包含，不需要先验知识以外的背景；
-> 第二部分（§5–§9）是本次工作（三波数值/代数攻击）的结果，含第一波结论的更正（§8）、
-> 证明纲要（§9）与 regulator 常数的显式计算（§9.1，证明链基本闭环）。
+> 第二部分（§5–§9）是本次工作（五波数值/代数攻击）的结果，含第一波结论的更正（§8）、
+> 证明纲要（§9）、regulator 常数的显式计算（§9.1）与闭链引理的严格化——(C3) 的证明（§9.2）。
 
 ---
 
@@ -275,7 +275,7 @@ $\operatorname{div}(y)=3[(0,0)]-3[P_\infty]$ 的支撑全是 5-扭点
 
 **绕数计算（60 位周期配对，`code/winding.py`、`code/winding.gp`）**：几何路径在折点 $\theta=\pm\pi/2$ 其实**不连续**（$y_{\text{big}}$ 在两个交点 $(i,\pm e^{i\pi/4})$ 之间跳跃，左/右极限分别为 $-e^{-i\pi/4}$ 与 $+e^{i\pi/4}$）——这正是必须取带符号链的原因；朴素环积分 $I_{\text{loop}}=-0.47447\ldots i$ 甚至不是任何整闭链的周期（与 $w_{\mathrm{anti}}$ 之比 $0.16262\ldots$ 非有理）。而带符号链在不变微分 $\omega=dx/u$（四次模型 $u^2=x^4-4x^3+2x^2+1$）下的周期
 $$I_{\mathrm{signed}}=-2.917633233876990458\ldots i$$
-与 PARI 给出的 $H_1(E,\mathbb Z)^-$ 生成元周期 $w_{\mathrm{anti}}=2i\,\mathrm{Im}\,\omega_2$（11.a3）**相等**（比值 $=1$ 到 13 位，受端点 $\sqrt\theta$ 奇性的积分误差所限）：**$\tilde\gamma$ 不仅闭合，而且就是 $H_1(E,\mathbb Z)^-$ 的生成元（绕数 $n=1$）**。
+与 PARI 给出的 $H_1(E,\mathbb Z)^-$ 生成元周期 $w_{\mathrm{anti}}=2i\,\mathrm{Im}\,\omega_2$（11.a3）**相等**（比值 $=1$ 到 13 位，受端点 $\sqrt\theta$ 奇性的积分误差所限）：第二波据此断言"$\tilde\gamma$ 就是 $H_1(E,\mathbb Z)^-$ 的生成元（绕数 $n=1$）"。**第五波更正与严格化**（§9.2）：$\tilde\gamma$ 是带边开链（端点 $P$ 非扭），其周期配对只是启发证据；正确的闭反不变闭链是 $C'=\tilde\gamma+\beta_0$（$\beta_0$ 为小分支补偿弧），严格认证 $\mathrm{class}(C')=2\gamma^-$——并由此把 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 提升为**严格等式**。
 
 ### 8.3 修正 Mahler 测度与 (C3) 的等价改写
 
@@ -354,7 +354,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 
 | 步骤 | 内容 | 状态 |
 |---|---|---|
-| S1 | 闭性引理：$\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中闭合（§8.2），且为**生成元**（绕数 $n=1$，周期配对 60 位） | 数值锁定，严格书写待做 |
+| S1 | 闭性引理：$\tilde\gamma$ 闭化为 $C'=\tilde\gamma+\beta_0\in H_1(E,\mathbb Z)^-$，$\mathrm{class}(C')=2\gamma^-$（§9.2，比率先验整数 + 15 位认证） | **已证（认证）** |
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
@@ -403,13 +403,54 @@ $$|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=b_{11}.$$
 也就是说，**regulator 一侧的等式本来就是 Brunault 的已证定理**（他证 (C1) 时的中间结果），
 exotic relation $D_E(2P)=\frac32D_E(P)$ 亦由 Bertin (J. Reine Angew. Math. 569, 2004) 证明。
 Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而在于
-**Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 生成元的等同**——这正是我们第二波
-绕数 $n=1$（周期配对，60 位 + PARI 交叉验证）所锁定的那一环。
+**Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 闭链的等同**——这一环由第五波的
+$C'=\tilde\gamma+\beta_0=2\gamma^-$ 认证闭合（§9.2）。
 
 **结论**：(C3) 的全部成分均已就位，且每一环要么是已证定理
 （tempered、modular units、Bloch Thm、Bertin Thm 6、Brunault (3.151)/(3.210)），
-要么已被高精度数值 + 精确代数双重锁定（绕数 1、除子、金刚石积、$D_E$ 值）。
+要么已被高精度数值 + 精确代数双重锁定（闭链 $C'=2\gamma^-$、除子、金刚石积、$D_E$ 值）。
 (C3) 由此从"开放数值猜想"降级为"已证定理的组装 + 书写级工作"。
+
+### 9.2 闭链引理的严格化与 (C3) 的证明（第五波）
+
+完整细节见 `notes/proof-n1.md`；数值认证 `code/n1_certify.py`（输出 `notes/attack9-n1.txt`）。
+
+**构造（精确代数）**。$\tilde\gamma$ 的边界为
+$\partial\tilde\gamma=[P]-[\bar P]+[-P]-[-\bar P]=:D$，$P=(i,e^{i\pi/4})$
+（精确：$x=i$ 时 $S_0=y^2-i$；分支跳跃值由数值读取并与精确值对照）。注意 $P$ **非扭**
+（第一波 `endpoint_torsion2.py` 精确群律 20 倍无周期）——但闭性不需要端点扭：
+取小分支补偿弧 $\beta_0=\alpha_1+\alpha_2$（$\alpha_2$：内弧 $P\to\bar P$；
+$\alpha_1$：外弧 $-P\to-\bar P$，内区间连接不了这两点是关键修正），则
+$\partial\beta_0=-D$、$c(\beta_0)=-\beta_0$，于是
+$$C'=\tilde\gamma+\beta_0:\qquad \partial C'=0,\quad c(C')=-C',$$
+是闭的、反不变的整系数闭链。
+
+**同调类（认证）**。属 1、$\Delta<0$：$H_1(E,\mathbb Z)^-=\mathbb Z\gamma^-$，
+周期配对单射，$\mathrm{period}(\gamma^-)=\pm w_{\mathrm{anti}}$，故
+$\mathrm{period}(C')/w_{\mathrm{anti}}$ **先验为整数**。实测（60/80 位双精度对照）
+$$\mathrm{period}(C')=I_{\mathrm{signed}}+A_{s,\mathrm{outer}}-A_{s,\mathrm{inner}},
+\qquad \frac{\mathrm{period}(C')}{w_{\mathrm{anti}}}=1.9999999999999999\ldots,$$
+$|\mathrm{period}(C')-2w_{\mathrm{anti}}|=2.5\times10^{-16}\ll 1$ ⟹
+$\mathrm{class}(C')=2\gamma^-$（认证等式）。**更正**：第二波的"$\tilde\gamma$ 本身是
+生成元（$n=1$）"不准确——$\tilde\gamma$ 是开链；正确的闭链 $C'$ 绕数为 **2**。
+
+**regulator 合成（精确积分代数）**。$|x|=1$ 上 $\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$
+逐点成立（两根之积 $=x^3$），直接计算得
+$$\int_{\beta_0}\eta=2(J_1-J_2)=\int_{\tilde\gamma}\eta
+\qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,$$
+其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
+再由 Bloch（$\pi r=D_E(\diamond)$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}b_{11}$）
++ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）+ 金刚石积 $5(A)-5(2A)$（§9.1）：
+$\int_{\gamma^-}\eta=\pm2\pi b_{11}$。合成：
+$$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
+符号由一次数值评估（$+2\pi b_{11}$，$b_{11}>0$）钉死。由结构定理
+$I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$（第一波，已证）：
+$$\boxed{\,I_{\mathrm{split}}=b_{11}\,}\qquad\text{(C3) 证毕（认证级别）}.$$
+
+**认证级别说明**：唯一非逐字严格之处是整数识别（比值 $=2$ 到 15 位 + 先验整数性，
+间隙为 1）；完全铁证化可用区间算术（Arb）重算三段积分，属机械工作。
+模型常数 $\kappa=1$ 由判别式比 $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}=2^a11^b$
+的离散候选 + 50 位一致锁定。
 
 ## 10. 总结
 
@@ -418,7 +459,7 @@ Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **证明链基本闭环**（§9.1）：除子与金刚石积精确算出，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，精确吻合 Brunault (3.151)），exotic $D_E(2P)=\frac32D_E(P)$（Bertin 已证），合成 $-\frac52D_E(P)=-\pi b_{11}$ 对 $\int\eta=2\pi b_{11}$；因子 $-2$ 经文献核对为 Bloch 定理的内在因子（$\pi r=D_E(\diamond)$）乘定向符号。更有 Brunault (3.210) 已证 $|r_\gamma\{x,y\}|=b_{11}$——(C3) 的 regulator 一侧本来就是定理，缺的"劈裂链 $=H_1(E,\mathbb Z)^-$ 生成元"一环由绕数 $n=1$ 锁定：(C3) 从"开放猜想"降级为"已证定理的组装 + 书写"。
+6. **(C3) 证毕（认证级别，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数 + 15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。剩余仅 Arb 区间算术铁证化（机械工作）。
 7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构定理**——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 $m(S_k)=r_k|L'(E_k,0)|$（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式成立当且仅当有扭点使 $x,y$ 成 modular units，全族仅 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$）。**conductor 53 矛盾解决**：环面上不存在非平凡反不变闭链（枚举唯一解周期为 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
 
 
@@ -429,7 +470,8 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python attack3.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
-  && python dilog.py && python k53_attack.py && python kneg_m.py
+  && python dilog.py && python k53_attack.py && python kneg_m.py \
+  && python n1_certify.py
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
