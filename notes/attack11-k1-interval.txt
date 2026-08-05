@@ -1,0 +1,25 @@
+=== interval certification, S_1 (k=1, conductor 17) ===
+[1/4] inner arc [-c,c], big branch (no theta=0 singularity):
+  inner_b  = [+/- 3.23e-14] + [-1.7966911576561 +/- 5.32e-14]j
+[2/4] outer arcs, big branch (cut at corners handled):
+  [c,pi]   = [-0.1213109289714677 +/- 4.00e-17] + [0.4745239802168164 +/- 3.96e-17]j
+  [-pi,-c] = [0.1213109289714677 +/- 4.00e-17] + [0.4745239802168164 +/- 3.96e-17]j
+  I_signed = [+/- 3.23e-14] + [-2.7457391180898 +/- 7.87e-14]j
+[3/4] small branch (A_in, A_out):
+  A_in     = [+/- 3.23e-14] + [1.7966911576561 +/- 5.32e-14]j
+  A_out    = [+/- 3.11e-17] + [-0.9490479604336328 +/- 7.91e-17]j
+[4/4] w_anti via Carlson RF (certified roots):
+  w_real   = [3.0941595071022403464191580099458874358609181419 +/- 3.11e-47] + [+/- 2.59e-48]j   (expect PARI w1 = 3.0941595071022403...)
+  w_imag   = [+/- 3.34e-48] + [2.7457391180897536720341878803801090713441744772 +/- 5.46e-47]j   (expect -PARI w2 = +2.7457391180897... i)
+
+period(C') = [+/- 6.47e-14] + [-5.4914782361795 +/- 7.20e-14]j
+ratio P/w_anti = [-2.0000000000000 +/- 2.36e-14] + [+/- 2.36e-14]j
+nearest integer n0 = -2   |ratio - n0| <= [3.3272258161234539259806797240059950127033516764641e-14 +/- 1.92e-64]
+contains n0: True   |ratio-n0| < 1/2: True
+VERDICT: period(C')/w_anti = -2  EXACTLY (a priori integer).
+         |class(C')| = 2 * gamma^-  --  cycle lemma certified. QED.
+GL calls: 64
+
+cross-check: -2*w_anti (mid) = [-5.4914782361795073440683757607602181426883489544758 +/- 1.46e-50]j
+our P (mid)                = [5.3455294201843912922810729343029637576303937602101e-51 +/- 2.63e-102] + [-5.4914782361795073440683757607602181426883489535628 +/- 3.02e-50]j
+mpmath 60/80-digit gave period(C')/w_anti = 2.0000000000000002 (w_anti = PARI w2 = -w_imag; sign = orientation)
