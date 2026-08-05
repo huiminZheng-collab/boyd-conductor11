@@ -457,6 +457,34 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定
 模型常数 $\kappa=1$ 由判别式比 $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}=2^a11^b$
 的离散候选 + 50 位一致锁定。
 
+### 9.3 k=1（conductor 17）：同一方法的第一次再应用（第七波）
+
+完整细节见 `notes/proof-k1.md`。Samart 的 conductor-17 类比猜想 $\tilde n(1)=b_{17}$
+沿 §9.2 的同一条路线**全程打通并证毕**，认证级别与 k=0 相同：
+
+- **曲线**：$S_1=y^2+(x^2+x+1)y+x^3$，PARI `ellfromeqn` 给出 conductor **17**、
+  $E(\mathbb Q)_{\mathrm{tors}}=\mathbb Z/4\mathbb Z$、$(0,0)$ 为 4-扭（平行于 k=0 的 5-扭）。
+  关键差别：$\Delta=+17>0$，原初反不变周期直接是 $w_{\mathrm{anti}}=w_2$。
+- **闭链（精确代数）**：fold 角 $c=2\pi/3$；在 $\theta=c$，$x=\omega=e^{2\pi i/3}$
+  使 $x^2+x+1=0$，故 $S_1=y^2+1$，跳跃值**精确**为 $y=\pm i$；闭化构造逐字平行，
+  $C'=\tilde\gamma+\beta_0$ 闭、反不变。
+- **同调类（Arb 铁证）**：`code/k1_interval.py`（真 300 位；$D(z)$ 在 $|z|=1$ 上
+  无零点，$\min|D|=4$，无端点奇性；$w_{\mathrm{anti}}$ 经 Newton+Rouché + 两分支
+  Carlson RF 独立认证）：比值球含 $-2$、半径 $3.4\times10^{-14}<1/2$ ⟹
+  $\mathrm{class}(C')=\pm2\gamma^-$ 严格。输出 `notes/attack11-k1-interval.txt`。
+- **regulator（已发表定理闭环）**：除子形式与 k=0 全同（局部展开 + 显式双有理映射
+  $X=-(x+y)$, $Y=x(x+y)$ + PARI + 代码展开四重验证）；金刚石积
+  $(x)\diamond(y)=6(O)+4(A)-6(2A)$；$D_E(2A)=0$（2-扭，级数逐项为零，严格）；
+  $D_E(A)=\frac{17}{8\pi}L(E,2)$ 是 **Lalín–Ramamonjisoa 2017 已发表定理**
+  （`literature/lalin-ramamonjisoa-cond17.pdf`）；Bloch 用 Lalín Thm. 6 归一化
+  （$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，该曲线上有 L–R + Zudilin 已证恒等式背书）。
+- **合成**：$\int_{\tilde\gamma}\eta=\frac12\cdot2\cdot(\pm2\pi b_{17})$，符号由
+  数值（$-2\pi b_{17}$）钉死，结构恒等式给出
+  $\boxed{\tilde n(1)=b_{17}}$（Samart conductor-17 类比猜想，证毕）。
+- **归一化备注**：k=0 证明引 Bloch–Brunault 的 $r_\gamma$ 归一化（$\int\eta=\pm2D_E$），
+  k=1 引 Lalín 归一化（因子 1）；两者只是 $r_\gamma$ 与 $D^E$ 定义中的常规因子之差，
+  各自被该曲线上的已发表公式钉死（Brunault (3.210)–(3.211)；L–R + Zudilin）。
+
 ## 10. 总结
 
 1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **149 位**（原公开记录 50 位）。
@@ -466,6 +494,7 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
 6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
 7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构定理**——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 $m(S_k)=r_k|L'(E_k,0)|$（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式成立当且仅当有扭点使 $x,y$ 成 modular units，全族仅 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$）。**conductor 53 矛盾解决**：环面上不存在非平凡反不变闭链（枚举唯一解周期为 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
+8. **conductor 17 证毕（第七波，§9.3）**：同一方法再应用于 $k=1$——链结构逐字平行（$c=2\pi/3$、跳跃值 $y=\pm i$ 精确）、$\mathrm{class}(C')=\pm2\gamma^-$ Arb 铁证、regulator 侧由 Lalín–Ramamonjisoa 已发表定理闭环——Samart 的 $\tilde n(1)=b_{17}$ 类比猜想成为定理。
 
 
 ## 11. 复现方式
@@ -478,9 +507,12 @@ cd code && python b11.py && python attack1.py && python attack2.py \
   && python dilog.py && python k53_attack.py && python kneg_m.py \
   && python n1_certify.py
 .venv/Scripts/python n1_interval.py    # Arb 区间算术铁证（需 python-flint）
+.venv/Scripts/python branch_certify.py  # 分支指派 + 模序认证
+.venv/Scripts/python k1_interval.py     # Arb 铁证，conductor 17
 gp -q verify_family.gp && gp -q verify_ratios.gp
 gp -q winding.gp && gp -q dilog.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
+gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 ```
 
 依赖：Python 3.12 + mpmath + sympy；区间铁证另需 python-flint 0.9.0（项目内 `.venv`）。
@@ -493,5 +525,7 @@ gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 - `zudilin-regulator.pdf` — Zudilin：BMZ regulator 公式（证明武器）
 - `samart2023.pdf` — Samart：开放猜想 (C3) 的明确陈述（其 eq. (4.1)）+ conductor 19 的成功范例
 - `lalin-samart-zudilin-cond21.pdf` — conductor 21：half-Mahler 方法范例
+- `lalin-ramamonjisoa-cond17.pdf` — Lalín–Ramamonjisoa 2017：conductor 17 已证公式
+  $L(E_{17},2)=\frac{8\pi}{17}D^E(P)$（k=1 证明的 regulator 闭环依据）与 Bloch Thm. 6 归一化出处
 - `boyd-slides.pdf` — Boyd 关于 $L(E,3)$ 的 slides
 - 详细笔记：`notes/literature-notes.md`；原始运行输出：`notes/attack*-results.txt`
