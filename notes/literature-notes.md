@@ -72,7 +72,8 @@
 
 ### BMZ Theorem 1 的适用范围核对（S4）
 Zudilin "Regulator of modular units and Mahler measures" Thm 1（Mellit–Brunault）：
-modular units g_a,g_b 沿**尖点 c/N 到 i∞** 路径的 regulator 积分 = 4L(f,2)，f 为显式 Eisenstein 组合；
+modular units g_a,g_b 沿**尖点 c/N 到 i∞** 路径的 regulator 积分 = (1/4π)L(f,2)，f 为显式 Eisenstein 组合
+（更正：此前误记为 4L(f,2)；原文 eq. (6) 为 1/(4π)，agent-8 已对原文核对）；
 若组合为尖点形式则得曲线的 L 值。**定理处理的是尖点间开路径**；我们的链 γ̃ 是闭链，
 需要 Beilinson–Brunault（闭链配对版）+ γ̃ 在 H_1(E,Z)^- 中的类。H_1^- 秩 1 ⇒ γ̃ = n·γ⁻，
 n 由周期配对确定。
