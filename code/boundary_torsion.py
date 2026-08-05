@@ -1,4 +1,7 @@
 """
+DEPRECATED: superseded by endpoint_torsion3.py (rigorous good-reduction
+proof); this script has no torsion-order bound and is heuristic only.
+
 The decisive check for the BMZ proof route (cf. Samart 2023 §3 "path becomes closed").
 
 Split-path boundary divisor:  D = 2[P_{pi/2}] - [P_0] - [P_pi]

@@ -288,6 +288,25 @@ def tip_ball(sign_theta, want_big, rho, delta, M):
     a0 = acb(0, 1) * acb.exp(acb(0, 1) * sign_theta * arb.pi() / 4) / sig
     H = M / (rho**2 * (1 - (delta / rho)**2))
     rad = H * delta**3 / 3
+    # self-check (referee item M3): a0 comes from a hand derivation and was
+    # injected without machine certification; a global sign/branch error in
+    # a0 would shift each tip by 2*|a0|*delta = 0.24 and could still pass
+    # the final 1/2 threshold.  f(t) = a0 + t^2 h(t) with |h| <= H on
+    # |t| <= delta, so a certified point evaluation of f at t = delta must
+    # satisfy |f(delta) - a0| <= H*delta^2; a sign flip (distance
+    # 2*|a0| = 2 >> H*delta^2) is necessarily caught.
+    x, D = D_and_x(acb(sign_theta * delta * delta))
+    u = D.sqrt()
+    if sig == -1:
+        u = -u
+    f_del = 2 * acb(0, 1) * delta * x / u
+    dev = abs(f_del - a0).upper()
+    bound = H * delta**2
+    assert dev <= bound, \
+        "tip self-check failed: |f(delta)-a0| = %s > H*delta^2 = %s" \
+        % (dev, bound)
+    print("  tip self-check (side=%+d, %-5s): |f(delta)-a0| <= %s <= H*delta^2 = %s"
+          % (sign_theta, "big" if want_big else "small", dev, bound))
     return a0 * delta + square_ball(rad), rad
 
 
@@ -310,6 +329,8 @@ def certify_w_anti():
               complex(0.7098216888035403, -0.3031453646035997)]
     roots = certify_poly_roots([1, 0, -4, 4], starts)   # 4x^3 - 4x^2 + 1
     e1 = roots[0]
+    # referee item (alignment with k1_interval.py): e1 must be REAL
+    assert abs(e1.imag).upper() < arb(10) ** (-30), "e1 not real?!"
     neg = roots[1] if roots[1].imag.mid() < 0 else roots[2]
     pos = roots[2] if roots[1].imag.mid() < 0 else roots[1]
     e2, e3 = neg, pos

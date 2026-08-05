@@ -32,19 +32,31 @@ KEY DIFFERENCES from k=0:
     verbatim as in k=0.
 
 (A) Each claimed assignment  y_branch(theta0^{+-}) = point  is certified
-    (for eps = 1e-6 and again for eps = 1e-9) exactly as in k=0:
-      1. computing both root balls y = (-B +/- sqrt(D))/2 at
-         theta1 = theta0 +/- eps AND at theta2 = theta0 +/- eps/2
-         (|D| >= 3.99 certified near c: D is far from 0; principal sqrt
-         fine at a point); the big/small label is decided by a certified
-         modulus test (|y| > 1 resp. < 1 with strict margin);
-      2. checking the selected root ball is within certified distance
-         < 1/10 of the claimed exact point at BOTH theta1 and theta2;
-      3. certifying D != 0 on the whole theta-ball [theta0, theta0 +/- 2eps]
-         covering the closed interval: no root collision on it, so
-         y_branch is continuous on (theta0, theta1], its limit at theta0
-         is one of the two exact roots, and those are 2 apart while the
-         ball sits within 1/10 of the claim -- the limit IS the claim.
+    (for eps = 1e-6 and again for eps = 1e-9) by tracking the selected
+    sheet over an adaptive subdivision of the WHOLE closing interval
+    (theta0, theta0 +/- 2 eps], exactly as in k=0  (referee item M2 fix:
+    the former two-point pinning + continuity argument did not exclude
+    the sheet drifting to the other root -- distance 2 -- and back
+    inside the interval; a single whole-ball evaluation cannot close
+    this either, because |y| = 1 at theta0 makes the modulus test
+    inconclusive there):
+      1. on every slab NOT touching theta0: D != 0, a certified sqrt
+         variant, STRICT modulus separation |y_big| > 1 > |y_small|
+         (part B's machinery), AND the selected sheet's root ball within
+         certified distance < 1 of the claim (half the root separation
+         at theta0);
+      2. on the unique slab touching theta0 (where the modulus test is
+         inconclusive): the two root balls are certified disjoint, one
+         within < 1 of the claim, the other > 1 from it;
+      3. D != 0 on every slab, hence on the whole closed interval, so
+         the two sheets are continuous and globally defined there.  The
+         sheet Y selected on the outermost slab is the modulus-selected
+         root at every shared node, hence on every strict slab, with
+         |Y - claim| < 1; on the touching slab Y enters within < 1 of
+         the claim and disjointness + continuity keep it in the near
+         ball.  So |Y - claim| < 1 on the whole open interval, while
+         Y(theta0) is one of the two exact roots (distances 0 and 2
+         from the claim) -- the one-sided limit IS the claim.
 
 (B) |y_-(theta)| <= 1 <= |y_+(theta)| for theta in [0, pi], with equality
     |y_-| = 1 only at theta = c = 2 pi/3.  Adaptive bisection of
@@ -73,7 +85,8 @@ PI = arb.pi()
 C2 = 2 * PI / 3                    # c = 2 pi/3  (fold angle for k=1)
 I = acb(0, 1)
 
-CLOSE_TOL = arb("0.1")             # certified pin distance (< 1/10)
+CLOSE_TOL = arb(1)                 # certified slab distance to the claim
+                                   # (< half the root separation 2 at theta0)
 SPECIAL_W = 1e-3                   # width cap for the special balls of (B)
 
 
@@ -174,44 +187,114 @@ CASES = [
 
 
 def certify_case(th0, dirn, want_big, ptname, eps):
-    """Certify  y_branch(theta0^{side}) = ptname  at offset scale eps.
-    Returns (max distance to claim, |D| lower bound on the interval)."""
+    """Certify  y_branch(theta0^{side}) = ptname  at offset scale eps by
+    tracking the selected sheet over an adaptive subdivision of the WHOLE
+    closing interval (theta0, theta0 +/- 2 eps]  (see the module docstring
+    for the argument).  Returns (max certified distance to the claim,
+    |D| lower bound over the slabs, number of strict slabs)."""
     xt, yt = PTS[ptname]
+    end = th0 + 2 * dirn * eps
+    lo, hi = (end, th0) if dirn < 0 else (th0, end)
     worst = arb(0)
-    for frac in (1, arb(1) / 2):     # theta0 +/- eps and theta0 +/- eps/2
-        th = th0 + dirn * eps * frac
-        x, yb, ys, mb, ms = root_balls_point(acb(th))
+    dlow = None
+    nstrict = 0
+    # NOTE: arb balls never compare equal (radius > 0), so the
+    # touches-theta0 property is tracked by an explicit flag: for
+    # dirn = +1 theta0 is the LEFT endpoint of the touching slab,
+    # for dirn = -1 the RIGHT one.
+    mid0 = (lo + hi) / 2            # seed one bisection: the sheet label
+    stack = [(mid0, hi, dirn < 0), (lo, mid0, dirn > 0)]
+    while stack:                      # must be anchored on a strict slab
+        a, b, touch = stack.pop()
+        w = b - a
+        assert w > arb(10) ** (-30), "slab subdivision did not converge"
+        mid = (a + b) / 2
+
+        def refine():
+            stack.append((a, mid, touch and dirn > 0))
+            stack.append((mid, b, touch and dirn < 0))
+
+        x, Db = D_and_x(acb(ball_interval(a, b)))
+        if Db.contains(arb(0)):          # root collision possible: refine
+            refine()
+            continue
+        d = abs(Db).lower()
+        dlow = d if dlow is None else min(dlow, d)
+        B = x * x + x + 1
+        if touch:
+            # special slab touching theta0: |y| = 1 AT theta0, so the
+            # modulus test is inconclusive here.  Use a cut-avoiding sqrt
+            # variant -- D(theta0) = -4 lies ON the principal branch cut,
+            # so the principal sqrt of the D-ball blows up (referee M2
+            # fix, k=1 deviation from k=0 where D(theta0) = 4i).
+            kind = cut_avoidance(Db)
+            if kind is None:             # cut ambiguity: refine
+                refine()
+                continue
+            u = variant_sqrt(Db, kind)
+            y1, y2 = (-B + u) / 2, (-B - u) / 2
+            d1, d2 = abs(y1 - yt), abs(y2 - yt)
+            near, far = (d1, d2) if d1.mid() < d2.mid() else (d2, d1)
+            if not (abs(y1 - y2).lower() > 0 and near.upper() < CLOSE_TOL
+                    and far.lower() > CLOSE_TOL):
+                refine()
+                continue
+            dx = abs(x - xt).upper()
+            assert dx < CLOSE_TOL, "x-ball strays from the claimed corner"
+            worst = max(worst, dx, near.upper())
+            continue
+        kind = cut_avoidance(Db)
+        if kind is None:                 # cut ambiguity: refine
+            refine()
+            continue
+        u = variant_sqrt(Db, kind)
+        y1, y2 = (-B + u) / 2, (-B - u) / 2
+        m1, m2 = abs(y1), abs(y2)
+        if (m1 - 1).contains(arb(0)) or (m2 - 1).contains(arb(0)):
+            refine()                     # modulus test inconclusive: refine
+            continue
+        yb, ys = (y1, y2) if m1.lower() > 1 else (y2, y1)
         ysel = yb if want_big else ys
         dx = abs(x - xt).upper()
         dy = abs(ysel - yt).upper()
-        assert dx < CLOSE_TOL and dy < CLOSE_TOL, \
-            "pin failed: distance to %s exceeds 1/10" % ptname
+        if not (dx < CLOSE_TOL and dy < CLOSE_TOL):
+            refine()                     # ball too coarse: refine
+            continue
         worst = max(worst, dx, dy)
-    # D != 0 on the closed theta-ball [theta0, theta0 +/- 2 eps]
-    lo = th0 + (2 * dirn * eps if dirn < 0 else 0)
-    hi = th0 + (0 if dirn < 0 else 2 * dirn * eps)
-    _, Db = D_and_x(acb(ball_interval(lo, hi)))
-    assert not Db.contains(arb(0)), "D vanishes on the closing interval"
-    return worst, abs(Db).lower()
+        nstrict += 1
+    assert nstrict > 0, "no strict slab -- sheet label never anchored"
+    return worst, dlow, nstrict
 
 
 def part_A():
     print("(A) closed-chain endpoint branch assignments")
+    print("    whole-interval sheet tracking on (th0, th0+/-2eps] (referee M2 fix):")
+    print("    strict slabs certify |y_big| > 1 > |y_small| AND the selected")
+    print("    sheet's ball within distance < 1 of the claim; the slab touching")
+    print("    th0 certifies disjoint root balls, one < 1 and one > 1 from it.")
     all_ok = True
     for eps in (arb("1e-6"), arb("1e-9")):
         print("  eps = %s:" % eps.mid())
-        print("  %-15s %-7s |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok"
+        print("  %-15s %-7s |dist to claim|  |D| >= on [th0, th0+/-2eps]  strict slabs  ok"
               % ("claim", "point"))
         for name, th0, dirn, want_big, ptname in CASES:
-            worst, dlow = certify_case(th0, dirn, want_big, ptname, eps)
-            ok = bool(worst < CLOSE_TOL)
+            try:
+                worst, dlow, nslab = certify_case(th0, dirn, want_big,
+                                                  ptname, eps)
+                ok = bool(worst < CLOSE_TOL)
+                print("  %-15s %-7s %14.3e  %28.6f  %12d  %s"
+                      % (name, ptname, float(worst), float(dlow), nslab, ok))
+            except AssertionError as exc:
+                ok = False
+                print("  %-15s %-7s FAILED: %s" % (name, ptname, exc))
             all_ok = all_ok and ok
-            print("  %-15s %-7s %14.3e  %28.6f  %s"
-                  % (name, ptname, float(worst), float(dlow), ok))
-    print("  continuity argument: D != 0 on each closing interval (above),")
-    print("  the two exact roots at theta0 are 2 apart (y = +/- i),")
-    print("  pin distance < 1/10")
-    print("  ==> the one-sided limit is the claimed point, in all 8 cases.")
+    print("  argument: D != 0 on every slab, so both sheets are continuous on")
+    print("  the closed interval; the tracked sheet stays within distance < 1")
+    print("  of the claim on the WHOLE open interval (strict slabs by modulus")
+    print("  separation + ball distance, the touching slab by disjoint balls")
+    print("  + continuity), and the two exact roots at th0 are 2 apart")
+    print("  (y = +/- i) ==> the one-sided limit is the claimed point,")
+    print("  in all 8 cases.")
     print("  VERDICT (A):", "ALL 8 ASSIGNMENTS CERTIFIED" if all_ok
           else "FAILURE -- investigate")
     return all_ok

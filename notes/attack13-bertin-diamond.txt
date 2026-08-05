@@ -1,0 +1,245 @@
+ATTACK 13 -- Bertin-symbol adjudication for the k=0 regulator anchor
+=====================================================================
+Date: 2026-08-05.  Artifacts: code/bertin_diamond.py, code/bertin_diamond.gp
+(this file = notes/attack13-bertin-diamond.txt).  No existing files modified.
+
+Notation: d = D_E(P) = 0.19119373708433169575495443431217381610123983364018...
+          b11 = L'(E,0) = 0.15214714172591804948622729747863449562814358916...
+          5d = 2*pi*b11 = 0.95596868542165847877477217156086908050619916820...
+          (5/2)d = pi*b11 = 0.47798434271082923938738608578043454025309958...
+          E = 11.a3: y^2+y = x^3-x^2 = X1(11), P = A = (0,0),
+          z(P)/w1 = 3/5, z(2P)/w1 = 1/5 (PARI ellpointtoz, 80 digits).
+
+---------------------------------------------------------------------
+1. LITERATURE (notes/txt/brunault-these.txt)
+---------------------------------------------------------------------
+* (3.208)-(3.209), lines 9650-9662: Boyd's (C1) Mahler measure
+    m( (X+Y+1)(X+1)(Y+1) + XY ) =? 7 * 11/(4 pi^2) * L(E,2)  (= 7 b11).
+* Theoreme 118, line 9664: (3.208) is true.
+* Proof, lines 9669-9706: "Dans l'article [10], Bertin a calcule la mesure de
+  Mahler (3.208) en termes d'un regulateur sur la courbe elliptique E ... la
+  relation (3.208) decoule de l'egalite conjecturale suivante"
+    |r({x,y})| =? 11/(4 pi^2) L(E,2)                                          (3.210)
+  with (lines 9682-9698)
+    r({x,y}) = (1/2pi) int_gamma eta(x,y),  eta = log|x| d arg y - log|y| d arg x  (3.211)
+  gamma any closed path on E(C) generating H_1(E(C),Z)^-.
+  Line 9699-9706: via (3.151), (3.210) reduces to
+    |r({x,y})| =? (5/2pi) D_E(P),   which "resulte de [10, Th. 6 et Cor. 6.1]".
+* Which curve?  Line 9642: "Notons E = X1(11) la courbe elliptique de
+  conducteur 11 consideree dans la section 3.7."  Section 3.7 (line 8435,
+  Thm. 8): "Soit E la courbe elliptique donnee par l'equation y2 + y = x3 - x2,
+  et P = (0,0)"; the rational points are given in (x,y)-coordinates in (3.152)
+  (line 8465).  => the {x,y} of (3.210)-(3.211) are the WEIERSTRASS COORDINATE
+  FUNCTIONS of E = X1(11): y^2+y = x^3-x^2, living on E itself -- not the
+  coordinate functions of the (C1) cubic (which is only birational to E and
+  never named in Sect. 3.9).
+  Numerical discrimination below confirms this reading: the Weierstrass
+  symbol's certified integral is exactly (3.210)'s value; the (C1) coordinate
+  symbol's integral is instead 2*pi*m(C1) = 14*pi*b11, the content of (3.208).
+* [10] = Bertin, "Mesure de Mahler d'une famille de polynomes", J. Reine
+  Angew. Math. 569 (2004), 175-188 (bibliography, line 9791).
+* Brunault's D_E (Definition 19, lines 993-998): D_{E,eta}([x]) =
+  sum_{n=-oo}^{oo} D(x q^n) -- the same series as code/dilog.py.  No
+  normalization factor hides there.  Remarque 20 (lines 1013-1041): for E/R,
+  D_E is canonical up to sign (orientation of E(R)).
+* (3.151), lines 8446-8451: L(E,2) = (10 pi/11) D_E(P) and the exotic
+  relation D_E(2P) = (3/2) D_E(P) (proved by Bertin [10]).
+  [NB code/dilog.py's header comment "exotic: expect 2" is stale; the series
+  itself gives ratio 1.5, in agreement with (3.151).]
+
+---------------------------------------------------------------------
+2. (C1) CUBIC: EXACT DIVISORS (code/bertin_diamond.py, Part 1)
+---------------------------------------------------------------------
+F = (X+Z)(Y+Z)(X+Y+Z) + XYZ = 0,  conductor 11 (W_int below has disc -11).
+Line intersections (exact factorizations):
+  {X=0} cap C = Z (Y+Z)^2        => 2*(0,-1) + Q1,  Q1 = [0:1:0]
+  {Y=0} cap C = Z (X+Z)^2        => 2*(-1,0) + Q2,  Q2 = [1:0:0]
+  {Z=0} cap C = X Y (X+Y)        => Q1 + Q2 + Q3,   Q3 = [1:-1:0]
+Tangent at A1=(0,-1) is X=0 (gradient (-1,0,0)) => ord_A1(X) = 2.
+Tangent at B1=(-1,0) is Y=0 (gradient (0,-1,0)) => ord_B1(Y) = 2.
+X/Z at Q1 = -1 (finite nonzero) => ord_Q1(X/Z) = 0.  Hence
+  div(X) = 2*A1 - Q2 - Q3,     div(Y) = 2*B1 - Q1 - Q3.
+(Confirms the task's expectation; independently derived here.)
+
+---------------------------------------------------------------------
+3. TORSION STRUCTURE (Part 2 + bertin_diamond.gp)
+---------------------------------------------------------------------
+Riemann-Roch at origin Q1:  u = Y/(X+1) (double pole at Q1),
+v = Y(X+Y)/(X+1) (triple pole at Q1).  Exact birational relation (sympy):
+  v^2 + 4uv + v = u^3 - 2u^2 - u      =: W_int,  [a1..a6] = [4,-2,1,-1,0].
+PARI: disc(W_int) = -11, j = -4096/11, ellidentify -> "11a3" [0,-1,1,0,0]
+with change of variable v = [1,-1,-2,2];  a-invariants of
+ellchangecurve(W_int, v) = [0,-1,1,0,0], disc -11.  So the (C1) cubic IS
+11.a3 itself (not 11.a1/a2).
+Exact group law on W_int (Fraction arithmetic):  B = (0,0) has order 5,
+  2B = (-1,2), 3B = (-1,1), 4B = (0,-1), 5B = O.
+Images of the five support points (direct values + asymptotics at infinity):
+  Q1=[0:1:0] -> O (pole of u,v)          B1=(-1,0) -> (0,0)  [= B]
+  A1=(0,-1)  -> (-1,1) = 3B              Q2=[1:0:0] -> (0,-1) = 4B
+  Q3=[1:-1:0]-> (-1,2) = 2B
+Z/5 table (origin Q1):  g = B1, 2g = Q3, 3g = A1, 4g = Q2.
+PARI transport to 11.a3 (ellchangepoint, v=[1,-1,-2,2]):
+  B1 -> (1,0) = 3P,  A1 -> (0,-1) = 4P,  Q3 -> (0,0) = P,  Q2 -> (1,-1) = 2P.
+Cross-check: z(B1)/w1 = 0.8 exactly (both via W_int and via 11.a3
+ellpointtoz, 80 digits); z(3P)/w1 = 0.8.  => g = B1 is the point 3P, i.e.
+u/w1(g) = 4/5.  (An intrinsic invariant: u/w1 mod 1 is isomorphism-invariant,
+so no map ambiguity beyond sign, which D_E absorbs by oddness.)
+
+---------------------------------------------------------------------
+4. DIAMOND PRODUCTS (L-R convention (f)<>(g) = sum m_i n_j [S_i - T_j])
+---------------------------------------------------------------------
+Generic routine; Z[E]^- = Z[E]/<[S]+[-S]>; Abel checks (coefficient sum = 0,
+weighted sum = O mod 5) all pass.
+
+(a) (C1) {X,Y}:  differences in multiples of g (=3P):
+      raw  = -4(g) + 6(2g) - 4(3g) + 1(4g) + 1(O)
+      Z[E]^-:  (X)<>(Y) = -5(g) + 10(2g)        [g = 3P on 11.a3]
+      => D_E = -5 D_E(3P) + 10 D_E(6P) = -5(-3/2 d) + 10 d = (35/2) d.
+
+(b) Weierstrass {x,y} on 11.a3 (Brunault's (3.210) symbol):
+      div(x) = (A) + (4A) - 2(O),  div(y) = 2(A) + (3A) - 3(O)
+      raw  = 8(O) - 2(A) - 2(2A) + 3(3A) - 7(4A)
+      Z[E]^-:  (x)<>(y) = 8(O) + 5(A) - 5(2A)
+      => D_E = 5d - 5*(3/2)d = -(5/2) d.
+
+(c) paper's S_0 symbol transported to 11.a3
+      [x_s = (X+Y)/(X-1), y_s = -(XY + 2X^2 - 2X + 1)/(X-1)^2; verified
+       symbolically to satisfy S_0: y^2+(x^2+1)y+x^3 = 0 on 11.a3]:
+      div(x_s) = (A)+(2A)-(O)-(3A),  div(y_s) = 3(2A)-2(3A)-(O)  [as in paper]
+      raw  = 6(O) - 4(A) + 1(2A) - 4(3A) + 1(4A)
+      Z[E]^-:  (x_s)<>(y_s) = 6(O) - 5(A) + 5(2A)   [matches paper.tex l.771]
+      => D_E = -5d + 5*(3/2)d = +(5/2) d.
+
+---------------------------------------------------------------------
+5. D_E AT 60 DIGITS (raw z-value sums; no exotic relation assumed)
+---------------------------------------------------------------------
+  D_E(P)  = 0.19119373708433169575495443431217381610123983364018
+  D_E(2P) = 0.28679060562649754363243165146826072415066383954109
+  D_E(3P) = -0.28679060562649754363243165146826072415066383954109
+  D_E(4P) = -0.19119373708433169575495443431217381610123983364018
+  D_E(2P)/D_E(P) = 1.5 (exotic relation, confirmed independently)
+  D_E(P) / ((2pi/5) b11) = 1.0 (Brunault (3.151), confirmed)
+
+  D_E((X)<>(Y))  (C1)        = 3.3458903989758046757117026004630417817657175
+                             = (35/2) d     [ratio 17.5 to ~50 digits]
+  D_E((x)<>(y))  Weierstrass = -0.4779843427108292393873860857804345402471200
+                             = -(5/2) d    [ratio -2.5]
+  D_E((x_s)<>(y_s)) S_0      = +0.4779843427108292393873860857804345402471200
+                             = +(5/2) d    [ratio +2.5]
+  Hence   D_E(<>_Weierstrass) = - D_E(<>_S0)        (ratio -1.0 to 50 digits)
+          D_E(<>_(C1))        = 7 * D_E(<>_S0)      (ratio +7.0)
+  The 7 is the same 7 as m(C1) = 7 b11 -- i.e. at the level of D_E-images,
+  {X,Y}_(C1) = 7 {x_s,y_s} in K_2(E) tensor Q (rank 1), and the Weierstrass
+  symbol equals -(the S_0 symbol).
+
+---------------------------------------------------------------------
+6. CERTIFIED INTEGRALS OVER gamma^- (anti-invariant generator
+   u = s*(2*w2 - w1), s in [0,1]; unwrapped midpoint Riemann sums, gp,
+   80 digits; off-by-one at the pole carefully avoided)
+---------------------------------------------------------------------
+Weierstrass {x,y} on 11.a3 (THE (3.210) SYMBOL):
+  N=2000: -0.95596260438846297211
+  N=4000: -0.95596716431364659975
+  N=8000: -0.95596830503005761222
+  Richardson (4*i3-i2)/3 = -0.95596868526886128304
+  Brunault (3.210) value -2*pi*b11 = -0.95596868542165847877   [9-digit match]
+  factor-1 Bloch would give -pi*b11 = -0.47798434271082923939  [ruled out]
+  => int_{gamma^-} eta(x,y) = -5 D_E(P).  Brunault (3.210) is TRUE as stated,
+     for the Weierstrass symbol, with the generator of H_1^-.
+
+(C1) {X,Y} (transported via W_int, X = (v-u^2)/(u(u+1)), Y = u(X+1)):
+  N=1000: 6.67070798587002341654
+  N=2000: 6.68023270524560136761
+  N=4000: 6.68550103513005103712     i3/(14 pi b11) = 0.9990616
+  Fit i(N) = I + (a log N + b)/N (N=1000,2000,4000): I = 6.6917822
+  Target 2*pi*m(C1) = 14*pi*b11 = 35 d = 6.69178079795160935142  [consistent]
+  factor-1 Bloch would give 7*pi*b11 = 3.34589039897580467571    [ruled out]
+  => int_{gamma^-} eta(X,Y) = +35 D_E(P) = 2*pi*m(C1), and the Mahler
+     integration path for (C1) is a GENERATOR of H_1^- (winding 1), with
+     Deninger's m = (1/2pi) int_gamma eta.  Consistent with Theoreme 118.
+
+Paper's S_0 symbol (already certified in the project): int = +2*pi*b11 = +5d.
+
+---------------------------------------------------------------------
+7. TAME SYMBOLS (exact local expansions, sympy)
+---------------------------------------------------------------------
+S_0 symbol {x_s, y_s} on 11.a3, at the full support union {A, 2A, 3A, O}:
+  at 2A=(1,-1): x_s = -t + t^2 - t^3 + ..., y_s = t^3 - 3 t^4 + 5 t^5 - ...
+      T_{2A} = (-1)^{1*3} (x_s^3/y_s)(2A) = +1
+  at 3A=(1,0):  x_s = t^-1 + 2 + t - ..., y_s = -t^-2 - 3 t^-1 - 4 - ...
+      T_{3A} = (-1)^{(-1)(-2)} (y_s/x_s^2)(3A) = -1
+  at O (t = X/Y): x_s = t^-1 + 1 + t + ..., y_s = -t^-1 - 2 - 2t - ...
+      T_O = (-1)^{(-1)(-1)} (y_s/x_s)(O) = +1
+  at A=(0,0): ord(x_s)=1, ord(y_s)=0:  T_A = 1/y_s(A) = -1
+All tame symbols are in {+1,-1}: torsion.  So {x_s,y_s} in K_2(E) tensor Q
+(in fact 2{x_s,y_s} in K_2(E)); Bloch's theorem premise HOLDS for the paper's
+symbol.  For the Weierstrass {x,y}: T_A = (x^2/y)(A) = -1 (y ~ -x^2 at A),
+T_O = (y^2/x^3)(O) = +1: also torsion.
+
+---------------------------------------------------------------------
+8. VERDICT -- how this adjudicates the logic triangle
+---------------------------------------------------------------------
+(A) The referee's premise needs correction, but their repair WORKS.
+    Brunault (3.210)'s {x,y} is the Weierstrass coordinate symbol of
+    E = X1(11) (textual: lines 9642, 8435, 8465, 9682-9698; numerical:
+    its certified integral is exactly (3.210)'s value).  It is NOT the (C1)
+    coordinate symbol {X,Y} -- the latter belongs to (3.208)/Theoreme 118
+    and has a 7-times-larger diamond image.
+    With the correct identification:
+        D_E(<>_Bertin) = -(5/2) d  vs  D_E(<>_ours) = +(5/2) d,
+    i.e. |D_E(<>_Bertin)| = |D_E(<>_ours)| EXACTLY (both computed here with
+    exact integer arithmetic + 60-digit series; ratio -1.0 to 50 digits).
+    Therefore the referee's B1 path closes the proof chain as designed:
+    the universal Bloch constant c cancels in the ratio,
+        |int eta_ours| / |int eta_Bertin| = |D_E(<>_ours)|/|D_E(<>_Bertin)| = 1,
+    and |int eta_Bertin| = 5d = 2 pi b11 (Brunault (3.210), now independently
+    certified numerically to 9 digits) gives |int eta_ours| = 2 pi b11.
+    In K_2(E) tensor Q (rank 1) the two symbols are proportional with
+    constant -1 -- consistent with paper.tex l.826-828's implicit assumption
+    ("proportionality constant pinned to 1" up to sign/orientation).
+
+(B) The factor-2 anomaly is REAL, curve-level, and NOT the paper's error.
+    For all THREE conductor-11 symbols (S_0's {x_s,y_s}, Weierstrass {x,y},
+    (C1) {X,Y}), with tame symbols all roots of unity (premise verified):
+        int_{gamma^-} eta  =  2 * D_E((f)<>(g)),
+    while conductor 17 (k=1) satisfies factor 1 -- corroborated independently
+    by Lalin--Ramamonjisoa's PROVEN m(F3) = (7/2) L'(E17,0) chain (their
+    Thm. 6 + Prop. 13 + Prop. 15 imply D_E(4-torsion P) = pi*b17/2, which
+    code/k1_dilog.py confirms to 40 digits).  So the "factor-1 Bloch"
+    statement r({x,y})[gamma] = D_E((x)<>(y)) (L-R Thm. 6 normalization)
+    holds literally for 17a but fails by exactly 2 for 11.a3 -- a
+    curve-dependent, symbol-independent phenomenon.
+
+(C) Inference on the ultimate source.  Since (i) the tame premise holds,
+    (ii) the diamond convention and D_E series are identical in both cases,
+    and (iii) the factor is symbol-independent within conductor 11, the
+    discrepancy must live in the one remaining ingredient: the relation
+    between the anti-invariant cycle gamma^- and the D_E formula for the two
+    lattice shapes.  The distinguishing data:
+      17a: disc > 0, two real components, tau pure imaginary (Re tau = 0),
+           q = +0.00378897 real positive;
+      11.a3: disc < 0, one real component, tau = 1/2 + 0.22988 i
+           (Re tau = 1/2), q = -0.23589554 real NEGATIVE.
+    For 11.a3 the anti-invariant generator is gamma^- = [0 -> 2 w2 - w1]
+    (= a - 2b in the conj-invariant basis: conj(a)=a, conj(b)=a-b), i.e. it
+    is an a-2b combination, whereas for 17a it is simply b.  Brunault's
+    Remarque 20 setup (tau = int_{gamma2} omega / int_{gamma1} omega in H
+    with (gamma1, gamma2) a DIRECT basis) also degenerates for one-component
+    real loci: with gamma1 = a one cannot keep both Im tau > 0 and
+    <gamma1, gamma2> = +1 without shifting gamma2 by a, which moves tau by an
+    integer and changes nothing -- except that Bloch's proof of
+    int_gamma eta = D_E(<>), which is normalized against a specific
+    fundamental-domain boundary cycle, can pick up precisely such a factor.
+    The data say: for Re(tau) = 1/2 (q < 0, one oval), the anti-invariant
+    generator integral equals TWICE the diamond value; for Re(tau) = 0
+    (q > 0, two ovals) it equals the diamond value.  This is the concrete
+    locus to repair in any citation of L-R Thm. 6 for one-component curves.
+    For the paper this is harmless: the k=0 regulator is anchored directly by
+    Brunault (3.210) (a theorem, now numerically re-certified), and the B1
+    ratio argument is c-insensitive.
+
+(D) Side note: the (C1) computation also explains the "7" in Theoreme 118
+    K_2-theoretically: D_E(<>_{X,Y}) = 7 D_E(<>_{x_s,y_s}) (exact ratio 7.0
+    to 50 digits), matching m(C1) = 7 b11 with the same Mahler-Deninger
+    normalization that gives m = b11 for the S_0-side regulator.
+=====================================================================

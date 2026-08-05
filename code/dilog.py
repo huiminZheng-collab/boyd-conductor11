@@ -8,10 +8,16 @@ P = (0,0) sits at u/w1 = 3/5, 2P = (1,-1) at 1/5  (z-values on unit circle).
 D_E(S) = sum_{n in Z} D(q^n z_S),  D = Bloch-Wigner,
 sum over negative n via D(w) = -D(1/w).
 
-Predictions:
-  (a) exotic relation: D_E(2P) = 2 D_E(P)          [Bertin, cited in Brunault (3.151)]
-  (b) our assembly:    -5 D_E(P)  = 2 pi b_11      [(x).(y) = 5(A)-5(2A), winding n=1]
-      <=> D_E(P) = -(2 pi/5) b_11 = -0.19119373708433169...
+Predictions (as of attack 13, see notes/attack13-bertin-diamond.txt):
+  (a) exotic relation: D_E(2P) = (3/2) D_E(P)      [Bertin, cited in Brunault (3.151);
+      confirmed numerically to 60 digits -- an early draft of this file said "expect 2",
+      which was wrong]
+  (b) diamond value:   D_E((x)⋄(y)) = (5/2) D_E(P) = pi b_11, while the
+      certified regulator integral is 2 pi b_11 (the factor-2 phenomenon of
+      paper Remark rem:diamondk0; curve-level, symbol-independent).
+      Earlier version "(x).(y) = 5(A)-5(2A) => -5 D_E(P) = 2 pi b_11" mixed
+      the raw and Z[E]--reduced expansions; the reduced diamond is
+      6(O)-5(A)+5(2A).
 """
 from mpmath import mp, mpf, mpc, pi, exp, log, polylog, nstr
 
@@ -60,10 +66,10 @@ DE2P = D_E(z2P)
 print("q =", nstr(q, 20))
 print("D_E(P)  =", nstr(DEP, 40))
 print("D_E(2P) =", nstr(DE2P, 40))
-print("(a) D_E(2P)/D_E(P) =", nstr(DE2P/DEP, 25), "  (exotic: expect 2)")
+print("(a) D_E(2P)/D_E(P) =", nstr(DE2P/DEP, 25), "  (exotic: 3/2)")
 b11 = mpf('0.1521471417259180494862272974786344956281')
-print("(b) -5 D_E(P) =", nstr(-5*DEP, 40))
-print("    2 pi b_11 =", nstr(2*pi*b11, 40))
-print("    ratio =", nstr(-5*DEP/(2*pi*b11), 25))
+print("(b) (5/2) D_E(P) =", nstr(mpf(5)/2*DEP, 40))
+print("    pi b_11     =", nstr(pi*b11, 40), "  <- D_E of the reduced diamond")
+print("    2 pi b_11   =", nstr(2*pi*b11, 40), "  <- certified regulator integral (factor 2)")
 L2 = mpf('0.5460480362150135183341266604334443385907')
 print("(c) D_E(P)/L(E,2) =", nstr(DEP/L2, 25), "  vs 11/(10 pi) =", nstr(11/(10*pi), 25))

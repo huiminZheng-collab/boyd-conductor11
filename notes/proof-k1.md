@@ -147,8 +147,8 @@ $$D_E\bigl((x)\diamond(y)\bigr)=4\cdot\frac{17}{8\pi}L(E,2)
 引 Bloch [Bl00]）：对 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ 与
 $H_1(E,\mathbb Z)^-$ 生成元 $\gamma^-$，
 $$\int_{\gamma^-}\eta(x,y)=\pm\,D^E\bigl((x)\diamond(y)\bigr).$$
-（ tempered 前提：$S_1$ Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、
-$y(x^2+x+1)$ 全分圆——注意 $x^2+x+1=\Phi_3(x)$，同 k=0 的 S2 步。）
+（ tempered 前提：$S_1$ Newton 面多项式 $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、
+$y^2+y$ 全分圆（$xy$ 项是 Newton 多边形的内部点），同 k=0 的 S2 步。）
 该归一化的 conductor-17 先例即 L–R 自身：其 $(x{-}1)\diamond(y{-}1)=8(P)$、
 $D^E(8P)=8\cdot\frac{\pi b_{17}}2=4\pi b_{17}=\int_{\gamma_1}\eta$，配合 Zudilin 的
 $m(P_i)=2b_{17}$ 严丝合缝——**因子 1 在本曲线上有已发表证明背书**。

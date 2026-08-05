@@ -10,30 +10,37 @@ exact corner points (c = 2 pi/3, omega = e^{2 pi i/3}):
            D(omega) = [-4.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 +/- 8.70e-89] + [+/- 7.40e-89]j  (contains -4; min_{|z|=1}|D| = 4)
 
 (A) closed-chain endpoint branch assignments
+    whole-interval sheet tracking on (th0, th0+/-2eps] (referee M2 fix):
+    strict slabs certify |y_big| > 1 > |y_small| AND the selected
+    sheet's ball within distance < 1 of the claim; the slab touching
+    th0 certifies disjoint root balls, one < 1 and one > 1 from it.
   eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-6 +/- 4.41e-97]:
-  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
-  y_big(c^-)      -P           1.304e-06                      3.999981  True
-  y_big(c^+)      P            2.073e-06                      3.999981  True
-  y_big(-c^+)     -P-bar       1.304e-06                      3.999981  True
-  y_big(-c^-)     P-bar        2.073e-06                      3.999981  True
-  y_small(c^-)    P            2.073e-06                      3.999981  True
-  y_small(c^+)    -P           1.304e-06                      3.999981  True
-  y_small(-c^+)   P-bar        2.073e-06                      3.999981  True
-  y_small(-c^-)   -P-bar       1.304e-06                      3.999981  True
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  strict slabs  ok
+  y_big(c^-)      -P           3.546e-06                      3.999990             2  True
+  y_big(c^+)      P            4.820e-06                      3.999990             2  True
+  y_big(-c^+)     -P-bar       3.546e-06                      3.999990             2  True
+  y_big(-c^-)     P-bar        4.820e-06                      3.999990             2  True
+  y_small(c^-)    P            4.821e-06                      3.999990             2  True
+  y_small(c^+)    -P           3.547e-06                      3.999990             2  True
+  y_small(-c^+)   P-bar        4.821e-06                      3.999990             2  True
+  y_small(-c^-)   -P-bar       3.547e-06                      3.999990             2  True
   eps = [1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-9 +/- 4.48e-100]:
-  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  ok
-  y_big(c^-)      -P           1.304e-09                      4.000000  True
-  y_big(c^+)      P            2.073e-09                      4.000000  True
-  y_big(-c^+)     -P-bar       1.304e-09                      4.000000  True
-  y_big(-c^-)     P-bar        2.073e-09                      4.000000  True
-  y_small(c^-)    P            2.073e-09                      4.000000  True
-  y_small(c^+)    -P           1.304e-09                      4.000000  True
-  y_small(-c^+)   P-bar        2.073e-09                      4.000000  True
-  y_small(-c^-)   -P-bar       1.304e-09                      4.000000  True
-  continuity argument: D != 0 on each closing interval (above),
-  the two exact roots at theta0 are 2 apart (y = +/- i),
-  pin distance < 1/10
-  ==> the one-sided limit is the claimed point, in all 8 cases.
+  claim           point   |dist to claim|  |D| >= on [th0, th0+/-2eps]  strict slabs  ok
+  y_big(c^-)      -P           3.551e-09                      4.000000             2  True
+  y_big(c^+)      P            4.826e-09                      4.000000             2  True
+  y_big(-c^+)     -P-bar       3.551e-09                      4.000000             2  True
+  y_big(-c^-)     P-bar        4.826e-09                      4.000000             2  True
+  y_small(c^-)    P            4.826e-09                      4.000000             2  True
+  y_small(c^+)    -P           3.551e-09                      4.000000             2  True
+  y_small(-c^+)   P-bar        4.826e-09                      4.000000             2  True
+  y_small(-c^-)   -P-bar       3.551e-09                      4.000000             2  True
+  argument: D != 0 on every slab, so both sheets are continuous on
+  the closed interval; the tracked sheet stays within distance < 1
+  of the claim on the WHOLE open interval (strict slabs by modulus
+  separation + ball distance, the touching slab by disjoint balls
+  + continuity), and the two exact roots at th0 are 2 apart
+  (y = +/- i) ==> the one-sided limit is the claimed point,
+  in all 8 cases.
   VERDICT (A): ALL 8 ASSIGNMENTS CERTIFIED
 
 (B) Proposition 3.1: |y_-(th)| <= 1 <= |y_+(th)| on [0, pi],

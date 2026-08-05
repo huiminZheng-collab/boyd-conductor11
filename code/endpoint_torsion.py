@@ -1,4 +1,7 @@
 """
+DEPRECATED: superseded by endpoint_torsion3.py (rigorous good-reduction
+proof); this script has no torsion-order bound and is heuristic only.
+
 Endpoint torsion check: the split-path boundary points on the quartic
 u^2 = x^4-4x^3+2x^2+1 are
   theta=0:   (x,y)=(1,-1)  -> (x,u)=(1,0)   = -A (already 5-torsion)

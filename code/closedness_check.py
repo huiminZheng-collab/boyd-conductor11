@@ -32,10 +32,13 @@ for side, th in [("pi-", pi - mpf('1e-12')), ("-pi+", -pi + mpf('1e-12'))]:
 print("  -1 - sqrt(2) =", nstr(-1-sqrt(2), 30))
 
 # (ii) full-circle signed integral vs -2 b_11
+# NOTE: log|y_big| has a sqrt(theta) cusp at theta = 0 (the double root
+# y = -1), so [-c, c] must be split at 0 for tanh-sinh to converge;
+# without the split the quadrature stalls at ~4 digits (referee item M1).
 c = pi/2
 W = lambda th: 1 if fabs(th) < c else -1
 f = lambda th: W(th) * log(fabs(ybig(th)))
-val = (mp.quad(f, [-pi, -c]) + mp.quad(f, [-c, c]) + mp.quad(f, [c, pi])) / (2*pi)
+val = (mp.quad(f, [-pi, -c]) + mp.quad(f, [-c, 0, c]) + mp.quad(f, [c, pi])) / (2*pi)
 print("\n  (1/2π) ∫_{full,signed} log|y_big| =", nstr(val, 50))
 b = b11(60)
 print("  -b_11/π × 2 × π/2 ... direct compare: -2*b_11/(2π)*π = ")

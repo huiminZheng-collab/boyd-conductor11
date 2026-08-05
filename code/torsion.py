@@ -1,4 +1,9 @@
 """
+NOTE (legacy): this script conflates the two points at infinity of the
+quartic model (multiples 3A/5A print nan/zoo); the conclusion 5A = O via
+the 4A = -A route remains valid.  For the rigorous verification see
+verify_divisors_k0.py and endpoint_torsion3.py.
+
 Torsion check (proof-strategy support).
 
 Curve S_0: y^2+(x^2+1)y+x^3 = 0. With u = 2y + x^2 + 1 it becomes the quartic

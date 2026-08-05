@@ -12,8 +12,10 @@
 VERDICT: explicit birational isomorphism C ~ 11.a3 verified symbolically;
 pullback of dX/(2Y+1) equals dx/u EXACTLY  ==>  kappa = 1 (exact, not 32/50-digit).
 
-REMARK (neutrals): as a map of curves, O+ (u/x^2 -> +1) maps to O, while
-O- (S_0's group neutral [0:1:0]) maps to (1,0), a 2-torsion point; the map
-is a group isomorphism (C, O+) ~ (11.a3, O).  The differential identity
+REMARK (neutrals, corrected): as a map of curves, O+ (u/x^2 -> +1) maps to O,
+while O- maps to (1,0)=3A, a 5-torsion point; the map is a group isomorphism
+(C, O+) ~ (11.a3, O). On the S_0 cubic closure the two points at infinity are
+O_1=[0:1:0] (maps to 3A) and Q_inf=[1:-1:0] (maps to O); see paper.tex SS4.1
+and notes/attack12-divisors.txt. The differential identity
 kappa = 1 is neutral-independent (invariant differentials are
 translation-invariant), so the conclusion is unaffected.

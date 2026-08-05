@@ -221,7 +221,20 @@ def certify_poly_roots(coeffs_asc, starts=None):
     dp = lambda z: sum(k * c * z**(k - 1) for k, c in enumerate(coeffs_asc) if k)
     if starts is None:
         starts = [r.mid() for r in acb_poly(coeffs_asc).roots()]
-    return [certify_root(p, dp, refine_newton(p, dp, s)) for s in starts]
+    roots = [certify_root(p, dp, refine_newton(p, dp, s)) for s in starts]
+    # completeness certificate (referee item, ported from n1_interval.py):
+    # the certified root balls are
+    # (a) pairwise disjoint -- certified distance between the discs > 0,
+    #     i.e. centre distance > sum of radii (each ball contains ONE root),
+    # (b) exhaustive -- exactly deg many, so every root is accounted for.
+    deg = len(coeffs_asc) - 1
+    assert len(roots) == deg, \
+        "root count %d != polynomial degree %d" % (len(roots), deg)
+    for i in range(deg):
+        for j in range(i + 1, deg):
+            assert abs(roots[i] - roots[j]).lower() > 0, \
+                "certified root balls %d and %d are not disjoint" % (i, j)
+    return roots
 
 
 # ---------------------------------------------------------------------------

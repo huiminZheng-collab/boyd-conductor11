@@ -1,4 +1,7 @@
 """
+DEPRECATED: superseded by endpoint_torsion3.py (rigorous good-reduction
+proof); this script has no torsion-order bound and is heuristic only.
+
 Endpoint torsion check, pure-Python exact arithmetic (no sympy).
 
 Quartic u^2 = f(x) = x^4 - 4x^3 + 2x^2 + 1, group law via monic parabolas,
