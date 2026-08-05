@@ -82,8 +82,8 @@ $\Lambda(E,s)=w\,\Lambda(E,2-s)$。$E_{11}$ 的根数 $w=+1$（秩 0）。由此
 
 $$b_{11}=L'(E_{11},0)=\frac{11}{4\pi^2}L(E_{11},2)=0.15214714172591804948622729747863\ldots$$
 
-（我们的 `code/b11.py` 用 $f_{11}$ 的系数和"近似函数方程"把它算到 300 位；
-$L(E,2)=\sum a_n[\,\cdots\,]$ 是一个以 $e^{-2\pi n/\sqrt{11}}$ 速度收敛的级数，几十项就够几百位。）
+（我们的 `code/b11.py` 用 $f_{11}$ 的系数和"近似函数方程"把它算到 800 位；
+$L(E,2)=\sum a_n[\,\cdots\,]$ 以 $e^{-2\pi n/\sqrt{11}}$ 速度收敛，尾项界驱动截断：442 项 @ 800 dps。）
 
 ## 3. Boyd 猜想从哪来：Deninger、Beilinson 与 Boyd 的数值实验
 
@@ -162,14 +162,14 @@ $x=e^{i\theta}$ 沿上半环面走，$\theta=\pi/2$ 处正是 torus 交点 $x=i$
 $$I_{\mathrm{split}}:=\underbrace{\frac1\pi\int_0^{\pi/2}\log|y_-(e^{i\theta})|\,d\theta}_{I_1}
 \;-\;\underbrace{\frac1\pi\int_{\pi/2}^{\pi}\log|y_-(e^{i\theta})|\,d\theta}_{I_2}\ \stackrel?=\ \pm b_{11}. \tag{C3}$$
 
-（符号取决于哪个根叫 $y_-$：$|y_+||y_-|=|x^3|=1$，换根整体变号。Samart 2023 的约定写成 $-L'(E,0)$。）
+（符号取决于哪个根叫 $y_-$：$|y_+||y_-|=|x^3|=1$，换根整体变号。Samart 的 eq. (4.1) 把右端写成 $-L'(E,0)$；但按 Samart 自己的 $y_-$ 定义，左端积分是正数 $+0.1521471\ldots$，该负号疑似笔误——按我们的 $y_-$ 约定恒等式读作 $+b_{11}$，(C3) 因此记 $\pm$。）
 
 Boyd 的原话（经 Samart 2023 §4 引用）：
 
 > "This is in accord with our contention that in case $P$ vanishes on the torus, it is the integral
-> of $\log|y|$ around a branch cut rather than $m(P)$, which should be rationally related to $L'(E,0)$."
+> of $\omega$ around a branch cut rather than $m(P)$, which should be rationally related to $L'(E,0)$."
 
-Samart 2023（arXiv:2301.05390）把 (C3) 明确列为**未证明的猜想**，并指出可尝试用他在
+Samart 2023（arXiv:2301.05390）以 Boyd 的“$=$?”猜想记号把 (C3) 记录为**开放恒等式**（其 eq. (4.1)），并指出可尝试用他在
 conductor 19 的 $Q_\alpha$ 族上成功的方法（超几何公式 + BMZ）来证，但"$S$ 族的情形 less apparent"。
 这就是本次攻击的靶子。
 
@@ -190,7 +190,7 @@ $\theta=0,\pi/2,\pi$ 对应的三个点，其中 $\theta=\pi/2$（torus 交点�
 - **$b_{11}$ 高精度**（`code/b11.py`）：由 $f_{11}=\eta(\tau)^2\eta(11\tau)^2=\sum a_nq^n$ 的整数系数
   （Euler 函数平方的截断卷积，精确整数），用权 2、根数 $+1$ 的近似函数方程
   $$b_{11}=\Lambda(f,2)=\sum_{n\ge1}a_n\Big[e^{-t_n}\Big(\frac1{t_n}+\frac1{t_n^2}\Big)+E_1(t_n)\Big],\quad t_n=\frac{2\pi n}{\sqrt{11}},$$
-  $E_1$ 为指数积分（来自 $\int_1^\infty e^{-ty}/y\,dy$）。项衰减 $\sim e^{-1.894n}$，200 项足够 300 位。
+  $E_1$ 为指数积分（来自 $\int_1^\infty e^{-ty}/y\,dy$）。项衰减 $\sim e^{-1.894n}$；尾项界驱动截断：442 项 @ 800 dps（旧稿"200 项够 300 位"有误，已更正）。
 - **Mahler 测度**：§1.2 的一维 Jensen 积分，mpmath 80–300 dps。
 - **PSLQ**：mpmath.pslq，搜索小系数整数关系。
 - **椭圆曲线群律（精确）**：令 $u=2y+x^2+1$ 把 $S_0=0$ 化为四次曲线
@@ -207,12 +207,13 @@ $\theta=0,\pi/2,\pi$ 对应的三个点，其中 $\theta=\pi/2$（torus 交点�
 | (C1) $m((1+x)(1+y)(1+x+y)+xy)$ | $1.06502999208142634\ldots$ | $\|m-7b_{11}\|\approx5.0\times10^{-53}$ |
 | (C2) $m(y^2+(x^2+2x-1)y+x^3)$ | $0.76073570862959024\ldots$ | $\|m-5b_{11}\|\approx3.6\times10^{-53}$ |
 
-### 6.2 开放猜想 (C3) 确认到 149 位 —— **主要数值结果**（`notes/attack3-results.txt`）
+### 6.2 开放猜想 (C3) 确认到 366 位 —— **主要数值结果**（`code/attack13_c3_300.py`，存档 `notes/attack13-c3-300.txt`）
 
 $$I_{\mathrm{split}}=0.152147141725918049486227297478634495628143589164226122809889823882023289695302776676\ldots$$
-$$|I_{\mathrm{split}}-b_{11}|=4.85\times10^{-149}.$$
+$$|I_{\mathrm{split}}-b_{11}|=9.26\times10^{-367}.$$
 
-此前公开记录是 Boyd 的 50 位验证；本次推进到 **149 位**。
+（800 dps 工作精度，641 秒；$b_{11}$ 的 $\eta$-级数值与 PARI/GP `lfun(E,0,1)` **330 位逐位吻合**——三条独立计算共享 310 位公共前缀。原 `attack3.py` 的 149 位结果标记 superseded。）
+此前公开记录是 Boyd 的 50 位验证（Boyd 2015 slides，p. 28，即 `literature/boyd-pnwnt2015.pdf`）；本次推进到 **366 位**。
 
 ### 6.3 结构恒等式（先数值发现，后给出证明）
 
@@ -252,7 +253,7 @@ $$P_0=(1,-1),\quad P_\pi=(-1,-1+\sqrt2),\quad P_{\pi/2}=(i,e^{i\pi/4}).$$
 $H_1(E,\mathbb Z)^-$（复共轭反不变部分）中闭合。
 
 **(i) 成立（精确验证）**：四次模型的不变量给出 $j=-2^{12}/11=j(X_1(11))$ ✓。
-群律精确计算（`code/torsion.py`）：对 $A=(0,1)$（即 $S_0$ 上的点 $(0,0)$），
+群律精确计算（`code/torsion.py`，在四次模型上进行、以其无穷远点为群单位元）：对 $S_0$ 上的点 $A=(0,0)$（即四次坐标下的点 $(x,u)=(0,1)$），
 
 $$2A=(0,-1),\qquad 4A=(1,0)=-A\quad\Longrightarrow\quad \boxed{5A=O}.$$
 
@@ -302,7 +303,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | $-3$ | $83$ | $-1$ | 无 | 比值 $0.8529175\ldots$ | 无有理关系 |
 | $-2$ | $91$ | $-1$ | 无 | 比值 $0.6339454\ldots$ | 无有理关系 |
 | $-1$ | $53$ | $-1$ | $1/3$ | 比值 $0.7392026\ldots$ | **无有理关系**（结构解释，见下） |
-| $0$ | $11$ | $+1$ | $1/2$ | $\tilde n=-b_{11}$ | (C3)，149 位 |
+| $0$ | $11$ | $+1$ | $1/2$ | $\tilde n=-b_{11}$ | (C3)，366 位 |
 | $1$ | $17$ | $+1$ | $2/3$ | $\tilde n=+b_{17}$ | 60 位（Samart 猜想独立确认）|
 | $2$ | $37$ | $-1$ | 无 | $m=\tilde n=2\,b_{37}$ | **新确认恒等式**，60 位 |
 | $3$ | $79$ | $-1$ | 无 | $m=\tilde n=b_{79}$ | **新确认恒等式**，60 位 |
@@ -316,13 +317,18 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
   的独立高精度确认（$y_-$ 约定下积分 $=-L'(E_{17},0)$，有理因子 $r=1$）。
 - **$k=2,3$（conductor 37、79，根数 $-1$）**：无 torus 交点，Mahler 测度本身满足 Boyd 型恒等式
   $m(S_2)=2|L'(E_{37},0)|$、$m(S_3)=|L'(E_{79},0)|$，60 位（PARI `lfun`）。这是本次意外收获。
-- **$k=-1$ 矛盾已解决（第四波，`code/k53_attack.py` + `k53.gp`）**：Samart 2023 §4 关于
+- **$k=-1$ 矛盾已解决（第四波，`code/k53_attack.py` + `k53.gp`；第十波精确化 `code/k53_smith.py`）**：Samart 2023 §4 关于
   conductor 53 的"类似猜想"只有一句话（无公式、无精度、无引用）。我们证明它**不可能成立**：
   1. **拓扑障碍**：$k=-1$ 时 $|x|=1$ 上的 torus 交点为 $\theta=0$（两根 $e^{\pm2\pi i/3}$，
-     分支在此**交换**）与 $\theta=\pm\pi/3$（$y=\pm1$）。枚举所有以交点为断点、big/small
-     分支组合的**闭反不变链**：唯一解 $(1,1,1,1)$ 的周期为 $0$——**环面上不存在非平凡的
-     反不变闭链**，$H_1(E,\mathbb Z)^-$ 生成元无法在 torus 上实现，故 Boyd 型环面积分
-     对象根本不存在。（连续根沿圆走**两圈**才闭合，且整圈周期也是 $0$。）
+     分支在此**交换**）与 $\theta=\pm\pi/3$（$y=\pm1$）。以交点为断点、big/small
+     分支组合的**闭反不变链**空间为 $\mathbb Z\cdot(1,1,1,1)$：反不变对称化的边界矩阵是
+     $\pm1/0$ 整数矩阵，其在 $\mathbb Q$ 上的核**恰为一维**，由精确有理线性代数算出
+     （`code/k53_smith.py`，非系数盒搜索）；生成元 $(1,1,1,1)$ 的周期为 $0$——而且是
+     **精确**为零，非数值：$(1,1,1,1)$ 是两叶在全圆上的和，两分支
+     $u=2y+B=\pm\sqrt{B^2-4x^3}$，故 $1/u_++1/u_-\equiv0$ 逐点成立，$\sum dx/u$
+     恒等于零（连续根沿圆走**两圈**才闭合，该两圈回路由同一抵消而为零）。因此
+     **环面上不存在非平凡的反不变闭链**，$H_1(E,\mathbb Z)^-$ 生成元无法在 torus 上实现，
+     Boyd 型环面积分对象根本不存在。
   2. **代数障碍**：53.a1 的扭子群**平凡**、秩 1，且 $(0,0)$ 就是 Mordell–Weil **生成元**
      （PARI `ellorder`=0）——$x,y$ **不是** modular units，Beilinson–Brunault 机制不适用，
      任何闭链的 regulator 配对都没有理由是有理数 $\times\,b_{53}$。
@@ -338,15 +344,18 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
   | $1$ | $17$ | $\mathbb Z/4$ | $4$ | 成立（$\tilde n=b_{17}$） |
   | $-3,-2,-1,2,3$ | $83,91,53,37,79$ | 平凡 | $\infty$ | 见下 |
 
-- **修正后的结构定理（第四波，预测+验证）**：分野不是 $k$ 的符号，而是 **torus 交点结构**：
+- **修正后的结构二分（第四波，预测+验证；数值确立的命题）**：分野不是 $k$ 的符号，而是 **torus 交点结构**：
   - **$|k|\ge2$**（无真正 torus 交点，$k=\pm2,\ldots$；$k=\pm4$ 处相切退化）：标准 Deninger
-    机制直接给出 $m(S_k)=r_k\,|L'(E_k,0)|$，$r_k$ 为小有理数——$k=2,3$ 已确认，
+    机制预期直接适用，$m(S_k)=r_k\,|L'(E_k,0)|$（$r_k$ 为小有理数）在所有已算情形获数值确认
+    ——$k=2,3$ 已确认，
     $k=-4,-5,-6$ 为**先预测后命中**：$m(S_{-4})=\frac72|L'(E_{37},0)|$、
     $m(S_{-5})=\frac14|L'(E_{359},0)|$、$m(S_{-6})=\frac18|L'(E_{997},0)|$（25 位精确）。
     注意 $S_{-4}$ 与 $S_2$ 同为 conductor 37，给出同一曲线的 Rodriguez-Villegas 型关系。
-  - **$-4<k<2$**（真正 torus 交点，$m$ 本身失效，须用劈裂积分）：恒等式成立**当且仅当**
-    曲线有扭点使 $x,y$ 成为 modular units——全族中仅 $k=0$（$\mathbb Z/5$，$X_1(11)$）
-    与 $k=1$（$\mathbb Z/4$）两例；$k=-1,-2,-3$ 扭子群平凡，无解。
+  - **$-4<k<2$**（真正 torus 交点，$m$ 本身失效，须用劈裂积分）：扭转二分与数值证据精确吻合
+    ——Boyd 型恒等式**证于**两个有扭点使 $x,y$ 成为 modular units 的情形：
+    $k=0$（$\mathbb Z/5$，$X_1(11)$）与 $k=1$（$\mathbb Z/4$）；$k=-1,-2,-3$
+    扭子群平凡，PSLQ 搜索无有理关系（这三条的 torus 交点含 $\theta=0$ 处的分支交换：
+    恰是环面与曲线相交但无 modular units 的情形）。
   - 这与 Samart 的观察 $K\cap\mathbb R=[-4,2]$（环面相交参数区间）精确吻合。
 
 
@@ -358,7 +367,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、$y^2+y$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
-| S5 | regulator 常数：Bertin–Brunault (3.210)/(3.211) 直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1，第八波重修后不再依赖金刚石积归一化） | 闭合 |
+| S5 | regulator 常数：Bertin–Brunault (3.210) 锚定 Weierstrass symbol $\{x_W,y_W\}$，经 $\diamond$ 比率 $-1$ 桥接（常数只依赖 $(E,\gamma^-)$）得 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1 第十波重修） | 闭合 |
 
 ### 9.1 regulator 常数的显式计算（第三波，40 位）
 
@@ -388,30 +397,67 @@ $$D_E(P)=0.1911937370843316957549544343121738161012\ldots$$
 $$-5D_E(P)+5D_E(2P)=-5\Bigl(1-\frac32\Bigr)D_E(P)=\frac52\,D_E(P)=\pi\,b_{11},$$
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
 
-**regulator 的直接锚定（第八波重修；取代旧的"因子 −2"读法）**：Brunault 论文
-(3.210)/(3.211) 引 Bertin [10, Thm 6 与 Cor. 6.1] 已直接给出
-$$|r_\gamma\{x,y\}|=\frac{5}{2\pi}D_E(P)=\frac{11}{4\pi^2}L(E,2)=b_{11},
-\qquad r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta(f,g),$$
-即 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$。**regulator 一侧的等式本来就是
-Bertin–Brunault 的已证定理**（他证 (C1) 时的中间结果），证明走这条路，
-完全不需要金刚石积的归一化约定。exotic relation $D_E(2P)=\frac32D_E(P)$
-由 Bertin（CRM Proc. Lecture Notes 36, 2004）证明（**更正**：此前误指
-J. Reine Angew. Math. 569——该文中此关系仍是猜想；zbMATH 书评与
+**regulator 的锚定（第十波重修；外部审稿 BLOCKER 修复）**：一个必须挑明的识别——
+Brunault (3.210) 的 symbol $\{x,y\}$ **不是**我们的 symbol，而是 $E:y^2+y=x^3-x^2$ 的
+Weierstrass 坐标函数 $\{x_W,y_W\}$（Brunault Thm. 8, (3.211)）。在该模型上
+$$\operatorname{div}(x_W)=[A]+[4A]-2[O],\qquad \operatorname{div}(y_W)=2[A]+[3A]-3[O],$$
+故 $\diamond_W=8(O)+5(A)-5(2A)$，由 exotic relation 得 $D_E(\diamond_W)=-\frac52D_E(P)$；
+而我们的 $\diamond_{S_0}=6(O)-5(A)+5(2A)$，$D_E=+\frac52D_E(P)$——**比率恰为 $-1$**
+（非零，因 $D_E(P)=\frac{2\pi}{5}b_{11}\neq0$）。两个 symbol 的 tame symbol 全为 $\pm1$
+（精确局部展开，`code/bertin_diamond.py`：$\{x,y\}$ 在 $A,2A,3A,O$ 处 $T\in\{\pm1\}$；
+$\{x_W,y_W\}$ 有 $T_A=-1$、$T_O=+1$），故都在 Bloch 定理的适用域内。新锚定逻辑：
+Bloch 定理在**任何**归一化下都把 tempered symbol 的 regulator 表为 $D_E(\diamond)$
+乘以一个只依赖 $(E,\gamma^-)$ 与约定、**不依赖 symbol** 的常数，故积分比被迫等于
+$\diamond$ 值比 $=-1$。而 Brunault (3.210)（引 Bertin [10]（= J. Reine Angew. Math.
+**569** (2004)，Thm 6 与 Cor. 6.1）；归一化 $r_\gamma\{f,g\}:=\frac1{2\pi}\int_\gamma\eta$，
+(3.211)）给出
+$$|r_{\gamma^-}\{x_W,y_W\}|=\frac{5}{2\pi}D_E(P)=b_{11},
+\qquad\text{即}\qquad \int_{\gamma^-}\eta(x_W,y_W)=\pm2\pi b_{11},$$
+且我们对此做了独立数值认证：沿反不变生成元 $\gamma^-=s(2w_2-w_1)$（$0\le s\le1$）
+直接数值积分 $\eta(x_W,y_W)$，Richardson 外推到 9 位得 $-2\pi b_{11}$
+（`code/bertin_diamond.gp`）。由比率即得
+$$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}.$$
+**regulator 一侧由此成为已证定理**；旧稿"K₂ 秩 1 + 认证积分钉 $\lambda=1$"的循环
+论证已删除。符号取决于定向（Brunault Remarque 20：$D_E$ 依赖 $E(\mathbb R)$ 的定向，
+只定义到符号）。exotic relation $D_E(2P)=\frac32D_E(P)$
+现同时引 Bertin 两篇：CRM Proc. Lecture Notes **36** (2004) 与
+J. Reine Angew. Math. **569** (2004) 175–188（后者即 Brunault 的参考文献 [10]）；
+证明出处为 CRM 版（**更正**维持：Crelle 版中此关系仍是猜想；zbMATH 书评与
 Touafek–Kerada、Mellit 三处佐证 CRM 版才是证明出处）。
 
-**归一化问题（第八波定论）**：Bloch 定理的正确陈述是因子 **1**：
-$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、$r[\gamma]=\int_\gamma\eta$
-（Lalín–Ramamonjisoa Thm. 6 原文；LSZ cond21 同）。判定依据：L–R 的
-conductor-17 链中实闭链的类是 $\gamma$ 的未知整数倍 $C$，因子 1 给出
-$C=1$（其已发表 eq. (20)，我们 60 位复现），因子 2 则迫使 $C=1/2\notin\mathbb Z$。
-旧笔记"$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）"与此不相容，已弃用。
-遗留问题（如实记录，不影响证明）：按修正除子展开的
-$D_E(\diamond)=\pm\frac52D_E(P)=\pm\pi b_{11}$，恰为 Bloch+Bertin 所需值
-$\pm5D_E(P)=\pm2\pi b_{11}$ 的一半——这个因子 2 住在 $\mathbb Z[E]^-$
-符号约定里（除子、$D_E$ 级数、闭链均已三重验证排除嫌疑），论文
-Remark 5.2/4.x 如实标注。
+**归一化问题（第十波定论）**：conductor-17 的证明中 Bloch 定理用 Lalín–Ramamonjisoa
+Thm. 6 的归一化：$r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$、$r[\gamma]=\int_\gamma\eta$。
+该因子-1 陈述**在该曲线上**的正确性由自洽性论证保证（我们自己的重构；L–R 原文中
+该常数 $C$ 从未被确定）：L–R §7 中实闭链的类是 $\gamma$ 的先验未知整数倍 $C$，
+将因子-1 定理用于其 $(X)\diamond(Y)$ 并与其已证的 Corollary 2（其 Thm. 1 eq. (5)，
+结合 Zudilin 恒等式即其 eq. (6)）比较，迫使 $C\cdot f=1$ 且 $C\in\mathbb Z\setminus\{0\}$，
+故 $f=1$；因子-2 陈述则迫使 $C=1/2\notin\mathbb Z$。其 §5 的底层 $D_E$ 恒等式
+我们已 60 位复现。k=0 不用 $\diamond$-形式的绝对值：它只通过同一曲线上两个 tempered
+symbol 的**比率**（上段，常数无论取何值都消去）进入，绝对值由 Bertin–Brunault 在
+$\{x_W,y_W\}$ 上的定理锚定。值得注意的是，因子-1 陈述本身在 conductor-11 曲线上
+**失效**：那里检验的全部三个独立 tempered symbol 都满足
+$\int_{\gamma^-}\eta=2\,D_E((\cdot)\diamond(\cdot))$（曲线级现象，见下段）；这不影响
+任一证明——conductor-17 论证在自己的曲线上自洽，conductor-11 论证只用比率。
+旧笔记"$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）"与两组数据都不符，已弃用。
+**因子 2 之谜的新数据（第十波，`code/bertin_diamond.py` + `bertin_diamond.gp`，存档
+`notes/attack13-bertin-diamond.txt`）**：形式展开 $D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$，
+而认证积分 $\int_{\gamma^-}\eta=2\pi b_{11}$——因子-1 归一化下两边恰差 2。我们用同一曲线
+上三个**独立** tempered symbol 考察此事：Weierstrass symbol、我们的 $S_0$ symbol、以及
+Bertin (C1) 三次 $(X+1)(Y+1)(X+Y+1)+XY=0$ 的坐标 symbol $\{X,Y\}$（经显式 Riemann–Roch
+变换映到 $E$，PARI `ellidentify` 认证像为 `11.a3`，精确变量代换 $[1,-1,-2,2]$）。
+$\diamond$ 值分别为 $-\frac52$、$+\frac52$、$+\frac{35}{2}$ 倍 $D_E(P)$，而沿 $\gamma^-$
+直接积分 $\eta$ 给出 $-5$、$+5$、$+35$ 倍 $D_E(P)$（前两个如上认证；第三个由外推
+Riemann 和，与 $2\pi m(C_1)=14\pi b_{11}$ 一致）：**因子在三个情形都恰为 2**。故它是
+$(E,\gamma^-)$ 的曲线级性质，与 symbol、$\diamond$ 约定（两曲线上相同）、tame symbol
+（皆单位根）、$D_E$ 级数无关。conductor-17 的计算用同代码同约定闭合于因子 1
+（那里有 L–R 已证定理佐证）。两条曲线恰在实拓扑上不同：$E$ 有 $\Delta=-11<0$、
+单实分支、$\Re\tau=1/2$（故 $\gamma^-=a-2b$ 而非实轨迹），conductor-17 曲线有
+$\Delta>0$、双实分支、$\Re\tau=0$；我们预期因子源于 Bloch 证明中单分支格的反不变
+闭链对基本域边界的归一化，但未做机理级证明。由于 (C3) 的证明只用比率（常数消去），
+此问题不影响主定理，如实记录。副产品：$D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$
+精确成立，在 $K_2(E)$ 层面解释了 Bertin $m(C_1)=7b_{11}$ 中的系数 7。
 
-Samart 2023 仍将 (C3) 列为开放猜想，缺口不在 regulator 计算，而在于
+Samart 2023 仍将 (C3) 记录为开放恒等式，缺口不在 regulator 计算，而在于
 **Boyd 的劈裂积分链与 $H_1(E,\mathbb Z)^-$ 闭链的等同**——这一环由第五波的
 $C'=\tilde\gamma+\beta_0=2\gamma^-$ 认证闭合（§9.2）。
 
@@ -445,15 +491,24 @@ $\mathrm{class}(C')=2\gamma^-$（第六波 Arb 铁证：比值球含 $-2$、半�
 符号=定向约定）。**更正**：第二波的"$\tilde\gamma$ 本身是
 生成元（$n=1$）"不准确——$\tilde\gamma$ 是开链；正确的闭链 $C'$ 绕数为 **2**。
 
+**同调不变性引理**：$\int_{C'}\eta(x,y)$ 只依赖于 $C'$ 在 $H_1(E,\mathbb Z)^-$ 中的同调类。
+事实上，由 $\{x,y\}\in K_2(E)\otimes\mathbb Q$（tempered，§9 表 S2），$\eta(x,y)$ 在
+$\operatorname{div}(x),\operatorname{div}(y)$ 支撑处的留数为扭，故与 $\eta$ 的配对下降到同调；
+链 $C'$ 避开 $\operatorname{supp}\operatorname{div}(x)\cup\operatorname{supp}\operatorname{div}(y)$
+（那些点 $x\in\{0,\infty\}$，而 $C'\subset\{|x|=1\}$）；折点处 $\log|y|=0$，故
+$\eta=-\log|y|\,d\theta$ 沿 $C'$ 连续可积。
+
 **regulator 合成（精确积分代数）**。$|x|=1$ 上 $\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$
 逐点成立（两根之积 $=x^3$），直接计算得
 $$\int_{\beta_0}\eta=2(J_1-J_2)=\int_{\tilde\gamma}\eta
 \qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,$$
 其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
-再由 Bertin–Brunault (3.210)/(3.211)（$|r_{\gamma^-}\{x,y\}|=\frac{5}{2\pi}D_E(P)=b_{11}$，
-$r=\frac1{2\pi}\int\eta$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}b_{11}$）
-+ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）（均为定理，§9.1 第八波重修）：
-$\int_{\gamma^-}\eta=\pm2\pi b_{11}$。合成：
+再由 §9.1 第十波重修的锚定：Brunault (3.210)/(3.211) 给出 Weierstrass symbol
+$|r_{\gamma^-}\{x_W,y_W\}|=\frac{5}{2\pi}D_E(P)=b_{11}$（$r=\frac1{2\pi}\int\eta$；
+并经 $\gamma^-=s(2w_2-w_1)$ 上的直接积分独立认证到 Richardson 9 位），两个 symbol 的
+$\diamond$ 值比率恰为 $-1$、Bloch 常数只依赖 $(E,\gamma^-)$ 而消去，故
+$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$（+ Brunault (3.151) $D_E(P)=\frac{2\pi}{5}b_{11}$
++ Bertin exotic $D_E(2P)=\frac32D_E(P)$，均为定理）。合成：
 $$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
 符号由一次数值评估（$+2\pi b_{11}$，$b_{11}>0$）钉死。由结构定理
 $I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$（第一波，已证）：
@@ -461,12 +516,23 @@ $$\boxed{\,I_{\mathrm{split}}=b_{11}\,}\qquad\text{(C3) 证毕}.$$
 
 **区间算术铁证化（第六波完成）**：整数识别已由 Arb 球算术完全严格化
 （`code/n1_interval.py`，输出 `notes/attack10-interval.txt`）：三段积分用 Arb 认证
-积分重算（θ=±t² 换元消端点奇性 + Cauchy 尖端估计；D 穿负实轴处自适应细分 +
+积分重算（θ=±t² 换元消端点奇性 + Cauchy 尖端估计——尖端常数 $a_0$ 由局部展开手算得到
+但不予轻信：脚本在 $t=\delta$ 用球算术重新评估 $f$，四个尖端逐一认证
+$|f(\delta)-a_0|\le H\delta^2$，$a_0$ 若有符号或分支错误会使值移动 $2$，远超此界；
+D 穿负实轴处自适应细分 +
 每段认证回避割线 + 认证符号传递；w_anti 由 Newton+Rouché 隔离的根 + Carlson RF
 独立认证，与 PARI 45 位一致），得比值球含 $-2$ 且半径 $<1/2$，先验整数性 ⟹
 $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定）。
 模型常数 $\kappa=1$ 由判别式比 $\kappa^{12}=\Delta_{\mathrm{quartic}}/\Delta_{\min}=2^a11^b$
 的离散候选 + 50 位一致锁定。
+
+**两项实现披露（注）**：(i) 存档输出（如 `notes/attack10-interval.txt`）中显示的球半径遵循
+Arb/python-flint 的 repr 约定——中点打印误差被折入显示半径；真实球半径更小
+（显示区间包含真实球）。上文引用的所有认证界均用精确半径，而非显示半径。
+(ii) 弧积分代码的早期版本在割线回避选取 $i\sqrt{-D}$ 变体时，第一个子弧原则上可能取错
+平方根叶（此隐患在 k=1 工作中发现并修复；k=0 永不触发，因其割线穿越点位于子弧内部、
+首段总是用 $\sqrt D$ 变体）。k=0 脚本已按修正后的逻辑复审；若真触发会使整段弧反号、
+比值以 $O(1)$ 幅度偏离 $-2$——存档输出表明未发生。
 
 ### 9.3 k=1（conductor 17）：同一方法的第一次再应用（第七波）
 
@@ -493,19 +559,20 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定
   数值（$-2\pi b_{17}$）钉死，结构恒等式给出
   $\boxed{\tilde n(1)=b_{17}}$（Samart conductor-17 类比猜想，证毕）。
 - **归一化备注（第八波定论）**：k=1 用的 Lalín 归一化（$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，
-  因子 1）经 L–R 的 $C=1$ 整数性论证确证为 Bloch 定理的正确形式；k=0 的证明随后
-  相应重修——不再引 Touafek 的因子-2 转述，改为直接锚定 Bertin–Brunault
-  (3.210)/(3.211) 的已证定理（§9.1）。
+  因子 1）经 conductor-17 自洽性论证确证为 Bloch 定理的正确形式（我们的重构：
+  因子-1 定理与 L–R 已证 Corollary 2 比较迫使 $C\cdot f=1$，$C\in\mathbb Z\setminus\{0\}$，
+  详见 §9.1；L–R 原文并未确定 $C$）；k=0 的证明不用 $\diamond$-形式，直接锚定
+  Bertin–Brunault (3.210)/(3.211) 的已证定理（§9.1）。
 
 ## 10. 总结
 
-1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **149 位**（原公开记录 50 位）。
+1. (C1)(C2) 独立复现至 52 位；(C3) 确认至 **366 位**（$|I_{\mathrm{split}}-b_{11}|=9.26\times10^{-367}$，PARI `lfun` 330 位交叉吻合；原公开记录 50 位，Boyd 2015 slides p. 28）。
 2. 新结构定理 $|y_-|\le1\Rightarrow I_1+I_2=-m(S_0)$，把 (C3) 化为 $I_1=(b_{11}-m(S_0))/2$。
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
-7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构定理**——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 $m(S_k)=r_k|L'(E_k,0)|$（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式成立当且仅当有扭点使 $x,y$ 成 modular units，全族仅 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$）。**conductor 53 矛盾解决**：环面上不存在非平凡反不变闭链（枚举唯一解周期为 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
+6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Bloch + Brunault (3.151)/(3.210) + Bertin exotic（均为定理；Brunault (3.210) 锚定的是 Weierstrass symbol $\{x_W,y_W\}$，经 $\diamond$ 比率 $-1$ 桥接到我们的 symbol，§9.1 第十波重修），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$ 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
+7. 族结果（第四波完成）：$\tilde n(k)$ 表 + **结构二分**（数值确立的命题）——分野是 torus 交点结构而非 $k$ 的符号：$|k|\ge2$ 时 Deninger 机制预期适用、$m(S_k)=r_k|L'(E_k,0)|$ 获数值确认（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时扭转二分与证据精确吻合：恒等式证于 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$），$k=-1,-2,-3$ PSLQ 阴性。**conductor 53 否定裁决**：环面上不存在非平凡反不变闭链（边界矩阵核恰一维，精确有理线性代数；生成元 $(1,1,1,1)$ 的周期由 $1/u_++1/u_-\equiv0$ 恒等于 0）+ 53.a1 扭平凡、$(0,0)$ 为 MW 生成元（非 modular units）——Samart 的 53 记述极可能是低精度假阳性（§8.4）。
 8. **conductor 17 证毕（第七波，§9.3）**：同一方法再应用于 $k=1$——链结构逐字平行（$c=2\pi/3$、跳跃值 $y=\pm i$ 精确）、$\mathrm{class}(C')=\pm2\gamma^-$ Arb 铁证、regulator 侧由 Lalín–Ramamonjisoa 已发表定理闭环——Samart 的 $\tilde n(1)=b_{17}$ 类比猜想成为定理。
 
 
@@ -513,16 +580,16 @@ $\mathrm{period}(C')/w_{\mathrm{anti}}=-2$ 为严格等式（符号=定向约定
 
 ```
 cd code && python b11.py && python attack1.py && python attack2.py \
-  && python attack3.py && python torsion.py && python endpoint_torsion2.py \
+  && python attack13_c3_300.py && python torsion.py && python endpoint_torsion2.py \
   && python boundary_torsion.py && python closedness_check.py \
   && python ntilde_family.py && python b_family.py && python winding.py \
-  && python dilog.py && python k53_attack.py && python kneg_m.py \
-  && python n1_certify.py
+  && python dilog.py && python k53_attack.py && python k53_smith.py && python kneg_m.py \
+  && python n1_certify.py && python bertin_diamond.py
 .venv/Scripts/python n1_interval.py    # Arb 区间算术铁证（需 python-flint）
 .venv/Scripts/python branch_certify.py  # 分支指派 + 模序认证
 .venv/Scripts/python k1_interval.py     # Arb 铁证，conductor 17
 gp -q verify_family.gp && gp -q verify_ratios.gp
-gp -q winding.gp && gp -q dilog.gp
+gp -q winding.gp && gp -q dilog.gp && gp -q bertin_diamond.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 ```
@@ -532,7 +599,7 @@ gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 ## 12. 文献导读（`literature/`）
 
 - `bertin-lalin-survey.pdf` — Bertin–Lalín 综述：全局图景与各 conductor 状态（先读这篇）
-- `boyd-pnwnt2015.pdf` — Boyd 2015 slides：猜想史 + $m(S_0)$ 原始数据
+- `boyd-pnwnt2015.pdf` — Boyd 2015 slides：猜想史 + $m(S_0)$ 原始数据；p. 28 载 (C3) 的 50 位验证（此前的公开纪录）
 - `brunault-these.pdf` — Brunault 博士论文：$X_1(11)$ 上 Beilinson 定理显式化，(C1) 的证明
 - `zudilin-regulator.pdf` — Zudilin：BMZ regulator 公式（证明武器）
 - `samart2023.pdf` — Samart：开放猜想 (C3) 的明确陈述（其 eq. (4.1)）+ conductor 19 的成功范例
