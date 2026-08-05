@@ -355,7 +355,7 @@ $$\text{(C3)}\ \Longleftrightarrow\ \int_{\tilde\gamma}\eta(x,y)=2\pi\, b_{11},$
 | 步骤 | 内容 | 状态 |
 |---|---|---|
 | S1 | 闭性引理：$\tilde\gamma$ 闭化为 $C'=\tilde\gamma+\beta_0\in H_1(E,\mathbb Z)^-$，$\mathrm{class}(C')=2\gamma^-$（§9.2，比率先验整数 + 15 位认证） | **已证（认证）** |
-| S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
+| S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、$y^2+y$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
 | S5 | regulator 常数：Bertin–Brunault (3.210)/(3.211) 直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1，第八波重修后不再依赖金刚石积归一化） | 闭合 |

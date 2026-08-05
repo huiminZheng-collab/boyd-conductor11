@@ -11,7 +11,9 @@ Diamond: (x)<>(y) = sum_ij m_i n_j [P_i - Q_j] in Z[E], points in Z/4.
 Convention: point k means k*A, k in Z/4; O = 0.
 Then evaluate D_E:  D_E(O) = D_E(2A) = 0 (2-torsion), D_E(3A) = -D_E(A).
 
-Also do k=0 (Z/5) as a control: must reproduce 6(O)+5(A)-5(2A).
+Also do k=0 (Z/5) as a control, with the corrected k=0 divisors
+(verify_divisors_k0.py, notes/attack12-divisors.txt): must reproduce
+6(O)-5(A)+5(2A).
 """
 from collections import defaultdict
 
@@ -41,16 +43,18 @@ DEA = 0.4702266562812140308266032191876266124613
 val = raw.get(1, 0) * DEA + raw.get(3, 0) * (-DEA)
 print("k=1 D_E(diamond) =", val, " = ", val / (3.1415926535897932385 * 0.29935558688291539), "pi b_17")
 
-# ---- k=0 control, Z/5 ----
-raw0 = diamond(divx, divy, 5)
+# ---- k=0 control, Z/5: corrected divisors (verify_divisors_k0.py) ----
+divx0 = {1: 1, 2: 1, 0: -1, 3: -1}   # div(x) = [A]+[2A]-[O]-[3A]
+divy0 = {2: 3, 0: -1, 3: -2}         # div(y) = 3[2A]-[O]-2[3A]
+raw0 = diamond(divx0, divy0, 5)
 print("k=0 raw diamond:", raw0)
-asym0 = defaultdict(int)
-for P, c in raw0.items():
-    asym0[P] += c
-    asym0[(-P) % 5] -= c
-print("k=0 anti-symmetrized (expect 6(O)+5(A)-5(2A)):",
-      {k: v // 2 for k, v in asym0.items()})
+# reduction in Z[E]^- : [4]=-[1], [3]=-[2]
+red0 = {0: raw0.get(0, 0),
+        1: raw0.get(1, 0) - raw0.get(4, 0),
+        2: raw0.get(2, 0) - raw0.get(3, 0)}
+print("k=0 reduced in Z[E]^- (expect {0: 6, 1: -5, 2: 5} = 6(O)-5(A)+5(2A)):",
+      red0)
 DEP0 = 0.1911937370843316957549544343121738161012
 DE2P0 = 1.5 * DEP0
 val0 = (raw0.get(1, 0) - raw0.get(4, 0)) * DEP0 + (raw0.get(2, 0) - raw0.get(3, 0)) * DE2P0
-print("k=0 D_E(diamond) =", val0, " vs -pi b_11 =", -3.1415926535897932385 * 0.15214714172591805)
+print("k=0 D_E(diamond) =", val0, " vs +pi b_11 =", 3.1415926535897932385 * 0.15214714172591805)

@@ -61,7 +61,8 @@ for dps in [60, 80]:
     int_eta = 2*(J1 - J2)
     print("int_gamma~ eta =", nstr(int_eta, 40))
     print("  /(2 pi b_17) =", nstr(int_eta/(2*pi*b17), 40))
-    print("  ntilde(1) = (J1-J2)/pi =", nstr((J1-J2)/pi, 40), " vs b_17")
+    print("  ntilde(1) = -(J1-J2)/pi =", nstr(-(J1-J2)/pi, 40), " vs b_17")
+    print("  (structural identity ntilde(1) = -(1/2pi) int_gamma~ eta, k=1 sign)")
 
 # --- exact jump values at the corners (mpmath 60) ---
 mp.dps = 60

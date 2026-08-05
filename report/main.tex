@@ -46,7 +46,8 @@ Samart 2023 eq.~(4.1)）仍开放。本报告：(i) 自包含地综述公开文�
 Beilinson--Brunault 路线的证明纲要；
 (vi) 第三波：regulator 常数显式计算——除子、金刚石积、椭圆双对数全部精确/高
 精度锁定，$D_E(P)=\frac{2\pi}{5}b_{11}$（40 位，精确吻合 Brunault (3.151)）；
-因子 $-2$ 经文献核对为 Bloch 定理的内在因子；
+早先笔记的因子 $2$（Touafek 转述）后经第八波文献核对证伪——Bloch 定理的
+正确归一化是因子 $1$，k=0 的证明改锚 Bertin--Brunault 已证定理；
 (vii) 第四波：$S_k$ 族结构定理 + conductor 53 矛盾裁决；
 (viii) 第五波：闭链引理严格化——$C'=\tilde\gamma+\beta_0=2\gamma^-$（比率先验
 整数 + 15 位认证）；(ix) 第六波：整数识别的 Arb 球算术铁证化（比值球含 $-2$、
@@ -514,11 +515,11 @@ $k=1$（$\ZZ/4$）两例；$k=-1,-2,-3$ 扭子群平凡，无解。
 \hline
 S1 & 闭性引理：$C'=\tilde\gamma+\beta_0\in H_1(E,\ZZ)^-$，$\mathrm{class}(C')=2\gamma^-$（\S\ref{sec:proofc3}） & \textbf{已证（认证）} \\
 S2 & tempered：$S_0$ 的 Newton 面多项式 & \\
-   & $x^3+x^2y$、$x^2y+y^2$、$x^3+y^2$、$y(x^2+1)$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\QQ$ & 已查 \\
+   & $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、$y^2+y$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\QQ$ & 已查 \\
 S3 & modular units：$x,y$ 的除子支撑于尖点（$5A=O$ 精确验证，\S\ref{sec:proof}） & 已证 \\
 S4 & Beilinson--Brunault 定理 + Brunault (3.151) & \\
    & $L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 & 已核（文献+数值） \\
-S5 & $5D_E(P)-5D_E(2P)=-\pi\bN$ vs $\int\eta=2\pi\bN$；$-2$ = Bloch 内在因子（\S\ref{sec:regulator}） & 闭合 \\
+S5 & regulator 常数：Bertin--Brunault (3.210)/(3.211) 直接给出 $\int_{\gamma^-}\eta=\pm2\pi\bN$（已证定理，\S\ref{sec:regulator}，第八波重修后不再依赖金刚石积归一化） & 闭合 \\
 \hline
 \end{tabular}
 \end{center}
@@ -635,8 +636,9 @@ $\log|y_{\mathrm{big}}|=-\log|y_{\mathrm{small}}|$ 逐点成立（两根之积 $
 \qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,
 \]
 其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
-再由 Bloch（$\pi r=D_E(\diamond)$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}\bN$）
-+ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）+ 金刚石积 $5(A)-5(2A)$（\S\ref{sec:regulator}）：
+再由 Bertin--Brunault (3.210)/(3.211)（$|r_{\gamma^-}\{x,y\}|=\frac{5}{2\pi}D_E(P)=\bN$，
+$r=\frac1{2\pi}\int\eta$）+ Brunault (3.151)（$D_E(P)=\frac{2\pi}{5}\bN$）
++ Bertin exotic（$D_E(2P)=\frac32D_E(P)$）（均为定理，\S\ref{sec:regulator} 第八波重修）：
 $\int_{\gamma^-}\eta=\pm2\pi\bN$。合成：
 \[
 \int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi\bN,
@@ -686,10 +688,10 @@ $D_E(A)=\frac{17}{8\pi}L(E,2)$ 是 \textbf{Lal\'in--Ramamonjisoa 2017 已发表�
 \item \textbf{合成}：$\int_{\tilde\gamma}\eta=\frac12\cdot2\cdot(\pm2\pi b_{17})$，
 符号由数值（$-2\pi b_{17}$）钉死，结构恒等式给出
 $\boxed{\tilde n(1)=b_{17}}$（Samart conductor-17 类比猜想，证毕）。
-\item \textbf{归一化备注}：k=0 证明引 Bloch--Brunault 的 $r_\gamma$ 归一化
-（$\int\eta=\pm2D_E$），k=1 引 Lal\'in 归一化（因子 1）；两者只是 $r_\gamma$ 与
-$D^E$ 定义中的常规因子之差，各自被该曲线上的已发表公式钉死
-（Brunault (3.210)--(3.211)；L--R + Zudilin）。
+\item \textbf{归一化备注（第八波定论）}：k=1 用的 Lal\'in 归一化
+（$\int_{\gamma^-}\eta=\pm D^E(\diamond)$，因子 1）经 L--R 的 $C=1$ 整数性论证
+确证为 Bloch 定理的正确形式；k=0 的证明不用 $\diamond$-形式，直接锚定
+Bertin--Brunault (3.210)--(3.211) 的已证定理（\S\ref{sec:regulator}）。
 \end{itemize}
 
 \section{总结}

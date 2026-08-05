@@ -17,9 +17,10 @@ notes/proof-k1.md):   (x) <> (y) = 6(O) + 4(A) - 6(2A)   in Z[E]^-
 
 Predictions to check:
   (a) D_E(2A) = 0            (2-torsion, q real => all terms vanish)
-  (b) Bloch synthesis: int_{gamma^-} eta = +-2 D_E(<>) = +-8 D_E(A)
+  (b) Bloch synthesis (factor-1 normalization of Lalin--Ramamonjisoa Thm. 6):
+      int_{gamma^-} eta = +-D_E(<>) = +-4 D_E(A)
       vs measured int_{gamma^-} eta = -2 pi b_17  (k1_certify.py)
-      => expect D_E(A) = +- pi b_17 / 4 = +-0.23511...
+      => expect D_E(A) = +- pi b_17 / 2 = +-0.47022...
   (c) Brunault-style constant: D_E(A)/L(E,2) =? rational/pi
       with L(E,2) = 0.69518146300948461345173162509571731230...
 """
@@ -64,9 +65,9 @@ L2  = mpf('0.6951814630094846134517316250957173122951579368298095213795131819680
 print("q =", nstr(q, 25))
 print("(a) D_E(2A) =", nstr(DE2A, 20), "   (expect 0)")
 print("    D_E(A)  =", nstr(DEA, 40))
-print("(b) 8 D_E(A) =", nstr(8*DEA, 40))
+print("(b) 4 D_E(A) =", nstr(4*DEA, 40))
 print("    2 pi b_17 =", nstr(2*pi*b17, 40))
-print("    8 D_E(A) / (2 pi b_17) =", nstr(8*DEA/(2*pi*b17), 25))
+print("    4 D_E(A) / (2 pi b_17) =", nstr(4*DEA/(2*pi*b17), 25))
 print("    D_E(A) / (pi b_17) =", nstr(DEA/(pi*b17), 25))
 print("(c) D_E(A)/L(E,2) =", nstr(DEA/L2, 25))
 print("    vs 17/(8 pi) =", nstr(17/(8*pi), 25), "  17/(16 pi) =", nstr(17/(16*pi), 25))
@@ -74,4 +75,4 @@ print("    pi D_E(A)/L(E,2) =", nstr(pi*DEA/L2, 25))
 # also: the full diamond combination and Bloch form
 Dd = 4*DEA - 6*DE2A
 print("    D_E(<>) = 4 D_E(A) - 6 D_E(2A) =", nstr(Dd, 40))
-print("    2 D_E(<>) / (2 pi b_17) =", nstr(2*Dd/(2*pi*b17), 25))
+print("    D_E(<>) / (2 pi b_17) =", nstr(Dd/(2*pi*b17), 25), "  (factor-1 Bloch: expect +-1)")
