@@ -21,9 +21,7 @@ Boyd's 1998 tables of conjectural identities $m(P)=r\,|L'(E,0)|$ between Mahler 
 
 ## Comments
 
-34 pages. Certification scripts available at https://github.com/huiminZheng-collab/boyd-conductor11 and archived at https://doi.org/10.5281/zenodo.XXXXXXX . Research carried out with the assistance of the AI system Kimi (Moonshot AI); see the declaration in the article.
-
-（XXXXXXX 待 Zenodo 新版 DOI 出来后替换；若决定不挂 Zenodo 就删掉 archived 分句。）
+34 pages. Certification scripts available at https://github.com/huiminZheng-collab/boyd-conductor11 and archived at https://doi.org/10.5281/zenodo.21820650 . Research carried out with the assistance of the AI system Kimi (Moonshot AI); see the declaration in the article.
 
 ## Journal-ref
 
