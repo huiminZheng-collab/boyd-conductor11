@@ -1,0 +1,5 @@
+- Boyd's conductor-11 Mahler measure identity (C3) is proved
+- Closed-cycle construction; Arb-certified period ratio pinned to 2
+- Direct Siegel-unit regulator computation avoids Bloch diamond ambiguity
+- Complete structural analysis of the polynomial family S_k
+- Conductor-53 mechanistic counterexample shows where the method fails
