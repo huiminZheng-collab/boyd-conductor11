@@ -1,0 +1,389 @@
+diff --git a/report/paper.tex b/report/paper.tex
+index 8f9405b..1a35f5a 100644
+--- a/report/paper.tex
++++ b/report/paper.tex
+@@ -61,10 +61,10 @@ where $\gamma^-$ generates $H_1(E,\Z)^-$: the period ratio
+ $\period(C')/w_{\mathrm{anti}}$ is a-priori an integer, and a
+ ball-arithmetic (Arb) computation with certified error bounds pins it to
+ $2$ (in particular it is non-zero). Combined with the exact integral identity
+-$\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$ and Bloch's regulator theorem in
+-a single normalization---the factor-$2$ index of the anti-invariant subgroup
+-in the coinvariant quotient on a $\Delta<0$ curve being identified and
+-resolved---this yields $I_{\mathrm{split}}=b_{11}$; the sign is certified in interval
++$\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$ and a direct regulator
++computation via Brunault's proved Siegel-unit formula---the symbol
++$\{x,y\}$ being a pair of modular units on $X_1(11)$, so no use of Bloch's
++diamond theorem is needed---this yields $I_{\mathrm{split}}=b_{11}$; the sign is certified in interval
+ arithmetic, and the identity agrees with the numerical value to $366$
+ digits. For the family $S_k=y^2+(x^2+kx+1)y+x^3$ we determine exactly the
+ torus intersections (as a function of real $k$), the single case where
+@@ -192,11 +192,11 @@ elliptic dilogarithm of \S\ref{sec:background}, implemented verbatim from
+   $\gamma^-$ generates $H_1(E,\Z)^-$; the integrality argument is made
+   rigorous by a ball-arithmetic (Arb) computation of the period ratio with
+   certified error bounds (\S\ref{subsec:rigour}). The regulator side
+-  is closed by Bloch's theorem in a single normalization: the
+-  anti-invariant subgroup has index $2$ in the coinvariant quotient on
+-  this $\Delta<0$ curve (Lemma~\ref{lem:coinvariant}), and the quotient
+-  value is anchored at Bloch's theorem through its proved instance on
+-  the conductor-$17$ curve (\S\ref{sec:proof}).
++  is closed by a direct computation: $\{x,y\}$ is a pair of modular units
++  on $X_1(11)$, and Brunault's proved Siegel-unit regulator formula
++  \cite{BrunaultSiegel} evaluates $\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$
++  through exact Siegel presentations and an exact weight-$2$ identity
++  $F_{\mathrm{total}}=-2f_{11}$ (\S\ref{sec:proof}).
+   \item \textbf{The conductor-$17$ analogue (appendix).} The same method is
+   applied to Samart's conductor-$17$ conjecture $\tilde n(1)=b_{17}$
+   (Theorem~\ref{thm:k1}, Appendix~\ref{app:k1}): the chain construction is
+@@ -996,16 +996,21 @@ the literature) are
+   $D_E(2P)=\frac32D_E(P)$ (note $\tfrac32$, not the naive $2$).
+ \end{itemize}
+ 
+-The evaluation of the regulator of $\{x,y\}$ along $\gamma^-$ uses Bloch's
+-theorem in a single fixed normalization throughout, together with an index
+-lemma comparing the two standard meanings of $H_1(E,\Z)^-$ on a curve with
+-$\Delta<0$.
++The evaluation of the regulator of $\{x,y\}$ along $\gamma^-$ is carried out
++\emph{directly}, via Brunault's proved regulator formula for Siegel units
++\cite{BrunaultSiegel}; Bloch's diamond theorem is not used.  We then record
++the clarification of the factor-of-two question that the computation
++entails (Lemma~\ref{lem:coinvariant} and the discussion below), which is
++likewise not part of the proof.
+ 
+ \begin{lemma}[The regulator generator and the index]\label{lem:coinvariant}
+ Let $E/\R$ be an elliptic curve, $c$ the complex-conjugation involution,
+ $H_1(E,\Z)^\pm=\ker(c_*\mp1)$, and $\{f,g\}$ a tempered symbol on $E$.
+-The pairing $\gamma\mapsto\int_\gamma\eta(f,g)$ descends to the
+-coinvariant quotient $H_1(E,\Z)/H_1(E,\Z)^+$.
++The pairing $\gamma\mapsto\int_\gamma\eta(f,g)$ descends to the quotient
++$H_1(E,\Z)/H_1(E,\Z)^+$ of the integral homology by the invariant
++sublattice (throughout, ``coinvariant quotient'' means exactly this
++quotient by $H_1(E,\Z)^+$; we do not use $\ker(c_*+1)$ and the quotient
++interchangeably, as they differ by an index that is material here).
+ \begin{enumerate}
+   \item If $\Delta>0$, then $H_1(E,\Z)^-=Z\,b$ maps isomorphically onto
+   $H_1(E,\Z)/H_1(E,\Z)^+=Z\,[b]$: the anti-invariant generator represents
+@@ -1032,48 +1037,144 @@ $b\mapsto-b$, so $H_1^-=Z\,b$ and the projection $b\mapsto[b]$ is an
+ isomorphism.
+ \end{proof}
+ 
+-\paragraph{Bloch's theorem.}
+-We use Bloch's theorem \cite{Bloch} in the formulation of
+-\cite[Thm.~6]{LalinRam}, in the normalizations of
+-\cite[Def.~5, eq.~(10)]{LalinRam} (which coincide verbatim with our series
+-implementation of $D_E$, checked to $60$ digits on both curves): for
+-$f,g\in\Q(E)$ with $\{f,g\}\in K_2(E)$,
+-\begin{equation}\label{eq:bloch}
+-  \int_{\bar\gamma}\eta(f,g)
+-  =D_E\big((f)\diamond(g)\big),
++\paragraph{The anchor: a direct Siegel-unit computation.}
++The symbol $\{x,y\}$ is a pair of modular units (\S\ref{sec:proof}, Modular
++units: its divisors are supported on the rational cusps of $X_1(11)$).
++Regulator integrals of Siegel units are computed by a proved formula that
++involves neither the diamond product nor a choice of homology lattice:
++for Siegel units $g_u,g_v$, $u=(a,b)$, $v=(c,d)\in(\Z/N\Z)^2\setminus0$,
++\begin{equation}\label{eq:siegelthm}
++  \int_0^{i\infty}\eta(g_u,g_v)
++  \;=\;\pi\,\Lambda^*\bigl(e_{a,d}\,e_{b,-c}+e_{a,-d}\,e_{b,c},\,0\bigr),
+ \end{equation}
+-where $\bar\gamma$ is a generator of the coinvariant quotient
+-$H_1(E,\Z)/H_1(E,\Z)^+$ --- the group on which the regulator is naturally
+-defined.  Both sides being $\Q$-linear in the symbol, \eqref{eq:bloch}
+-extends from $K_2(E)$ to $K_2(E)\otimes\Q$, hence to all tempered
+-symbols.  For $\Delta>0$ the quotient and anti-invariant generators
+-coincide (Lemma~\ref{lem:coinvariant}~(1)), and \eqref{eq:bloch} is then
+-exactly the statement of \cite[Thm.~6]{LalinRam} as used in their
+-conductor-$17$ computation; this is the instance our Appendix~\ref{app:k1}
+-relies on.  For $\Delta<0$ the two readings differ by the index $2$
+-(Lemma~\ref{lem:coinvariant}~(2)), and the quotient reading
+-\eqref{eq:bloch} is confirmed on the present curve by three independent
+-tempered symbols and by a direct numerical evaluation of $\int_{[b]}\eta$
+-(Remark~\ref{rem:diamondk0}).
+-
+-\paragraph{Application to our symbol.}
+-The symbol $\{x,y\}$ is tempered, with diamond value
+-\[
+-  D_E\big((x)\diamond(y)\big)
+-  =-5D_E(P)+5D_E(2P)=\tfrac52\,D_E(P)=\pi\,b_{11}\neq0,
+-\]
+-using Bertin's exotic relation and Brunault's coefficient (both displayed
+-above).  Bloch's theorem \eqref{eq:bloch} gives
+-$\int_{[b]}\eta(x,y)=\pm\pi b_{11}$, and
+-Lemma~\ref{lem:coinvariant}~(2) --- our curve has $\Delta=-11<0$ ---
+-doubles this:
++with $e_{a,b}$ the explicit weight-$1$ level-$N^2$ Eisenstein series of
++\cite[Thm.~1, eq.~(2)]{BrunaultSiegel} and $\Lambda^*$ the regularized
++completed $L$-value of \cite[\S2]{BrunaultSiegel}; arbitrary modular
++symbols are handled by linearity \cite[Rem.~2]{BrunaultSiegel}.  (We
++verified the factor $\pi$ in \eqref{eq:siegelthm} against the article's
++source, and validated our implementation of the formula by reproducing the
++conductor-$14$ application of \cite[\S5.1]{BrunaultSiegel} to $60$ digits
++by three independent methods; archive
++\texttt{notes/attack16-siegel-anchor.txt}.)
++
++\begin{theorem}[The regulator anchor]\label{thm:anchor}
++With $\gamma^-$ the anti-invariant generator of Lemma~\ref{lem:antiinv},
+ \begin{equation}\label{eq:anchor}
+   \int_{\gamma^-}\eta(x,y)=\pm\,2\pi b_{11},
+ \end{equation}
+-the sign depending on orientations.  The regulator side is therefore a
+-proved theorem with a single normalization throughout; the remaining gap,
+-closed in \S\ref{subsec:class}, is the identification of Boyd's
+-split-integral chain with the closed cycle $C'=2\gamma^-$.
++the sign depending on orientations.
++\end{theorem}
++
++\begin{proof}
++All steps are exact rational/$q$-expansion computations or are archived
++(\texttt{code/siegel\_anchor\_step1}--\texttt{11},
++\texttt{notes/attack16-siegel-anchor.txt}).
++\emph{(1) Cusps and divisors.}  Under the modular parametrization
++$X_1(11)\to E$ attached to $f_{11}$ (infinite cusp $\mapsto O$), the
++rational cusps map as $k/11\mapsto m_kA$ with
++$(m_1,\dots,m_5)=(0,2,1,4,3)$, consistently with Brunault's cusp table
++\cite[(3.152)--(3.153)]{Brunault}; the cusps $i\infty$ and $1/11$ coincide
++on $X_1(11)$ since $\bigl(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}
++\bigr)\in\Gamma_1(11)$.  Hence $x\circ\pi,y\circ\pi$ have cusp orders
++\[
++  \operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
++  \operatorname{ord}_{k/11}(y\circ\pi)=(-1,+3,0,0,-2)
++\]
++for $k=1,\dots,5$ (Abel-integral computation to $60$ digits, cross-checked
++against the exact divisors displayed at the beginning of this subsection).
++\emph{(2) Siegel presentations.}  With
++$G_a:=\prod_{b\bmod 11}g_{a,b}$ and the Kubert--Lang cusp orders
++$\operatorname{ord}_{(r,t)}g_{a,b}=\tfrac{11}{2}B_2(\{(ar+bt)/11\})$ on the
++$60$ cusps of $X(11)$, exact rational linear algebra gives
++\begin{equation}\label{eq:siegelpres}
++  x\circ\pi=-\,\frac{G_4G_5}{G_2^2},
++  \qquad
++  y\circ\pi=\frac{G_1G_5^{\,3}}{G_2^{\,3}G_3}.
++\end{equation}
++Each side of \eqref{eq:siegelpres} is $\Gamma_1(11)$-invariant with the
++same cusp divisor, so each ratio is a constant; the constants are roots of
++unity (computed to $70$ digits at four $\tau$-points: $-1$ and $+1$), hence
++invisible to $\eta$: $\log|C|=0$, and the $d\arg$ corrections vanish
++identically for these row-uniform products.
++\emph{(3) The cycle.}  Take the modular symbol
++$\gamma^-=\{0,\tfrac{3}{11}\}-\{0,\tfrac{8}{11}\}$: it is closed on
++$X_1(11)$ (as $3\equiv-8\bmod 11$), anti-invariant under
++$\tau\mapsto-\bar\tau$, and primitive (its period is a priori a nonzero
++integral multiple of $w_{\mathrm{anti}}$ and equals $w_{\mathrm{anti}}$ to
++$60$ digits); hence it is the class $\pm(a-2b)$ of
++Lemma~\ref{lem:antiinv}.  Continued fractions decompose it into seven
++Manin symbols:
++\[
++\begin{aligned}
++  \{0,\tfrac{3}{11}\}&=\textstyle
++   +\bigl[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\bigr]
++   -\bigl[\begin{smallmatrix}1&1\\3&4\end{smallmatrix}\bigr]
++   +\bigl[\begin{smallmatrix}3&1\\11&4\end{smallmatrix}\bigr],\\
++  \{0,\tfrac{8}{11}\}&=\textstyle
++   +\bigl[\begin{smallmatrix}1&0\\1&1\end{smallmatrix}\bigr]
++   -\bigl[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\bigr]
++   +\bigl[\begin{smallmatrix}3&2\\4&3\end{smallmatrix}\bigr]
++   -\bigl[\begin{smallmatrix}3&8\\4&11\end{smallmatrix}\bigr].
++\end{aligned}
++\]
++\emph{(4) Evaluation.}  Applying \eqref{eq:siegelthm} term by term to
++\eqref{eq:siegelpres} along these symbols, exact $q$-expansion arithmetic
++in the cyclotomic coefficient fields (251 coefficients, far beyond the
++Sturm bound $2$ for $M_2(\Gamma_0(11))$) proves that the total weight-$2$
++form is exactly
++\[
++  F_{\mathrm{total}}=-2\,f_{11}\ \in\ M_2(\Gamma_0(11)):
++\]
++two symbols ($\bigl[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\bigr]$,
++$\bigl[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\bigr]$) contribute
++$-f_{11}$ each and the remaining five vanish identically.  Therefore the
++$\Lambda$-sum equals $-2\,\Lambda(f_{11},0)=-2\,b_{11}$, since with
++$\Lambda(f,s)=11^{s/2}(2\pi)^{-s}\Gamma(s)L(f,s)$ and $L(f_{11},0)=0$
++(root number $+1$) one has $\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$.
++Multiplying by the factor $\pi$ of \eqref{eq:siegelthm} gives
++$\int_{\gamma^-}\eta(x,y)=-2\pi b_{11}$ with the orientation of (3),
++i.e.\ \eqref{eq:anchor} in general.  Independent corroboration: the
++numerical $\Lambda$-sum is $-2b_{11}$ to $50$ digits
++(\texttt{siegel\_anchor\_step8.py}), and direct numerical integration of
++$\eta(x,y)$ along $\gamma^-$ with the opposite orientation gives
++$+0.9559686854216584787\ldots$ to $45$ digits
++(\texttt{siegel\_anchor\_step11.py}).
++\end{proof}
++
++The regulator side of (C3) is therefore a proved theorem, independent of
++Bloch's diamond formula; the remaining gap, closed in \S\ref{subsec:class},
++is the identification of Boyd's split-integral chain with the closed cycle
++$C'=2\gamma^-$.
++
++\paragraph{The status of Bloch's diamond formula (not used).}
++For orientation we record what the computation implies for Bloch's theorem.
++As transmitted by \cite[Thm.~6]{LalinRam}, that theorem states
++\begin{equation}\label{eq:bloch}
++  \int_{\gamma}\eta(f,g)
++  =D_E\big((f)\diamond(g)\big)
++\end{equation}
++for $\gamma$ a generator of the anti-invariant \emph{subgroup}
++$H_1(E,\Z)^-$, with $D_E$ given by \cite[Def.~5, eq.~(10)]{LalinRam} (that
++series is, term by term, the series we implement; a non-rigorous numerical
++comparison on both curves agrees to $60$ digits).  On the present curve
++($\Delta<0$) the subgroup reading of \eqref{eq:bloch} with factor $1$ is
++incompatible with the proved value of the anchor:
++$D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$ while
++$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$.  Every verified datum --- the
++anchor above, Brunault--Bertin's value for $\{x_W,y_W\}$
++(Remark~\ref{rem:brunault-dict}), direct numerical integration on both
++generators (Remark~\ref{rem:diamondk0}), and the proved conductor-$17$
++computation of \cite{LalinRam}, where the subgroup and the quotient
++coincide (Lemma~\ref{lem:coinvariant}~(1)) --- is instead consistent with
++\eqref{eq:bloch} holding with factor $1$ for a generator $\bar\gamma$ of
++the coinvariant quotient $H_1(E,\Z)/H_1(E,\Z)^+$, the group on which the
++regulator is naturally defined (both sides being extended $\Q$-linearly in
++the symbol); by Lemma~\ref{lem:coinvariant}~(2) the subgroup generator then
++reads twice as much, exactly as observed.  We record this as the apparent
++correct formulation of Bloch's theorem for $\Delta<0$ curves --- the
++transmitted subgroup statement of \cite[Thm.~6]{LalinRam} being imprecise
++in that case, which their paper never uses --- but we emphasize once more
++that nothing in this paper depends on it.
+ 
+ \begin{remark}[The factor $2$ in the $\diamond$-form of Bloch's theorem,
+ resolved]\label{rem:diamondk0}
+@@ -1105,7 +1206,7 @@ integral over the \emph{quotient} generator $[\gamma^-_0]=[b]$ with
+ factor $1$, and the integral over the \emph{subgroup} generator
+ $\gamma^-=a-2b$ acquires the index $2$ of $\Z\cdot\gamma^-$ in $H_1/H_1^+$
+ (Lemma~\ref{lem:coinvariant}(2)). On the conductor-$17$ curve the index is
+-$1$ (Lemma~\ref{lem:coinvariant}(3): $\Delta>0$, $b\mapsto-b$), the subgroup
++$1$ (Lemma~\ref{lem:coinvariant}(1): $\Delta>0$, $b\mapsto-b$), the subgroup
+ and quotient coincide, and the same computation closes with factor $1$ ---
+ corroborated there by the proved theorem of \cite{LalinRam}. The three
+ symbols' uniform factor $2$ is thus exactly the $\Delta<0$ index, and the
+@@ -1113,7 +1214,9 @@ conductor-$17$ factor $1$ its $\Delta>0$ counterpart.
+ We verified the quotient reading numerically on the conductor-$11$ curve
+ itself (\texttt{code/verify\_coinvariant.gp}, archive
+ \texttt{notes/attack15-coinvariant.txt}): integrating $\eta(x_W,y_W)$ along
+-cycles shifted to avoid its poles,
++cycles shifted to avoid its poles, with a centered discretization whose
++convergence order is measured empirically to be $2.000000$ at every
++doubling from $N=500$ to $N=8000$,
+ \[
+   \textstyle
+   \int_{a}\eta=0,\qquad
+@@ -1121,10 +1224,17 @@ cycles shifted to avoid its poles,
+    =D^E\bigl((x_W)\diamond(y_W)\bigr),\qquad
+   \int_{a-2b}\eta=2\pi b_{11},
+ \]
+-the first two to $O(1/N)$ in the subdivision with clean Richardson
+-extrapolation (linear in $1/N$, matching $-\pi b_{11}$ to $10^{-6}$), the
+-last to $10^{-22}$; and $-2\int_b\eta=\int_{a-2b}\eta$ to the same accuracy.
+-In particular the factor-$1$ identity \eqref{eq:bloch} holds for the symbol
++where the first integral converges to $0$ spectrally (below $10^{-75}$, the
++working-precision floor, from $N=2000$ on), and the raw errors of the
++second and third decrease like $N^{-2}$ from $-1.4\cdot10^{-5}$ resp.\
++$-6.5\cdot10^{-6}$ at $N=500$ to $-5.4\cdot10^{-8}$ resp.\
++$-2.5\cdot10^{-8}$ at $N=8000$; a single $p=2$ Richardson step on the
++finest pair leaves residuals $-1.8\cdot10^{-15}$ and $-9.2\cdot10^{-16}$
++against $-\pi b_{11}$ and $2\pi b_{11}$, and
++$-2\int_b\eta-\int_{a-2b}\eta=4.6\cdot10^{-15}$ on the extrapolants.
++We stress that this is a numerical consistency check, not a proof.
++Subject to that caveat, the factor-$1$ identity \eqref{eq:bloch} holds for
++the symbol
+ $\{x_W,y_W\}$ on the quotient generator, and its subgroup-generator value is
+ the doubled \eqref{eq:anchor}.
+ A by-product: $D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ exactly, which
+@@ -1418,15 +1528,27 @@ PARI/GP~2.15.5\textup{)}:
+   assertions\textup{)}, while
+   $b_{11}=\Lambda(f_{11},2)>0$ exactly by the absolutely convergent Euler
+   product at $s=2$.
++  \item \emph{The Siegel-unit anchor.} The presentations
++  \eqref{eq:siegelpres} are exact identities of $\Gamma_1(11)$-invariant
++  functions \textup{(}exact cusp-divisor match via Kubert--Lang orders;
++  the constants are roots of unity, computed to $70$
++  digits\textup{)}; the Manin-symbol decomposition of $\gamma^-$ is exact
++  \textup{(}continued fractions\textup{)}; and the identity
++  $F_{\mathrm{total}}=-2f_{11}$ of weight-$2$ forms on $\Gamma_0(11)$ is
++  proved by exact $q$-expansion arithmetic to $251$ coefficients, far
++  beyond the Sturm bound $2$ \textup{(}\texttt{siegel\_anchor\_step6/7/9},
++  archive \texttt{notes/attack16-siegel-anchor.txt}\textup{)}; the
++  cusp-torsion correspondence and the primitivity of the cycle are
++  confirmed to $60$ digits against their a-priori integral values.
+ \end{enumerate}
+-The only remaining non-machine step in the proof of
+-Theorem~\ref{thm:C3} is the regulator evaluation of
+-\S\ref{subsec:anchor}, which uses Bloch's theorem
+-\cite{Bloch} (as formulated in \cite[Thm.~6]{LalinRam}) in a single
+-normalization, together with the two $D_E$-values of Brunault's
+-Corollaire~3.5.101 \cite[eq.~(3.151)]{Brunault}; his symbol dictionary
+-\cite[Thm.~118, eqs.~(3.210)--(3.211)]{Brunault} is used only as a
+-cross-check \textup{(}Remark~\ref{rem:brunault-dict}\textup{)}.
++The only remaining external input in the proof of
++Theorem~\ref{thm:C3} is Brunault's regulator formula for Siegel units
++\cite[Thm.~1]{BrunaultSiegel} --- proved in loc.\ cit.\ by a Rankin--Selberg
++computation --- together with the functional-equation evaluation
++$\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$.  Bloch's diamond theorem,
++Bertin's Theorem~6, and Brunault's symbol dictionary are \emph{not} used
++\textup{(}the latter is retained only as a cross-check,
++Remark~\ref{rem:brunault-dict}\textup{)}.
+ \end{theorem}
+ 
+ %=====================================================================
+@@ -1490,7 +1612,7 @@ rests on exactly two $K$-theoretic/regulator hypotheses:
+   this curve} follows from the consistency argument of
+   Remark~\ref{rem:normalisation} (our reconstruction; the constant is not
+   determined in \cite{LalinRam}), equivalently from the index-$1$ statement
+-  of Lemma~\ref{lem:coinvariant}(3): on this $\Delta>0$ curve the
++  of Lemma~\ref{lem:coinvariant}(1): on this $\Delta>0$ curve the
+   anti-invariant subgroup coincides with the coinvariant quotient, so no
+   alternative subgroup reading of the factor-$1$ theorem exists.
+ \end{itemize}
+@@ -1653,7 +1775,7 @@ theorem applied to their $(X)\diamond(Y)$ with their proved Corollary~2
+ (their Thm.~1, eq.~(5), combined with Zudilin's identity, their eq.~(6))
+ forces $C\cdot f=1$ with $C\in\Z\setminus\{0\}$, hence $f=1$; a factor-$2$
+ statement would force $C=\tfrac12\notin\Z$. (This self-consistency argument
+-is now explained by Lemma~\ref{lem:coinvariant}(3): on the $\Delta>0$
++is now explained by Lemma~\ref{lem:coinvariant}(1): on the $\Delta>0$
+ conductor-$17$ curve the anti-invariant subgroup \emph{coincides} with the
+ coinvariant quotient, so the factor-$1$ theorem admits no alternative
+ subgroup reading.) The underlying $D_E$-identity of
+@@ -1665,7 +1787,7 @@ $\int_{[\gamma^-_0]}\eta=D_E((\cdot)\diamond(\cdot))$, verified numerically
+ in Remark~\ref{rem:diamondk0} --- while the \emph{subgroup} generator
+ $\gamma^-=a-2b=-2[b]$ reads exactly twice as much
+ (Lemma~\ref{lem:coinvariant}(2)), which accounts for the uniform factor $2$
+-observed for all three independent tempered symbols of
++observed for all three different tempered symbols of
+ Remark~\ref{rem:diamondk0}. This does
+ not affect either proof: the conductor-$17$ argument is
+ self-contained on its own curve, and the conductor-$11$ argument anchors
+@@ -1729,8 +1851,12 @@ File & Purpose\\
+ \texttt{verify\_family.gp} & family conductors and $j$-invariants\\
+ \texttt{verify\_ratios.gp} & PARI \texttt{lfun} cross-check of ratios\\
+ \texttt{kfamily\_torsion.gp} & torsion, $\operatorname{ord}(0,0)$ for the family\\
+-\texttt{verify\_coinvariant.gp} & quotient vs subgroup generator integrals
+-  ($\int_b\eta=-\pi b_{11}$, $\int_{a-2b}\eta=2\pi b_{11}$)\\
++\texttt{verify\_coinvariant.gp} & generator integrals (numerical cross-check)\\
++\texttt{siegel\_anchor\_step1--11} & the Siegel-unit regulator anchor
++  (Theorem~\ref{thm:anchor}):\\
++  & cusp-torsion map, presentations \eqref{eq:siegelpres}, Manin
++    decomposition,\\
++  & exact $F_{\mathrm{total}}=-2f_{11}$, final value\\
+ \bottomrule
+ \end{tabular}
+ \end{center}
+@@ -1760,6 +1886,9 @@ gp -q winding.gp && gp -q dilog.gp
+ gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
+ gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
+ gp -q verify_coinvariant.gp  # quotient vs subgroup generator integrals
++python siegel_anchor_step11.py  # Siegel anchor: final value (Thm. anchor)
++# full anchor chain rebuild: siegel_anchor_step4.py -> step5.py -> step6.py
++#   -> step7.gp -> step9.py -> step8.py   (step8 takes 10-20 min)
+ \end{verbatim}
+ }
+ 
+@@ -1808,6 +1937,11 @@ F.~Brunault,
+ elliptique},
+ th\`ese, Universit\'e Paris 7 -- Denis Diderot, 2005.
+ 
++\bibitem{BrunaultSiegel}
++F.~Brunault,
++\emph{Regulators of Siegel units and applications},
++J.~Number Theory \textbf{163} (2016), 542--569.
++
+ \bibitem{BrunaultBSMF}
+ F.~Brunault,
+ \emph{Valeur en $2$ de fonctions $L$ de formes modulaires de poids $2$:

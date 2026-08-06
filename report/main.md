@@ -419,7 +419,7 @@ $\eta(x,y)=\log|x|\,d\arg y-\log|y|\,d\arg x$；$\mathbb Z[E]^-$ 取 Lalín–Ra
 | S2 | tempered：$S_0$ 的 Newton 面多项式 $x^3+y$、$x^3+x^2y$、$x^2y+y^2$、$y^2+y$ 全分圆，故 $\{x,y\}\in K_2(E)\otimes\mathbb Q$ | 已查 |
 | S3 | modular units：$x,y$ 在 $E=X_1(11)$ 上的除子支撑于尖点（$5A=O$ 精确验证） | 已证 |
 | S4 | Beilinson–Brunault regulator 定理 + Brunault (3.151)：$L(E,2)=\frac{10\pi}{11}D_E(P)$，系数 40 位复核 | 已核（文献+数值） |
-| S5 | regulator 常数：余商生成元上 Bloch 因子-1 锚定 $\int_{[b]}\eta=\pm\pi b_{11}$，经指数引理（$\Delta<0$，指数 2）翻倍得 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（已证定理，§9.1） | 闭合 |
+| S5 | regulator 常数：Brunault 的 Siegel 单位 regulator 定理（JNT 163 (2016) Thm. 1，已证）直接计算 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$——四步精确链（尖点↔扭点、Siegel 表示、Manin 分解、$F_{\mathrm{total}}=-2f_{11}$），§9.1 锚定定理 | 闭合 |
 
 ### 9.1 regulator 常数的显式计算（第三波，40 位）
 
@@ -449,14 +449,18 @@ $$D_E(P)=0.1911937370843316957549544343121738161012\ldots$$
 $$-5D_E(P)+5D_E(2P)=-5\Bigl(1-\frac32\Bigr)D_E(P)=\frac52\,D_E(P)=\pi\,b_{11},$$
 而绕数一节已锁定 $\int_{\tilde\gamma}\eta(x,y)=2\pi b_{11}$（60 位，PARI 交叉验证）。
 
-**regulator 的锚定（第十波重修；第十二波：单一归一化 + 指数引理）**：$\{x,y\}$ 沿
-$\gamma^-$ 的 regulator 评估全程使用**单一固定归一化**下的 Bloch 定理，外加一条指数
-引理，比较 $\Delta<0$ 曲线上"$H_1(E,\mathbb Z)^-$"的两种标准含义。
+**regulator 的锚定（第十波重修；rev4：Siegel 单位定理直接计算）**：$\{x,y\}$ 沿
+$\gamma^-$ 的 regulator 评估现在**直接**进行——用 Brunault 已证的 Siegel 单位
+regulator 公式（J. Number Theory **163** (2016) 542–569，Thm. 1，
+`literature/brunault-siegel.pdf`）；Bloch 菱形定理不再使用。计算所引出的因子-2 澄清
+（指数引理与下文讨论）仅是文献状态说明，同样不属于证明。
 
 **指数引理（regulator 生成元与指数）**：设 $E/\mathbb R$ 为椭圆曲线，$c$ 为复共轭
 对合，$H_1(E,\mathbb Z)^\pm=\ker(c_*\mp1)$，$\{f,g\}$ 为 $E$ 上的 tempered symbol。
-配对 $\gamma\mapsto\int_\gamma\eta(f,g)$ 下降到**余商**（coinvariant quotient）
-$H_1(E,\mathbb Z)/H_1(E,\mathbb Z)^+$ 上：
+配对 $\gamma\mapsto\int_\gamma\eta(f,g)$ 下降到**余商**
+$H_1(E,\mathbb Z)/H_1(E,\mathbb Z)^+$ 上（本文中"余商"（coinvariant quotient）专指
+整同调模掉**不变子格** $H_1(E,\mathbb Z)^+$ 的这个商；我们不把 $\ker(c_*+1)$ 与该商
+混用——二者相差的指数正是这里的关键）：
 
 1. 若 $\Delta>0$，则 $H_1(E,\mathbb Z)^-=\mathbb Z b$ 同构地映上余商 $\mathbb Z[b]$：
    反不变生成元代表余商生成元（指数 $1$）；
@@ -472,27 +476,87 @@ $b\mapsto a-b$（反不变生成元引理），故 $H_1^+=\mathbb Z a$、余商 
 反不变类 $a-2b$ 投影为 $-2[b]$，指数 $2$；$\Delta>0$ 时 $c_*:a\mapsto a$、$b\mapsto-b$，
 故 $H_1^-=\mathbb Z b$，投影 $b\mapsto[b]$ 为同构。$\blacksquare$
 
-**Bloch 定理**：本文用 Lalín–Ramamonjisoa Thm. 6 表述的 Bloch 定理，归一化取
-L–R Def. 5 eq. (10)（与我们 $D_E$ 的级数实现逐字一致，两条曲线上均 60 位核对）：
-对 $f,g\in\mathbb Q(E)$、$\{f,g\}\in K_2(E)$，
-$$\int_{\bar\gamma}\eta(f,g)=D_E\big((f)\diamond(g)\big)\qquad\text{(B)}$$
-其中 $\bar\gamma$ 是余商 $H_1(E,\mathbb Z)/H_1(E,\mathbb Z)^+$ 的生成元——regulator
-天然定义在其上的那个群。两端对 symbol 均 $\mathbb Q$-线性，故 (B) 从 $K_2(E)$ 延拓到
-$K_2(E)\otimes\mathbb Q$，即全部 tempered symbol。$\Delta>0$ 时余商与反不变生成元一致
-（指数引理 1），(B) 正是 L–R Thm. 6 在其 conductor-17 计算中所用的陈述——附录 A 依赖的
-正是这个**已证实例**；$\Delta<0$ 时两种读法差指数 $2$（指数引理 2），而余商读法 (B)
-在本曲线上由三个独立 tempered symbol 与 $\int_{[b]}\eta$ 的直接数值评估双重确认
-（见下"因子 2——已解决"段）。
+**锚定：Siegel 单位直接计算**。symbol $\{x,y\}$ 是一对 **modular units**（§9.1
+modular units 段：其除子支撑于 $X_1(11)$ 的有理尖点）。Siegel 单位的 regulator 积分
+由一条已证公式计算——既不涉及金刚石积、也不涉及同调格的选取：对 Siegel 单位
+$g_u,g_v$，$u=(a,b)$、$v=(c,d)\in(\mathbb Z/N\mathbb Z)^2\setminus0$，
+$$\int_0^{i\infty}\eta(g_u,g_v)
+=\pi\,\Lambda^*\big(e_{a,d}e_{b,-c}+e_{a,-d}e_{b,c},\,0\big)\qquad\text{(S)}$$
+其中 $e_{a,b}$ 是 Brunault Thm. 1 eq. (2) 的显式权 1、level $N^2$ Eisenstein 级数，
+$\Lambda^*$ 是其 §2 的正则化完全 $L$ 值；任意模符号由线性处理（其 Rem. 2）。
+（(S) 中的因子 $\pi$ 已对原文 LaTeX 源码核实——PDF 文本抽取会吞掉行内 $\pi$；我们对
+公式的实现以三种独立方法 60 位复现了原文 §5.1 的 conductor-14 应用而验证，存档
+`notes/attack16-siegel-anchor.txt`。）
 
-**应用到我们的 symbol**：symbol $\{x,y\}$ 是 tempered 的，$\diamond$ 值为
-$$D_E\big((x)\diamond(y)\big)=-5D_E(P)+5D_E(2P)=\tfrac52\,D_E(P)=\pi\,b_{11}\neq0$$
-（用 Bertin exotic relation 与 Brunault 的系数——Thm. 8 与 Cor. 101，eq. (3.151)——
-均见上文）。Bloch 定理 (B) 给出 $\int_{[b]}\eta(x,y)=\pm\pi b_{11}$；本曲线
-$\Delta=-11<0$，指数引理 2 把它翻倍：
+**定理（regulator 锚定）**：取反不变生成元引理（§9.2）的 $\gamma^-$，则
 $$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}\qquad\text{(A)}$$
-（符号取决于定向）。**regulator 一侧由此成为单一归一化下的已证定理**；余下的缺口——
-Boyd 劈裂积分链与闭链 $C'=2\gamma^-$ 的等同——由 §9.2 的认证闭合。旧稿"K₂ 秩 1 +
-认证积分钉 $\lambda=1$"的循环论证已删除。exotic relation $D_E(2P)=\frac32D_E(P)$
+（符号取决于定向）。
+
+*证明*：全部步骤为精确有理/$q$ 展开计算或已存档（`code/siegel_anchor_step1`–`11`，
+`notes/attack16-siegel-anchor.txt`）。
+**(1) 尖点与除子**：在附属于 $f_{11}$ 的模参数化 $X_1(11)\to E$（无穷尖点
+$\mapsto O$）下，有理尖点 $k/11\mapsto m_kA$，$(m_1,\dots,m_5)=(0,2,1,4,3)$，与
+Brunault 的尖点表（(3.152)–(3.153)）一致；尖点 $i\infty$ 与 $1/11$ 在 $X_1(11)$ 上
+重合（因 $\big(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\big)\in\Gamma_1(11)$）。
+故 $x\circ\pi,y\circ\pi$ 的尖点阶为
+$$\operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
+\operatorname{ord}_{k/11}(y\circ\pi)=(-1,+3,0,0,-2)$$
+（$k=1,\dots,5$；Abel 积分 60 位计算，与本小节开头的精确除子交叉吻合）。
+**(2) Siegel 表示**：记 $G_a:=\prod_{b\bmod 11}g_{a,b}$；用 Kubert–Lang 尖点阶
+$\operatorname{ord}_{(r,t)}g_{a,b}=\tfrac{11}{2}B_2(\{(ar+bt)/11\})$（$X(11)$ 的 60 个
+尖点上），精确有理线性代数给出
+$$x\circ\pi=-\frac{G_4G_5}{G_2^2},\qquad
+y\circ\pi=\frac{G_1G_5^{\,3}}{G_2^{\,3}G_3}.\qquad\text{(P)}$$
+两边均 $\Gamma_1(11)$ 不变且尖点除子相同，故各比值为常数；常数为单位根（在四个
+$\tau$ 点算到 70 位：$-1$ 与 $+1$），对 $\eta$ 不可见：$\log|C|=0$，且对这些行均匀
+乘积 $d\arg$ 修正恒为零。
+**(3) 闭链**：取模符号 $\gamma^-=\{0,\tfrac{3}{11}\}-\{0,\tfrac{8}{11}\}$：它在
+$X_1(11)$ 上闭合（$3\equiv-8\bmod 11$）、在 $\tau\mapsto-\bar\tau$ 下反不变、且本原
+（其周期先验为 $w_{\mathrm{anti}}$ 的非零整数倍，60 位等于 $w_{\mathrm{anti}}$），故即
+反不变生成元引理的类 $\pm(a-2b)$。连分数把它分解为七个 Manin 符号：
+$$\begin{aligned}
+\{0,\tfrac{3}{11}\}&=\textstyle
+ +\big[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big]
+ -\big[\begin{smallmatrix}1&1\\3&4\end{smallmatrix}\big]
+ +\big[\begin{smallmatrix}3&1\\11&4\end{smallmatrix}\big],\\
+\{0,\tfrac{8}{11}\}&=\textstyle
+ +\big[\begin{smallmatrix}1&0\\1&1\end{smallmatrix}\big]
+ -\big[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\big]
+ +\big[\begin{smallmatrix}3&2\\4&3\end{smallmatrix}\big]
+ -\big[\begin{smallmatrix}3&8\\4&11\end{smallmatrix}\big].
+\end{aligned}$$
+**(4) 求值**：沿这些符号对 (P) 逐项施用 (S)，分圆系数域上的精确 $q$ 展开算术
+（251 个系数，远超 $M_2(\Gamma_0(11))$ 的 Sturm 界 2）证明总权 2 形式恰为
+$$F_{\mathrm{total}}=-2f_{11}\ \in\ M_2(\Gamma_0(11)):$$
+两个符号（$\big[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big]$、
+$\big[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\big]$）各贡献 $-f_{11}$，其余五个
+恒为零。因此 $\Lambda$ 和等于 $-2\Lambda(f_{11},0)=-2b_{11}$——由
+$\Lambda(f,s)=11^{s/2}(2\pi)^{-s}\Gamma(s)L(f,s)$ 与 $L(f_{11},0)=0$（根数 $+1$）有
+$\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$。乘上 (S) 的因子 $\pi$，按 (3) 的定向得
+$\int_{\gamma^-}\eta(x,y)=-2\pi b_{11}$，即一般情形的 (A)。$\blacksquare$
+独立佐证：数值 $\Lambda$ 和 50 位等于 $-2b_{11}$（`siegel_anchor_step8.py`）；沿
+$\gamma^-$ 反定向直接数值积分 $\eta(x,y)$ 得 $+0.9559686854216584787\ldots$（45 位，
+`siegel_anchor_step11.py`）。
+
+(C3) 的 regulator 一侧由此成为**已证定理**，不依赖 Bloch 菱形公式；余下的缺口——Boyd
+劈裂积分链与闭链 $C'=2\gamma^-$ 的等同——由 §9.2 的认证闭合。旧稿"K₂ 秩 1 +
+认证积分钉 $\lambda=1$"的循环论证已删除。
+
+**Bloch 菱形公式的地位（不使用）**：为明确文献状态，记录本计算对 Bloch 定理的含义。
+Lalín–Ramamonjisoa Thm. 6 转述的该定理称
+$$\int_{\gamma}\eta(f,g)=D_E\big((f)\diamond(g)\big)\qquad\text{(B)}$$
+对反不变**子群** $H_1(E,\mathbb Z)^-$ 的生成元 $\gamma$ 成立，$D_E$ 由 L–R Def. 5
+eq. (10) 给出（该级数与我们实现的级数逐项相同；两条曲线上 60 位的吻合是**非严格的
+数值核对**）。在本曲线（$\Delta<0$）上，(B) 的子群 factor-1 读法与锚定的已证值
+不相容：$D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$ 而
+$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$。相反，**一切**已核实的数据——上面的锚定
+定理、Brunault–Bertin 对 $\{x_W,y_W\}$ 的值（字典交叉验证段）、两个生成元上的直接
+数值积分（"因子 2——已解决"段）、以及 L–R 已证的 conductor-17 计算（那里子群与余商
+重合，指数引理 1）——都与 (B) 以因子 1 对**余商** $H_1/H_1^+$ 的生成元 $\bar\gamma$
+成立相容（余商正是 regulator 天然定义于其上的群；两端对 symbol $\mathbb Q$-线性
+延拓）；由指数引理 2，子群生成元的读数则恰为两倍，与观测一致。我们记录此为
+$\Delta<0$ 曲线上 Bloch 定理的显见正确表述——L–R Thm. 6 转述的子群陈述在该情形
+不精确（他们的论文从未用到该情形）——但再次强调：**本文没有任何地方依赖它**。exotic relation $D_E(2P)=\frac32D_E(P)$
 现同时引 Bertin 两篇：CRM Proc. Lecture Notes **36** (2004) 与
 J. Reine Angew. Math. **569** (2004) 175–188（后者即 Brunault 的参考文献 [10]）；
 证明出处为 CRM 版（**更正**维持：Crelle 版中此关系仍是猜想；zbMATH 书评与
@@ -510,9 +574,10 @@ $C\in\mathbb Z\setminus\{0\}$，故 $f=1$；因子-2 陈述则迫使 $C=1/2\noti
 我们已 60 位复现。k=0 的 $\diamond$-形式经**同一个余商生成元读法**进入：因子-1 陈述在
 conductor-11 曲线上同样成立——对余商生成元 $[\gamma^-_0]=[b]$ 有
 $\int_{[\gamma^-_0]}\eta=D_E((\cdot)\diamond(\cdot))$（数值验证见下段），而子群生成元
-$\gamma^-=a-2b=-2[b]$ 的读数恰为其两倍（指数引理 2）——这正解释了全部三个独立
+$\gamma^-=a-2b=-2[b]$ 的读数恰为其两倍（指数引理 2）——这正解释了全部三个**不同**
 tempered symbol 观测到的统一因子 2（见下段）。这不影响任一证明：conductor-17 论证在
-自己的曲线上自洽，conductor-11 论证经 conductor-17 已证实例把余商值锚定在 Bloch 定理上。
+自己的曲线上自洽，conductor-11 的证明自 rev4 起完全不使用 $\diamond$-形式（regulator
+由 Siegel 单位定理直接计算，见上锚定定理）；本段仅为文献状态的澄清。
 旧笔记"$\pi r=D_E(\diamond)$（因子 2，Touafek 转述）"与两组数据都不符，已弃用。
 **因子 2——已解决（指数现象；数据：`code/bertin_diamond.py` + `bertin_diamond.gp`，存档
 `notes/attack13-bertin-diamond.txt`；新验证 `code/verify_coinvariant.gp`，存档
@@ -536,14 +601,20 @@ Bloch 定理 (B) 因此以因子 1 评估**余商**生成元 $[\gamma^-_0]=[b]$ 
 子群与余商重合，同一计算以因子 1 闭合——那里有 L–R 已证定理佐证。三个 symbol 的统一
 因子 2 因此正是 $\Delta<0$ 指数，conductor-17 的因子 1 是其 $\Delta>0$ 对照。
 我们还在 conductor-11 曲线本身数值验证了余商读法（`code/verify_coinvariant.gp`，存档
-`notes/attack15-coinvariant.txt`）：沿平移以避开 $\eta(x_W,y_W)$ 极点的闭链积分，
+`notes/attack15-coinvariant.txt`）：沿平移以避开 $\eta(x_W,y_W)$ 极点的闭链积分，采用
+**中心格式**离散（$\log|\cdot|$ 取子区间中点采样、乘以精确辐角增量；经验实测收敛阶
+在 $N=500$ 到 $N=8000$ 的每次翻倍均为 $p=2.000000$），
 $$\textstyle\int_a\eta=0,\qquad
 \int_b\eta=-\pi b_{11}=D^E\big((x_W)\diamond(y_W)\big),\qquad
 \int_{a-2b}\eta=2\pi b_{11},$$
-前两个随细分以 $O(1/N)$ 收敛、Richardson 外推（$1/N$ 线性）与 $-\pi b_{11}$ 吻合到
-$10^{-6}$，最后一个到 $10^{-22}$；且 $-2\int_b\eta=\int_{a-2b}\eta$ 以同精度成立。
-特别地，因子-1 恒等式 (B) 对 $\{x_W,y_W\}$ 在余商生成元上成立，其子群生成元读数即
-加倍的 (A)。副产品：$D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ 精确成立，在 $K_2(E)$
+其中第一个积分**谱收敛**到 $0$（$N\ge2000$ 起低于 $10^{-75}$ 的工作精度下限——配对
+在 $H_1^+$ 上为零的直接体现）；第二、三个的原始误差如 $N^{-2}$ 衰减（$N=500$ 时
+$-1.4\times10^{-5}$、$-6.5\times10^{-6}$，$N=8000$ 时 $-5.4\times10^{-8}$、
+$-2.5\times10^{-8}$），最细一对（$N=4000/8000$）上做单步 $p=2$ Richardson 外推后，
+残差为 $-1.8\times10^{-15}$（对 $-\pi b_{11}$）与 $-9.2\times10^{-16}$（对
+$2\pi b_{11}$），且 $-2\int_b\eta-\int_{a-2b}\eta=4.6\times10^{-15}$（外推值上）。
+**我们强调这只是数值一致性核查，不是证明**。在此前提下，因子-1 恒等式 (B) 对
+$\{x_W,y_W\}$ 在余商生成元上成立，其子群生成元读数即加倍的 (A)。副产品：$D_E((X)\diamond(Y))=7\,D_E((x)\diamond(y))$ 精确成立，在 $K_2(E)$
 层面解释了 Bertin $m(C_1)=7b_{11}$ 中的系数 7。Touafek 转述的形式
 $\pi r=D_E(\diamond)$（其 Thm. 1）与因子-1、因子-2 两组数据都不相容，本文不用。
 
@@ -571,8 +642,7 @@ Samart 2023 仍将 (C3) 记录为开放恒等式，缺口不在 regulator 计算
 $C'=\tilde\gamma+\beta_0=2\gamma^-$ 认证闭合（§9.2）。
 
 **结论**：(C3) 的全部成分均已就位，且每一环要么是已证定理
-（tempered、modular units、Bertin Thm 6、Brunault (3.151)/(3.210)、
-Bloch Thm（k=1，Lalín 归一化）），
+（tempered、modular units、Brunault Siegel Thm. 1（regulator 锚定）），
 要么已被高精度数值 + 精确代数双重锁定（闭链 $C'=2\gamma^-$、除子、$D_E$ 值）。
 (C3) 由此从"开放数值猜想"降级为"已证定理的组装 + 书写级工作"。
 
@@ -637,11 +707,10 @@ $\eta=-\log|y|\,d\theta$ 沿 $C'$ 连续可积。
 $$\int_{\beta_0}\eta=2(J_1-J_2)=\int_{\tilde\gamma}\eta
 \qquad\Longrightarrow\qquad \int_{C'}\eta=2\int_{\tilde\gamma}\eta,$$
 其中 $J_1=\int_0^{\pi/2}\log|y_s|d\theta$、$J_2=\int_{\pi/2}^{\pi}\log|y_s|d\theta$。
-再由 §9.1 的锚定：$\{x,y\}$ 的 $\diamond$ 值 $\frac52D_E(P)=\pi b_{11}$
-（Brunault (3.151) $D_E(P)=\frac{2\pi}{5}b_{11}$ + Bertin exotic $D_E(2P)=\frac32D_E(P)$，
-均为定理），Bloch 因子-1 恒等式 (B) 给出余商值 $\int_{[b]}\eta(x,y)=\pm\pi b_{11}$，
-指数引理 2（本曲线 $\Delta=-11<0$，指数 2）把它翻倍，故
-$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$（(A)）。合成：
+再由 §9.1 的锚定（regulator 锚定定理）：$\{x,y\}$ 是 $X_1(11)$ 上的 modular units，
+Brunault 的 Siegel 单位 regulator 定理（JNT 163 (2016) Thm. 1，已证）经四步精确计算
+直接给出 $\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$（(A)；Siegel 表示 (P) + 七个 Manin
+符号 + $F_{\mathrm{total}}=-2f_{11}$ 精确恒等式）。合成：
 $$\int_{\tilde\gamma}\eta=\frac12\int_{C'}\eta=\pm 2\pi b_{11},$$
 故由结构恒等式 $I_{\mathrm{split}}=\frac{1}{2\pi}\int_{\tilde\gamma}\eta$（§6.3，已证）得
 $|I_{\mathrm{split}}|=b_{11}$。两个符号事实完成剩下的选择。**其一**，
@@ -701,11 +770,18 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
    `notes/attack14-sign-k0.txt`；所有值域包围——含未分离段上的凸包——完全在球算术内
    构造并验证，带程序化包含断言），而 $b_{11}=\Lambda(f_{11},2)>0$ 由 $s=2$ 处绝对收敛的
    Euler 乘积精确成立。
+7. **Siegel 锚定**：Siegel 表示 (P) 是 $\Gamma_1(11)$ 不变函数的精确恒等式（Kubert–Lang
+   阶的精确尖点除子匹配；常数为单位根，算到 70 位）；$\gamma^-$ 的 Manin 符号分解精确
+   （连分数）；权 2 形式恒等式 $F_{\mathrm{total}}=-2f_{11}$ 由精确 $q$ 展开算术证到
+   251 个系数、远超 Sturm 界 2（`siegel_anchor_step6/7/9`，存档
+   `notes/attack16-siegel-anchor.txt`）；尖点-扭点对应与闭链本原性对其先验整数值
+   60 位确认。
 
-主定理证明中唯一的非机器步骤是 §9.1 的 regulator 评估，它使用**单一归一化**下的 Bloch
-定理（Lalín–Ramamonjisoa Thm. 6 的表述），连同 Brunault Cor. 3.5.101（eq. (3.151)）的
-两个 $D_E$ 值；其 symbol 字典（Thm. 118，eq. (3.210)–(3.211)）只作交叉验证
-（§9.1 末"与 Brunault symbol 字典的交叉验证"段）。
+主定理证明中唯一的外部输入是 Brunault 的 Siegel 单位 regulator 公式（J. Number
+Theory **163** (2016) 542–569，Thm. 1——原文以 Rankin–Selberg 计算证明），连同函数
+方程求值 $\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$。Bloch 菱形定理、Bertin Thm. 6 与
+Brunault 的 symbol 字典**不**用于逻辑链（后者仅作交叉验证保留，§9.1 末"与 Brunault
+symbol 字典的交叉验证"段）。
 
 ## 10. 总结
 
@@ -714,14 +790,15 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
 3. $m(S_0)$ 对初等常数 PSLQ 阴性（界 $10^{10}$）。
 4. modular units 前提**成立**（$5A=O$ 精确验证）。
 5. **更正**：第一波"朴素 BMZ 被非扭边界阻断"的断言不成立——正确积分链 $\tilde\gamma$ 在 $H_1(E,\mathbb Z)^-$ 中拓扑闭合，与扭点无关（§8）。
-6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与单一归一化下的
-Bloch 定理 + Brunault (3.151) + Bertin exotic（均为定理；余商生成元上因子-1 锚定
-$\int_{[b]}\eta=\pm\pi b_{11}$，经指数引理（$\Delta<0$，指数 2）翻倍得
-$\int_{\gamma^-}\eta=\pm2\pi b_{11}$，§9.1），得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$
+6. **(C3) 证毕（完全严格，§9.2）**：闭链引理严格化——$\tilde\gamma$ 经小分支补偿弧闭化为 $C'=\tilde\gamma+\beta_0$（闭、反不变、整系数），比率先验整数；15 位匹配认证 $\mathrm{class}(C')=2\gamma^-$（更正第二波"绕数 $n=1$"的表述），并于第六波由 Arb 球算术铁证化（比值球含 $-2$、半径 $<1/2$）；配合 $\int_{\beta_0}\eta=\int_{\tilde\gamma}\eta$（精确积分代数）与 Brunault 的
+Siegel 单位 regulator 定理（JNT 163 (2016) 542–569，Thm. 1，已证）——$\{x,y\}$ 为
+modular units，四步精确计算直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{11}$（§9.1 锚定
+定理；不使用 Bloch 菱形定理）——得 $\int_{\tilde\gamma}\eta=2\pi b_{11}$
 为**严格等式**，$I_{\mathrm{split}}=b_{11}$ 证毕。
 7. 族结果（第四波完成 + rev2/rev3 精确化）：$\tilde n(k)$ 表 + **精确结构分析 + 数值证据**框架——环面交精确刻画（命题：交 ⟺ $k\in[-4,2]$）与模单位/temperedness 结构精确刻画（模单位仅 $k=0$；$k=1$ 为 tempered + 扭点支撑，足以支撑 conductor-17 论证）；$k\notin(-4,2)$ 时 Deninger 机制预期适用、$m(S_k)=r_k|L'(E_k,0)|$ 获数值确认（$k=2,3$ 确认，$k=-4,-5,-6$ **先预测后命中**，$r=2,1,\frac72,\frac14,\frac18$）；$-4<k<2$ 时恒等式证于 $k=0$（$\mathbb Z/5$）与 $k=1$（$\mathbb Z/4$，conditional on 归一化引理），$k=-1,-2,-3$ PSLQ 阴性（界 $10^8$ 内未发现）。**conductor 53 机制失效**：闭链空间精确一维、生成元周期由 $1/u_++1/u_-\equiv0$ 恒等于 0（环面上无反不变闭链可实现）+ $x,y$ 非 modular units（精确除子论证：53.a1 为 strong Weil curve，$X_0(53)$ 尖点全映到 $O$，而 $\operatorname{div}(x),\operatorname{div}(y)$ 的支撑含非扭生成元）——机制不适用，在缺乏精确候选公式下**留作开放**（§8.4）。
 8. **conductor 17（第七波，附录 A）**：同一方法再应用于 $k=1$——链结构逐字平行（$c=2\pi/3$、跳跃值 $y=\pm i$ 精确）、$\mathrm{class}(C')=\pm2\gamma^-$ Arb 铁证、regulator 侧由 Lalín–Ramamonjisoa 已发表定理闭环——Samart 的 $\tilde n(1)=b_{17}$ 类比猜想成为定理，**conditional on 附录 A 讨论的归一化引理**。
 9. **rev2/rev3（第十一、十二波）严格化**：环面交/模单位的精确刻画（§8.4）+ 反不变生成元本原性引理（§9.2）+ 符号的认证区间包围（`sign_certify.py`、`k1_sign_certify.py`）+ 认证计算定理（§9.2 末六项清单）+（第十二波）因子 2 的源头定位——反不变子群在余商 $H_1/H_1^+$ 中的指数（$\Delta<0$ 时指数 2；指数引理，§9.1），Bloch 定理重述为余商生成元的因子-1 恒等式 (B)，直接锚定 (A) 取代已删除的比例引理，并新增 `verify_coinvariant.gp` 直接数值验证（$\int_b\eta=-\pi b_{11}$ 因子 1、$\int_{a-2b}\eta=2\pi b_{11}$）；Brunault Thm. 118 字典降为交叉验证；k=1 材料移入附录 A 并标注 conditional；LICENSE 与 requirements.txt 落定（§11）。
+10. **rev4（第四轮审稿后）**：regulator 锚定再升级——证明不再使用 Bloch 菱形定理、Bertin Thm. 6 与 symbol 字典，改用 Brunault 已证的 Siegel 单位 regulator 公式（JNT 163 (2016) 542–569，Thm. 1）直接严格计算 $\int_{\gamma^-}\eta=-2\pi b_{11}$（§9.1 锚定定理：尖点↔扭点对应 $k/11\mapsto m_kA$、Siegel 表示 (P)、七个 Manin 符号、$F_{\mathrm{total}}=-2f_{11}$ 由 251 系数精确 $q$ 展开证明；存档 `notes/attack16-siegel-anchor.txt`，脚本 `siegel_anchor_step1`–`11`）；认证计算定理新增第 7 项记录其机器可验证部分，唯一外部输入 = Brunault Thm. 1 + 函数方程 $\Lambda(f_{11},0)=b_{11}$；`verify_coinvariant.gp` 改中心格式（实测收敛阶 $p=2$），明确标注为数值一致性核查。
 
 
 ## 附录 A. k=1（conductor 17）：同一方法的再应用（第七波；conditional）
@@ -792,6 +869,9 @@ gp -q winding.gp && gp -q dilog.gp && gp -q bertin_diamond.gp
 gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 gp -q verify_coinvariant.gp  # 余商 vs 子群生成元积分（∫_b=-πb11 因子 1；∫_{a-2b}=2πb11）
+python siegel_anchor_step11.py  # Siegel 锚定：最终值（§9.1 锚定定理）
+# 完整锚定链重建：siegel_anchor_step4.py -> step5.py -> step6.py
+#   -> step7.gp -> step9.py -> step8.py（step8 约 10–20 分钟）
 ```
 
 依赖（仓库根目录 `requirements.txt`）：Python ≥3.10 + mpmath + sympy；区间铁证另需
@@ -808,6 +888,7 @@ python-flint 0.9.0（Arb）。从干净 checkout 复现：`python -m pip install
 - `bertin-lalin-survey.pdf` — Bertin–Lalín 综述：全局图景与各 conductor 状态（先读这篇）
 - `boyd-pnwnt2015.pdf` — Boyd 2015 slides：猜想史 + $m(S_0)$ 原始数据；p. 28 载 (C3) 的 50 位验证（此前的公开纪录）
 - `brunault-these.pdf` — Brunault 博士论文：$X_1(11)$ 上 Beilinson 定理显式化，(C1) 的证明
+- `brunault-siegel.pdf` — Brunault：Siegel 单位的 regulator 及应用（J. Number Theory **163** (2016) 542–569，arXiv:1504.08127）：Thm. 1 的 Siegel 单位 regulator 公式——rev4 起主定理的锚定（§9.1 锚定定理）
 - `zudilin-regulator.pdf` — Zudilin：BMZ regulator 公式（证明武器）
 - `samart2023.pdf` — Samart：开放猜想 (C3) 的明确陈述（其 eq. (4.1)）+ conductor 19 的成功范例
 - `lalin-samart-zudilin-cond21.pdf` — conductor 21：half-Mahler 方法范例

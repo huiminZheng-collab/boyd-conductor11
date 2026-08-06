@@ -1,0 +1,132 @@
+attack16: Siegel-unit regulator 锚定 —— Brunault Theorem 1 严格计算 ∫_{γ⁻}η(x,y)
+================================================================================
+日期: 2026-08-05/06   参考文献: F. Brunault, "Regulators of Siegel units and
+applications", arXiv:1504.08127 (文本: notes/txt/brunault-siegel.txt,
+UTF-8 版: notes/txt/brunault-siegel-utf8.txt)
+
+最终结论
+--------
+∫_{γ⁻} η(x,y) = ±2π·b11,  b11 = L'(E11a3,0) = m(P)
+             = 0.15214714172591804948622729747863449562814358916422612280989...
+
+取 γ⁻ = {0,3/11} − {0,8/11}（反不变闭链，周期 wim）及 step8/9 的符号链定向，
+值为  −2π·b11 = −0.955968685421658478774772171560869080502937592969318586963175
+仓库 proof-n1.md 的独立直接数值积分（γ̃ 定向相反）为 +0.9559686854216584787...，
+绝对值在 45 位上一致（step11 输出: 差 ~3e-45，即 repo 值的打印精度截断）。
+
+即: Brunault Siegel-unit regulator 定理的严格机器计算, 以 45+ 位精度确认了
+仓库结论 ∫_{γ⁻}η = ±2πb11。
+
+★ π 归一化悬念的裁定（本 attack 的关键插曲）
+----------------------------------------------
+PDF 文本抽取（pdftotext）把论文中所有行内 π 全部吞掉。直接后果：
+  · 抽取文本的 Theorem 1 读作  ∫₀^{i∞}η(g_u,g_v) = Λ*(e_{a,d}e_{b,−c}+e_{a,−d}e_{b,c},0)
+  · LaTeX 源码（arXiv e-print, reg_siegel.tex 第 91 行）的真实陈述是
+        ∫₀^{i∞} η(g_u,g_v) = π · Λ*(e_{a,d}e_{b,−c} + e_{a,−d}e_{b,c}, 0)
+  · 同理源码第 598 行 m(P_k) = (1/(2π))∫_{γ_k}η（抽取版显示成 1/2），
+    第 626 行 ∫_{γ_{−1}}η = πL'(4f_{−1},0)。
+我的 Λ 实现本身完全正确——它 45 位复现了论文 cond-14 的中间量 Λ 和 = 4L′(E14,0)；
+缺的只是 Theorem 1 陈述里的这个 π。π 归属由三个互相独立的方法在 60 位上钉死
+（code/siegel_anchor_step11.py）：
+  (1) Jensen 直接算 Mahler 测度:  m(P_{−1}) = 0.45496244602470221578...
+      = 2L'(E14a4,0)（Boyd/Mellit 恒等式, 差 2e-61）;
+  (2) Deninger 路径上标准 η = log|x|darg y − log|y|darg x 的直接积分
+      （x=e^{iθ} 参数化, log|x|=0 ⟹ η = −log|y+|dθ）:
+      ∫_{γ_{−1}}η = −2.85861335618089462411... = −2π·m = −4πL′;
+  (3) 我的 Λ 链（step5）总和 0.90992489204940443157... = 4L′, 乘 π 后
+      = 2.85861335618089462411..., 与 (2) 差 1.2e-60, 与论文源码 πL'(4f,0) 一致。
+注: 为此写的直接路径积分实验 code/siegel_anchor_step10.py 自身有缺陷
+（cond-14 得 −2.3842, 与 (1)(2)(3) 全矛盾; 疑似 t→0 端点/S-变换处理错误），
+已弃用, 仅存档, 不要引用其数值。
+
+证明链（每步均可复现）
+--------------------
+E = ellinit([0,-1,1,0,0]) = 11.a3 = X₁(11);  扭点 A=(0,0)（5 阶）, z(A)=3w1/5;
+w1 = 6.346046521397767..., wim = w1−2w2 = 2.917633233876990...i。
+Boyd 函数（code/kappa_exact.py 的有理映射, P=[X,Y]）:
+  x_B(P) = (X+Y)/(X−1),  y_B(P) = ((X−1)³−(X+Y)(Y+1))/(X−1)²
+  div(x_B) = [A]+[2A]−[O]−[3A],  div(y_B) = 3[2A]−2[3A]−[O]。
+
+Step 1-2 (code/siegel_anchor_step1.gp, step2.gp): 除子/扭点/周期 PARI 复核。
+
+Step 3-4 (step3.py, step4.py): 尖点↔扭点对应。Abel 分段路径积分(60 位,
+交叉验证 + L(f,1) 检验): 模参数化 π: X₁(11)→E,  π(k/11) = m_k·A,
+m = (0,2,1,4,3) for k=(1,2,3,4,5);  π(i∞)=π(1/11)=O（因 [[1,0],[11,1]]∈Γ₁(11)）。
+⟹ div(x∘π) 在 k/11 的阶 = (−1,+1,+1,0,−1),  div(y∘π) = (−1,+3,0,0,−2)。
+
+Step 5 (step5.py): sanity check —— 论文 §5.1 的 conductor-14 例完整复算:
+u = g₅g₆/(g₁g₂), v = −g₃g₅g₆²/(g₁²g₂g₄), Deninger 路径 {2/7,−2/7} 的
+4 个 Manin 符号的 Λ 总和 = 0.90992489204940443157992925809053 = 4L'(14a4,0)
+（45 位一致; 乘 π 即论文源码的 ∫_{γ_{−1}}η = πL'(4f_{−1},0) = 2.8586133561...）。
+同时确认: Manin 符号解释是 {α0,αi∞}（非 {0,αi∞}）, 且
+Λ(e_{0,d}e_{b,0}+e_{0,−d}e_{b,0},0)=0 的 Part B 也通过。
+
+Step 6-7 (step6.py + step6_out.json, step7.gp): x,y 的 Siegel-unit 精确表示。
+X(11) 有 60 个尖点 (r,t)∈P¹(Z/11)/±;  Kubert–Lang: ord_{(r,t)} g_{a,b}
+= (11/2)B₂({(ar+bt)/11}),  有理尖点拉回分歧 e=11。60×60 有理线性代数解出
+行均匀结构（记 G_a = Π_{b=0}^{10} g_{a,b}）:
+      x∘π = −G₄G₅/G₂²,        y∘π = G₁G₅³/(G₂³G₃)
+（指数向量 ρ={2:−2,4:1,5:1}, σ={1:1,2:−3,3:−1,5:3}）。
+step7.gp 在 4 个 τ 点 70 位验证: 乘积恒等式成立, 常数 C_x = −1, C_y = +1 精确
+（logCx = iπ, logCy = 0, 实部全 0）⟹ log|C| 修正项消失; 且对 Γ₀(11) 符号
+Du=Dv=0, darg 修正严格为 0。
+
+Step 8-9 (step8.py, step9.py + step9_out.json): γ⁻ 的模符号分解与主求值。
+γ⁻ = {0,3/11} − {0,8/11}（反不变生成元, 3/11~8/11 on X₁(11)）。连分数分解:
+  {0,3/11} = +[[1,0],[3,1]] − [[1,1],[3,4]] + [[3,1],[11,4]]
+  {0,8/11} = +[[1,0],[1,1]] − [[1,2],[1,3]] + [[3,2],[4,3]] − [[3,8],[4,11]]
+Theorem 1 配对 u=(a,b),v=(c,d):  ∫₀^{i∞}η(g_u,g_v) = πΛ(e_{a,d}e_{b,−c}+e_{a,−d}e_{b,c},0)。
+step9（精确分数系数, M₂(Γ₀(11)) 检验 λ=−2,μ=0, 251 个系数全等）:
+      F_total = −2·f₁₁   （精确等式!）
+只有符号 [[1,0],[3,1]] 与 [[1,2],[1,3]] 的 F_sym = −f11 非零, 其余 5 个 ≡0
+（两个 Γ₀(11) 符号因 EΣ_p 奇性严格为 0）。
+step8（数值, NMAX=200, e/f 系数表 + 配对卷积 + W-分裂）: 7 符号 Λ 和
+      = −0.3042942834518360989724545949572689912562871783 = −2·b11（50 位）
+逐符号: [[1,0],[3,1]] 与 [[1,2],[1,3]] 各 −b11, 其余 ~1e-50。
+乘 Theorem 1 的 π:  ∫_{γ⁻}η = π·(−2b11) = −2πb11。∎
+
+技术要点备查
+------------
+· α₀(e): a=b=0: 0;  a=0,b≠0: 1/2−{b/N};  a≠0,b=0: 1/2−{a/N};  a,b≠0: 0
+  （step5 Part A 用 Lemma 13 数值钉死 40 位）。α₀(f): 0 /
+  ½(1+ζᵇ)/(1−ζᵇ) / ½(1+ζᵃ)/(1−ζᵃ) / ½两者和。
+· Lemma 13: W_{N²}(e_{a,b}) = −(i/N)f_{a,b}。注意 Brunault 的 W 带 i^k 因子,
+  k=2 时与通常 Fricke 反号: W₁₁f₁₁ = +f₁₁（常用约定 −1）。
+· Λ(F,0) 的 W-分裂公式（M=level, c=1/√M）:
+  Λ = ΣAₙE₁(2πnc) + ΣBₙe^{−2πnc}(√M/(2πn)+M/(2πn)²) − b₀/2。
+  Λ(f₁₁,0) = b11（45 位验证, Brunault W 约定）。
+· Lemma 5: ∫₀^{i∞}darg g_{a,b} = 0（a=0 或 b=0）, 否则 2π({a/N}−½)({b/N}−½)。
+· g_{a,b}(ατ) = w·g_{(a,b)α}(τ), w 单位根, 对 η 无影响。
+
+坑（后续 attack 引以为戒）
+--------------------------
+1. pdftotext 会吞行内 π——本次几乎导致错误的最终结论。凡从抽取文本读公式,
+   关键常数必须对照 LaTeX 源码（arXiv e-print）或独立数值实验。
+2. gp 的 mseval 不等于 X₁(11) 的 Abel–Jacobi（attack 早期弯路）。
+3. I_1=0 类恒等式必须区分 Γ₁ 真实性与 Γ₀ 投影。
+4. Boyd 的 x ≠ Weierstrass 的 X（有理映射见上）。
+5. Brunault 的 Atkin–Lehner W 与通常 Fricke 反号（W₁₁f₁₁=+f₁₁）。
+6. 行均匀 Siegel 表示使 darg 修正项恒消失（Du=Dv=0），大幅简化计算。
+7. 任务书引用的 b11 数字串从第 31 位起为转录错误; 正确值以仓库
+   attack13 三重认证值为准（见上）。
+
+文件清单（全部新建, 未改动任何既有文件）
+----------------------------------------
+code/siegel_anchor_step1.gp    除子/周期/扭点 PARI 复核
+code/siegel_anchor_step2.gp    扭点 z(A)=3w1/5 等
+code/siegel_anchor_step3.py    Abel 积分准备
+code/siegel_anchor_step4.py    尖点↔扭点 m=(0,2,1,4,3)（60 位）
+code/siegel_anchor_step5.py    cond-14 sanity check（45 位通过）
+code/siegel_anchor_step6.py    Kubert–Lang 60×60 线性代数 → Siegel 表示
+code/siegel_anchor_step6_out.json
+code/siegel_anchor_step7.gp    乘积恒等式 70 位验证（C_x=−1, C_y=+1）
+code/siegel_anchor_step8.py    7 符号 Λ 主求值（= −2b11, 50 位）
+code/siegel_anchor_step9.py    F_total = −2f11 精确证明（251 系数）
+code/siegel_anchor_step9_out.json
+code/siegel_anchor_step10.py   ⚠ 直接 η 积分实验, 代码有缺陷, 数值不可信, 仅存档
+code/siegel_anchor_step11.py   ★ 最终验证: π 裁定 + 终值对比（60 位全过）
+notes/txt/brunault-siegel-utf8.txt   论文文本 UTF-8 版
+notes/attack16-siegel-anchor.txt     本存档
+
+复现: cd boyd-conductor11 && .venv/Scripts/python.exe code/siegel_anchor_step11.py
+（依赖 gp 在 PATH; 依次跑 step4→5→6→7.gp→9→8 可重建全链, step8 约 10-20 分钟。）
