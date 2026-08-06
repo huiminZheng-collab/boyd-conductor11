@@ -1,7 +1,7 @@
 \documentclass[11pt]{amsart}
 
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{url}
@@ -32,8 +32,10 @@
 conjecture:\\ proof of the split-integral identity \textup{(C3)},
 with an exact structural analysis of the family $S_k$}
 
-\author{Zheng Huimin}
-\address{Anhui Science and Technology University}
+\author{Huimin Zheng}
+\address{College of Information and Network Engineering,
+Anhui Science and Technology University,
+Fengyang, Anhui 233100, P.~R.~China}
 \email{zhhm@ahstu.edu.cn}
 
 \subjclass[2020]{Primary 11R06, 11G40; Secondary 11G05, 11G55, 65G30}
@@ -84,6 +86,18 @@ interval arithmetic.
 \end{abstract}
 
 \maketitle
+
+%=====================================================================
+\section*{Declaration on the use of AI tools}
+The research reported in this article --- including the computational
+exploration, the discovery of the proof strategy, the machine-certified
+verifications, and the preparation of the manuscript --- was carried out
+by the author with the assistance of the AI system \emph{Kimi}
+(Moonshot AI). All mathematical content, including every proof and
+every certified computation, has been checked and verified by the
+author, who takes full responsibility for the correctness and integrity
+of the article. All certification scripts are available for independent
+verification (see Section~\ref{sec:cert} and Appendix~\ref{app:code}).
 
 \tableofcontents
 
@@ -2014,25 +2028,6 @@ python siegel_anchor_step14.py  # exact constants, D_U/D_V, cusp table
 #   (step10 is a discarded defective experiment and is not part of the chain)
 \end{verbatim}
 }
-
-%=====================================================================
-\section*{Declaration of AI assistance}
-Large language model tools were used extensively in this project: the AI
-agent Kimi Code CLI (Moonshot AI) carried out, under the author's
-direction, most of the computational work (writing and running the scripts
-in Appendix~\ref{app:code}, including the certified interval-arithmetic and
-exact Sturm/Smith-normal-form computations), the retrieval and verification
-of the literature, and the drafting and revision of the manuscript; AI
-agents (Kimi and GPT) were also used as adversarial reviewers of successive
-drafts, which led to the detection and correction of one incorrect claim in
-an earlier version of the archive. The research direction, the choice of
-methods, and all key mathematical decisions are the author's, as is the
-final responsibility for the content. No AI tool is an author of this
-paper. Every computational statement on which the proof relies is certified
-by exact or interval arithmetic and is independently reproducible from the
-archived scripts, as described in Section~\ref{sec:cert} and
-Appendix~\ref{app:code}; two of the key scripts were also rerun
-independently by the referee.
 
 %=====================================================================
 \begin{thebibliography}{99}
