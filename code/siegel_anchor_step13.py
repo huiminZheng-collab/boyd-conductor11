@@ -33,7 +33,7 @@ import math
 import os
 import subprocess
 
-from sympy import Matrix
+from sympy import Matrix, gcdex
 from sympy.matrices.normalforms import smith_normal_decomp
 
 N = 11
@@ -91,12 +91,17 @@ NCUSP = len(CUSP_IDS)
 cusp_label = {c: k for k, c in enumerate(CUSP_IDS)}
 cusp_of = [cusp_label[c] for c in cusp_of]
 
-# a point a/c of P^1(Q) -> cusp label: bottom-row coset of any matrix with
-# second column... rather: cusp of g*oo has bottom row of g; cusp a/c =
-# cusp of matrix (a b; c d) -> coset (c,d).
+# a point a/c of P^1(Q) -> cusp label: cusp of g*oo has bottom row of g;
+# cusp a/c = cusp of matrix g = (a b; c d) in SL_2(Z) -> coset (c,d).
+# The second bottom-row entry d is a Bezout coefficient (a*d - b*c = 1),
+# i.e. d = a^{-1} (mod c) -- NOT a itself (fixed after round-5 review).
 def cusp_of_point(a, c):
-    return cusp_of[IDX[canon(c, a)]]
-    # matrix (a b; c d) has bottom row (c,d); gcd(a,c)=1 => (c,d)!=(0,0) mod 11
+    u, v, h = gcdex(a, c)          # u*a + v*c = h (sympy order!)
+    assert h == 1 and math.gcd(a, c) == 1
+    d, b = u, -v                   # det (a b; c d) = a*u + v*c = 1
+    assert a * d - b * c == 1
+    return cusp_of[IDX[canon(c, d)]]
+    # gcd(a,c)=1 => (c,d)!=(0,0) mod 11
 
 # ---------------------------------------------------------------- boundary
 # d(x_i) = [g_i 0] - [g_i oo];  g 0 = gS oo  =>  d(e_i) = cusp(S i) - cusp(i)

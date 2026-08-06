@@ -112,7 +112,7 @@ DU = SU3 - SU8
 DV = SV3 - SV8
 print("\n  D_U/(2*pi) = %s    D_V/(2*pi) = %s" % (DU, DV))
 check("D_V = 0 exactly", DV == 0, "D_V = 2pi*(%s)" % DV)
-check("D_U is an integral multiple of 2pi (closed-cycle winding)", DU.denominator == 1,
+check("D_U = 2*pi exactly (winding number 1)", DU == 1,
       "D_U = 2pi*(%s)  -- NONZERO: archive claim 'Du=0' was wrong" % DU)
 
 # --------------------------------------------------------------------------

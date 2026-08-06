@@ -503,18 +503,22 @@ $P_v$——以 $v\in(\mathbb Z/11\mathbb Z)^\times/\{\pm1\}$ 标记——列为 
 （(3.152)–(3.153)）：$P_1=\infty$、$P_2=(1,0)$、$P_3=(0,-1)$、$P_4=(0,0)$、
 $P_5=(1,-1)$，满足 $P_{4^a}=a\,P_4$，$P_4$ 生成
 $E(\mathbb Q)\cong\mathbb Z/5\mathbb Z$。对 $A=(0,0)$ 用群律 $2A=(1,-1)$、
-$3A=(1,0)$、$4A=(0,-1)$ 读作 $P_v=n(v)A$，$n=(0,3,4,1,2)$。标签换算是**逆**字典：
-$P_v$ 是尖点 $k/11$ 当且仅当 $v\equiv k^{-1}\pmod{11}$（相差 $\pm1$）。具体地，锚点
-$P_1=i\infty=1/11$（因
-$\big(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\big)\in\Gamma_1(11)$）加上 diamond
-算子的等变作用（其在五个有理尖点上传递）把字典限制到 $v\equiv k^{\pm1}$，再由下面的
-精确除子阶匹配选定逆约定，即得 (M)。故 $x\circ\pi,y\circ\pi$ 的尖点阶为
+$3A=(1,0)$、$4A=(0,-1)$ 读作 $P_v=n(v)A$，$n=(0,3,4,1,2)$。标签换算是**逆**字典，且由
+Brunault 的定义 $P_v=\langle v\rangle i\infty=[0,v]$ **直接**得出（rev6；取代旧稿
+"锚点 + diamond 传递性 + 除子阶选定"的论证——审稿人指出其有循环外观：表示式选定
+尖点映射、尖点映射又证表示式）：矩阵
+$\gamma=\big(\begin{smallmatrix}k&b\\11&d\end{smallmatrix}\big)\in\mathrm{SL}_2(\mathbb Z)$
+表示尖点 $k/11$，行列式 $kd-11b=1$ 给出 $d\equiv k^{-1}\pmod{11}$，故 $k/11$ 的底行
+标签为 $[0,d]=[0,k^{-1}]$，即
+$$k/11\;=\;P_{k^{-1}}\qquad\text{(L)}$$
+（相差 $\pm1$ 约定）——无任何除子比较参与此鉴定；结合上面的群律读数，(L) 即给出
+(M)。故 $x\circ\pi,y\circ\pi$ 的尖点阶为
 $$\operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
 \operatorname{ord}_{k/11}(y\circ\pi)=(-1,+3,0,0,-2)$$
 （$k=1,\dots,5$），与本小节开头的精确除子完全吻合；反过来，这些阶与 (2) 的
-Kubert–Lang 阶合起来**唯一**迫使元组 (M)——一条独立的精确推导。尖点像的 60 位
-Abel 积分计算与两种推导都一致，仅作核查（`siegel_anchor_step14.py`，存档
-`notes/attack17-constants.txt`）。
+Kubert–Lang 阶合起来**唯一**迫使元组 (M)——一条独立的精确核查，不参与上述鉴定。
+尖点像的 60 位 Abel 积分计算与两种推导都一致，仅作核查（`siegel_anchor_step14.py`，
+存档 `notes/attack17-constants.txt`）。
 **(2) Siegel 表示与常数**：记 $G_a:=\prod_{b\bmod 11}g_{a,b}$；用 Kubert–Lang 尖点阶
 $\operatorname{ord}_{(r,t)}g_{a,b}=\tfrac{11}{2}B_2(\{(ar+bt)/11\})$（$X(11)$ 的 60 个
 尖点上），精确有理线性代数给出
@@ -531,7 +535,8 @@ $\kappa_{4/11}(U)=\kappa_{3/11}(V)=-1$），而 $x(4A)=1$、$y(A)=-1$，故
 $$C_x=\frac{x(4A)}{\kappa_{4/11}(U)}=\frac{1}{-1}=-1,\qquad
 C_y=\frac{y(A)}{\kappa_{3/11}(V)}=\frac{-1}{-1}=+1$$
 （`siegel_anchor_step14.py`）。
-**辐角周期与一则勘误（$D_U=2\pi$）**：regulator 积分其实不依赖常数的具体值——由
+**辐角周期与一则勘误（$D_U=2\pi$）**：因常数的模为 $1$，其对 regulator 积分的修正
+消失——由
 $\eta(CU,C'V)=\eta(U,V)+\log|C|\,d\!\arg V-\log|C'|\,d\!\arg U$，
 $$\int_{\gamma^-}\eta(x\circ\pi,y\circ\pi)=\int_{\gamma^-}\eta(U,V)
 +\log|C_x|\,D_V-\log|C_y|\,D_U,\qquad
@@ -592,7 +597,7 @@ $\frac{2}{12}[\mathrm{PSL}_2(\mathbb Z):\bar\Gamma_1(121)]
 （指数为 $\frac{121^2}{2}(1-\frac1{121})=7260$，因偶数权下 $-I$ 作用平凡）。精确有理
 $q$ 展开算术（高次 $e$ 系数为整数、$\alpha_0(a,b)\in\frac1{22}\mathbb Z$，卷积全部
 精确求值，并与旧的 251 个系数交叉吻合）给出 $a_n(D)=0$ 对所有 $0\le n\le2420$
-成立——sharp 界 $1210$ 的两倍，也超出保守的 $\mathrm{SL}_2$ 指数约定
+成立——sharp 界 $1210$ 的两倍，特别地贯穿保守的 $\mathrm{SL}_2$ 指数约定
 $\frac{2}{12}\cdot14520=2420$（`siegel_anchor_step12.py`，存档
 `notes/attack17-membership.txt`）。由 Sturm 定理 $D=0$，即作为模形式
 $$F_{\mathrm{total}}=-2f_{11}$$
@@ -625,9 +630,12 @@ $\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}$。相反，**一切**已核实的数�
 数值积分（"因子 2——已解决"段）、以及 L–R 已证的 conductor-17 计算（那里子群与余商
 重合，指数引理 1）——都与 (B) 以因子 1 对**余商** $H_1/H_1^+$ 的生成元 $\bar\gamma$
 成立相容（余商正是 regulator 天然定义于其上的群；两端对 symbol $\mathbb Q$-线性
-延拓）；由指数引理 2，子群生成元的读数则恰为两倍，与观测一致。我们记录此为
-$\Delta<0$ 曲线上 Bloch 定理的显见正确表述——L–R Thm. 6 转述的子群陈述在该情形
-不精确（他们的论文从未用到该情形）——但再次强调：**本文没有任何地方依赖它**。exotic relation $D_E(2P)=\frac32D_E(P)$
+延拓）；由指数引理 2，子群生成元的读数则恰为两倍，与观测一致。我们中性地记录此为
+一则**归一化/格偏差**——子群生成元 vs 余商生成元，由指数引理 2 的指标 $2$
+相联——现有数据支持余商读法；这究竟反映 L–R Thm. 6 转述的子群陈述（他们的论文
+从未用到该陈述）的误归一化，还是我们未能重建的约定，**留作文献公开问题**（rev6：
+旧稿"转述定理在该情形不精确"的断言已撤回）。再次强调：本文没有任何地方依赖其
+答案。exotic relation $D_E(2P)=\frac32D_E(P)$
 现同时引 Bertin 两篇：CRM Proc. Lecture Notes **36** (2004) 与
 J. Reine Angew. Math. **569** (2004) 175–188（后者即 Brunault 的参考文献 [10]）；
 证明出处为 CRM 版（**更正**维持：Crelle 版中此关系仍是猜想；zbMATH 书评与
@@ -876,6 +884,7 @@ modular units，四步精确计算直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{1
 9. **rev2/rev3（第十一、十二波）严格化**：环面交/模单位的精确刻画（§8.4）+ 反不变生成元本原性引理（§9.2）+ 符号的认证区间包围（`sign_certify.py`、`k1_sign_certify.py`）+ 认证计算定理（§9.2 末六项清单）+（第十二波）因子 2 的源头定位——反不变子群在余商 $H_1/H_1^+$ 中的指数（$\Delta<0$ 时指数 2；指数引理，§9.1），Bloch 定理重述为余商生成元的因子-1 恒等式 (B)，直接锚定 (A) 取代已删除的比例引理，并新增 `verify_coinvariant.gp` 直接数值验证（$\int_b\eta=-\pi b_{11}$ 因子 1、$\int_{a-2b}\eta=2\pi b_{11}$）；Brunault Thm. 118 字典降为交叉验证；k=1 材料移入附录 A 并标注 conditional；LICENSE 与 requirements.txt 落定（§11）。
 10. **rev4（第四轮审稿后）**：regulator 锚定再升级——证明不再使用 Bloch 菱形定理、Bertin Thm. 6 与 symbol 字典，改用 Brunault 已证的 Siegel 单位 regulator 公式（JNT 163 (2016) 542–569，Thm. 1）直接严格计算 $\int_{\gamma^-}\eta=-2\pi b_{11}$（§9.1 锚定定理：尖点↔扭点对应 $k/11\mapsto m_kA$、Siegel 表示 (P)、七个 Manin 符号、$F_{\mathrm{total}}=-2f_{11}$ 由 251 系数精确 $q$ 展开证明；存档 `notes/attack16-siegel-anchor.txt`，脚本 `siegel_anchor_step1`–`11`）；认证计算定理新增第 7 项记录其机器可验证部分，唯一外部输入 = Brunault Thm. 1 + 函数方程 $\Lambda(f_{11},0)=b_{11}$；`verify_coinvariant.gp` 改中心格式（实测收敛阶 $p=2$），明确标注为数值一致性核查。
 11. **rev5（第五轮审稿后）**：锚定证明的三处严格化，均沿审稿人建议的路线以精确论证修复——(i) $F_{\mathrm{total}}=-2f_{11}$ 的成员性：Brunault 的 Lemma 11 给出 $e_{a,b}\in M_1(\Gamma_1(121))$（level 是 $N^2$ 而非 $N$），故成员性**无条件**成立；Sturm 界 $\frac{2}{12}\cdot7260=1210$，精确有理 $q$ 展开算到 $q^{2420}$（sharp 界两倍）全为零 ⟹ 恒等式严格成立；逐符号断言（两个 $-f_{11}$、五个恒零）同法证掉（`siegel_anchor_step12.py`，`notes/attack17-membership.txt`）；(ii) $\gamma^-$ 的本原性：$\pm\Gamma_1(11)$（PSL 指数 60）Manin 符号 + Smith 正规形的纯整数线性代数——$H_1(X_1(11),\mathbb Z)\cong\mathbb Z^2$ 无挠、$H_1^-=\mathbb Z\cdot(-1,1)$、七符号链坐标 $(1,-1)$ 恰为生成元 $\pm1$ 倍（step13，`notes/attack17-primitivity.txt`）；(iii) 常数与尖点表精确化：$C_x=-1$、$C_y=+1$ 由阶 0 尖点求值 + $S,T$ 变换律的单位根首项系数精确确定，$m=(0,2,1,4,3)$ 由 Brunault 博士论文 (3.152)–(3.153) 精确导出（逆标签约定 $v\equiv k^{-1}\bmod 11$）并有 Kubert–Lang 阶唯一解的独立推导（step14，`notes/attack17-constants.txt`）；**勘误**：精确计算揭示旧存档"$D_U=D_V=0$"对 $U$ 错误——$D_U=2\pi$（绕数 1），修正项靠 $\log|C_x|=\log|C_y|=0$ 精确消失，`attack16` 存档已加勘误段；认证计算定理第 7 项重写；step10 标注为弃用缺陷实验。
+12. **rev6（正式第五轮报告：accept subject to minor revision）**：一处必修小改——尖点标签换算改为由 Brunault 的定义 $P_v=\langle v\rangle i\infty=[0,v]$ **直接**证明（$\gamma=\big(\begin{smallmatrix}k&b\\11&d\end{smallmatrix}\big)\in\mathrm{SL}_2(\mathbb Z)$ 表示 $k/11$，$\det=kd-11b=1$ ⟹ $d\equiv k^{-1}\bmod 11$，新公式 (L)），撤除有循环外观的"锚点 + diamond 传递性 + 除子阶选定"论证，Kubert–Lang 阶匹配降级为独立核查；代码层：`step13.py` 的 `cusp_of_point` helper 修正为真 Bézout 系数 $d=a^{-1}\bmod c$（gcdex，断言 $\det=1$；两个受测尖点恰落同一尖点轨道，修复后重跑 17 项全 PASS、存档结果逐字不变），`step14.py` 断言加强为 $D_U=1$（$2\pi$ 单位，绕数 1）；措辞三项：常数修正句改"模为 1 故修正消失"（因 $D_U=2\pi\neq0$，旧句"不依赖这些值"不准确）、"beyond the conservative bound" 改 "in particular through"、Bloch 段结尾中性化为"归一化/格偏差 + 留作文献公开问题"（撤回"转述定理不精确"的断言）。审稿人已在独立副本重跑 step12/13，复现了存档结果。
 
 
 ## 附录 A. k=1（conductor 17）：同一方法的再应用（第七波；conditional）

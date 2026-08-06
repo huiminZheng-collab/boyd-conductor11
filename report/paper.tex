@@ -1085,14 +1085,20 @@ $v\in(\Z/11\Z)^\times/\{\pm1\}$, as points of $E$
 $P_3=(0,-1)$, $P_4=(0,0)$, $P_5=(1,-1)$, with $P_{4^a}=a\,P_4$ and $P_4$
 a generator of $E(\Q)\cong\Z/5\Z$.  With the group law $2A=(1,-1)$,
 $3A=(1,0)$, $4A=(0,-1)$ for $A=(0,0)$ this reads $P_v=n(v)A$,
-$n=(0,3,4,1,2)$.  The label conversion is the \emph{inverse} one:
-$P_v$ is the cusp $k/11$ if and only if $v\equiv k^{-1}\pmod{11}$ up to
-$\pm1$.  Indeed, the anchor $P_1=i\infty=1/11$ (since
-$\bigl(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\bigr)\in\Gamma_1(11)$)
-together with equivariance under the diamond operators, which act
-transitively on the five rational cusps, restricts the dictionary to
-$v\equiv k^{\pm1}$, and the exact divisor-order match below selects the
-inverse dictionary; this gives \eqref{eq:mtable}.  Hence
+$n=(0,3,4,1,2)$.  The label conversion is the \emph{inverse} one, and it
+follows directly from Brunault's definition
+$P_v=\langle v\rangle i\infty=[0,v]$: a matrix
+$\gamma=\bigl(\begin{smallmatrix}k&b\\11&d\end{smallmatrix}\bigr)
+ \in\mathrm{SL}_2(\Z)$
+represents the cusp $k/11$, and the determinant $kd-11b=1$ gives
+$d\equiv k^{-1}\pmod{11}$; hence the bottom-row label of $k/11$ is
+$[0,d]=[0,k^{-1}]$, that is,
+\begin{equation}\label{eq:labelconv}
+  k/11 \;=\; P_{k^{-1}}
+\end{equation}
+up to the $\pm1$ convention.  No divisor comparison enters this
+identification.  Together with the group-law reading above,
+\eqref{eq:labelconv} gives \eqref{eq:mtable}.  Hence
 $x\circ\pi,y\circ\pi$ have cusp orders
 \[
   \operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
@@ -1101,7 +1107,8 @@ $x\circ\pi,y\circ\pi$ have cusp orders
 for $k=1,\dots,5$, matching exactly the divisors displayed at the
 beginning of this subsection; conversely, these orders together with the
 Kubert--Lang orders of \emph{(2)} force the tuple \eqref{eq:mtable}
-uniquely, an independent exact derivation.  The $60$-digit Abel-integral
+uniquely, an independent exact check that does not enter the
+identification above.  The $60$-digit Abel-integral
 evaluation of the cusp images agrees with both derivations and is used
 only as a check (\texttt{siegel\_anchor\_step14.py},
 \texttt{notes/attack17-constants.txt}).
@@ -1131,7 +1138,8 @@ $x(4A)=1$, $y(A)=-1$, hence
   C_y=\frac{y(A)}{\kappa_{3/11}(V)}=\frac{-1}{-1}=+1
 \]
 (\texttt{siegel\_anchor\_step14.py}).  In fact the regulator integral
-does not even depend on these values: since
+Because the constants have modulus one, their correction to the
+regulator integral vanishes: since
 $\eta(CU,C'V)=\eta(U,V)+\log|C|\,d\!\arg V-\log|C'|\,d\!\arg U$, one has
 $\int_{\gamma^-}\eta(x\circ\pi,y\circ\pi)=\int_{\gamma^-}\eta(U,V)
  +\log|C_x|\,D_V-\log|C_y|\,D_U$ with $D_F:=\int_{\gamma^-}d\!\arg F$,
@@ -1206,7 +1214,7 @@ weight).  Exact rational $q$-expansion arithmetic (the higher
 $e$-coefficients are integral and
 $\alpha_0(a,b)\in\frac1{22}\Z$; the convolutions are evaluated exactly)
 gives $a_n(D)=0$ for all $0\le n\le 2420$ --- twice the sharp bound, and
-also beyond the conservative $\mathrm{SL}_2$-index convention
+in particular through the conservative $\mathrm{SL}_2$-index convention
 $\frac{2}{12}\cdot14520=2420$ (\texttt{siegel\_anchor\_step12.py},
 \texttt{notes/attack17-membership.txt}).  By Sturm's theorem $D=0$,
 that is,
@@ -1261,11 +1269,15 @@ coincide (Lemma~\ref{lem:coinvariant}~(1)) --- is instead consistent with
 the coinvariant quotient $H_1(E,\Z)/H_1(E,\Z)^+$, the group on which the
 regulator is naturally defined (both sides being extended $\Q$-linearly in
 the symbol); by Lemma~\ref{lem:coinvariant}~(2) the subgroup generator then
-reads twice as much, exactly as observed.  We record this as the apparent
-correct formulation of Bloch's theorem for $\Delta<0$ curves --- the
-transmitted subgroup statement of \cite[Thm.~6]{LalinRam} being imprecise
-in that case, which their paper never uses --- but we emphasize once more
-that nothing in this paper depends on it.
+reads twice as much, exactly as observed.  We record this neutrally as a
+\emph{normalization/lattice discrepancy} --- subgroup versus
+coinvariant-quotient generator, related by the index $2$ of
+Lemma~\ref{lem:coinvariant}~(2) --- which the present data resolve in
+favour of the quotient reading; whether this reflects a misnormalization
+in the transmitted subgroup statement of \cite[Thm.~6]{LalinRam} (a
+statement their paper never uses) or a convention we have not
+reconstructed, we leave as an open question for the literature.  We
+emphasize once more that nothing in this paper depends on the answer.
 
 \begin{remark}[The factor $2$ in the $\diamond$-form of Bloch's theorem,
 resolved]\label{rem:diamondk0}
