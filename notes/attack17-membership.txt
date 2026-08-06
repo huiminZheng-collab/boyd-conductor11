@@ -1,0 +1,100 @@
+attack17: 第五轮审稿意见第 1 条修复 —— F_total 的模形式身份与 Sturm 论证
+================================================================================
+日期: 2026-08-06   前置存档: notes/attack16-siegel-anchor.txt
+新文件: code/siegel_anchor_step12.py, code/siegel_anchor_step12_out.json,
+        notes/attack17-membership-latex.tex（可直接粘贴进论文的英文段落）
+
+审稿意见（循环论证问题）
+------------------------
+step9 只算了 251 个精确 q 系数并比对 F_total 与 −2f11，但当时并未先证明
+F_total ∈ M₂(Γ₀(11))，所以 Sturm 界 2 不可用 —— 推理循环。
+
+Level 的裁定（决定路线的关键事实）
+----------------------------------
+直接查 Brunault 论文 LaTeX 源码（literature/arxiv-1504.08127/reg_siegel.tex,
+arXiv e-print 1504.08127 重新下载；pdftotext 抽取版此行同样可靠但公式编号易
+错位，一切以源码为准）：
+
+  Definition 10 (tex 行 ~268): e_{a,b} = α₀(a,b) + Σ_{m≡a,k≡b(N)} q^{mk}
+                               − Σ_{m≡−a,k≡−b(N)} q^{mk},  (a,b)∈(ℤ/Nℤ)².
+  Lemma 11 (tex 行 ~283): "The function e_{a,b}(τ/N) is an Eisenstein series of
+      weight 1 on the group Γ(N), and the function e_{a,b} is an Eisenstein
+      series of weight 1 on Γ₁(N²)."
+  Theorem 1 (tex 行 ~89-96): ∫₀^{i∞} η(g_u,g_v)
+      = π·Λ*(e_{a,d}e_{b,−c} + e_{a,−d}e_{b,c}, 0)，
+      且原文明确称 e_{a,b} 为 "Eisenstein series of weight 1 and level N²"。
+
+结论: **e_{a,b} 的 level 是 N² = 121，即 e_{a,b} ∈ M₁(Γ₁(121))，不是 Γ₁(11)。**
+审稿人优选路线 (b) 的前提（e ∈ M₁(Γ₁(11))）不成立。此外，干净的指标置换律
+e|γ = e_{(a,b)γ} 只对缩放后的 e_{a,b}(τ/N)（Γ(N) 上）经由 G_{1,(a,b)}} 成立，
+换回 e_{a,b}(τ) 后 SL₂(ℤ) 作用会把 e 混成带分圆系数的组合（Lemma 11 证明中
+e_{a,b}(τ/N) 是 G_{1,(b,−c)} 对 c 的傅里叶组合），因此对 Γ₀(11) 生成元的
+"纯符号有限重标号"检查没有直接成立的基础。按审稿人指示转入兜底路线。
+
+所走路线：ambient 空间 Sturm 论证（兜底，严格、无循环）
+------------------------------------------------------
+1. 无条件的成员关系：
+   e_{a,b} ∈ M₁(Γ₁(121))（Brunault Lemma 11；Eisenstein 级数在 ℋ 与所有
+   尖点全纯，**不需要** Kubert–Lang 阶计算 —— 那是模单位的事，这里都是模形式）。
+   ⟹ 每个乘积 e_{a,d}e_{b,−c}、e_{a,−d}e_{b,c} ∈ M₂(Γ₁(121))；
+   F_total 与每个逐符号 F_sym 都是这类乘积的有限有理线性组合
+   ⟹ F_total, F_sym ∈ M₂(Γ₁(121))（无条件）。
+   又 −2f11 ∈ M₂(Γ₀(11)) ⊂ M₂(Γ₁(121))，故
+        D := F_total + 2f11 ∈ M₂(Γ₁(121))。
+
+2. Sturm 界：
+   [PSL₂(ℤ) : Γ̄₁(121)] = (121²/2)(1 − 1/121) = 7260   （N ≥ 5 的标准公式;
+   −I 在权 2 作用平凡，故用 PSL 指标正确）。
+        B_sharp = (k/12)·7260 = (2/12)·7260 = 1210。
+   保守 SL₂ 指标约定: (2/12)·14520 = 2420。两种约定都被覆盖（见下）。
+
+3. 精确计算（code/siegel_anchor_step12.py）:
+   · e 系数（n ≥ 1）是小整数（实测 max |系数| = 4），α₀ ∈ (1/22)ℤ；
+     所有乘积系数为精确有理数。
+   · 整数卷积用 Kronecker 打包（偏置 K=4096，基底 2^64，数位上界在代码内
+     assert；无溢出）⟹ 精确、快（全部 615 个不同乘积，11.3 秒）。
+   · 对称性 e_{−a,−b} = −e_{a,b}、e_{a,b} = e_{b,a} 用于代表元归一与缓存。
+   · 验证 D 的全部系数 a_n = 0（0 ≤ n ≤ 2420）—— sharp 界的两倍。
+   ⟹ Sturm 定理给出 D = 0，即
+        F_total = −2 f11   （模形式的严格等式）。
+   推论: F_total ∈ M₂(Γ₀(11)) 事后成立，step9 的 251 系数比对随之合法化
+   （M₂(Γ₀(11)) 的 Sturm 界为 2）。循环论证消除。
+
+4. 逐符号断言（attack16 中的更强陈述）同等严格化：
+   每个 F_sym 同样是 e 乘积的有限和 ∈ M₂(Γ₁(121))，同一 Sturm 计算验证到
+   q^2420：
+        [[1,0],[3,1]] 与 [[1,2],[1,3]] 的 F_sym = −f11（精确），
+        其余 5 个符号 F_sym ≡ 0（精确）。
+   论文中主证明只需 F_total 总和；逐符号分解作为补充 remark 列出（见 LaTeX
+   段落），地位已由"观察"升级为已证事实。
+
+step12 运行结果（code/siegel_anchor_step12_out.json）
+----------------------------------------------------
+  e tables: max |e coeff| = 4
+  逐符号 distinct products: 547/550/103/409/547/550/103（共 615 个缓存乘积）
+  MAIN: F_total = −2 f11 精确对 n = 0..2420        PASS
+  PER-SYMBOL（7 个符号全部符合预期）               PASS
+  cross-check vs step9_out.json（251 系数 ×8 条级数）PASS
+  runtime 11.3s   VERDICT: PASS
+
+复现: cd boyd-conductor11 && .venv/Scripts/python.exe code/siegel_anchor_step12.py
+
+定理出处备查（Brunault arXiv:1504.08127 = J. Number Theory 163 (2016)）
+----------------------------------------------------------------------
+  · Definition 10: e_{a,b} 的 q 展开与 α₀。
+  · Lemma 11: e_{a,b}(τ/N) ∈ M₁(Γ(N)); e_{a,b} ∈ M₁(Γ₁(N²))。  ← 本 attack 的核心
+  · Lemma 13: W_{N²}(e_{a,b}) = −(i/N) f_{a,b}（attack16 已用）。
+  · Theorem 1: ∫₀^{i∞}η(g_u,g_v) = π Λ*(e_{a,d}e_{b,−c}+e_{a,−d}e_{b,c}, 0)。
+  Sturm 定理标准出处: J. Sturm, "On the congruence of modular forms",
+  LNM 1240 (1987)；指标公式 [PSL₂(ℤ):Γ̄₁(N)] = (N²/2)∏_{p|N}(1−p⁻²) (N≥5)
+  见 Diamond–Shurman §3.9。
+
+对审稿意见的回应要点（供主 agent 整合时使用）
+--------------------------------------------
+  · 确认审稿人判断正确：step9 的论证当时确实循环。
+  · 但优选路线的前提不成立：e_{a,b} 的 level 是 Γ₁(121)（Brunault Lemma 11），
+    不是 Γ₁(11)；已在 Γ₁(121) 中用 Sturm 界 1210（计算到 2420）直接证明
+    F_total = −2f11，成员关系无条件成立，循环消除。
+  · 逐符号分解已同样严格证明，作为补充 remark。
+  · 交付: code/siegel_anchor_step12.py(+_out.json), 本存档,
+    notes/attack17-membership-latex.tex（粘贴用英文段落）。

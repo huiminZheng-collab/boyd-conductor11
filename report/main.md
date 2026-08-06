@@ -492,28 +492,82 @@ $\Lambda^*$ 是其 §2 的正则化完全 $L$ 值；任意模符号由线性处�
 $$\int_{\gamma^-}\eta(x,y)=\pm2\pi b_{11}\qquad\text{(A)}$$
 （符号取决于定向）。
 
-*证明*：全部步骤为精确有理/$q$ 展开计算或已存档（`code/siegel_anchor_step1`–`11`，
-`notes/attack16-siegel-anchor.txt`）。
-**(1) 尖点与除子**：在附属于 $f_{11}$ 的模参数化 $X_1(11)\to E$（无穷尖点
-$\mapsto O$）下，有理尖点 $k/11\mapsto m_kA$，$(m_1,\dots,m_5)=(0,2,1,4,3)$，与
-Brunault 的尖点表（(3.152)–(3.153)）一致；尖点 $i\infty$ 与 $1/11$ 在 $X_1(11)$ 上
-重合（因 $\big(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\big)\in\Gamma_1(11)$）。
-故 $x\circ\pi,y\circ\pi$ 的尖点阶为
+*证明*：全部步骤为精确有理/$q$ 展开计算或已存档（`code/siegel_anchor_step1`–`14`，
+存档 `notes/attack16-siegel-anchor.txt`、`notes/attack17-membership.txt`、
+`notes/attack17-primitivity.txt`、`notes/attack17-constants.txt`）。
+**(1) 尖点与除子**：在附属于 $f_{11}$ 的模参数化 $\pi\colon X_1(11)\to E$（无穷尖点
+$\mapsto O$）下，有理尖点 $k/11\mapsto m_kA$，
+$$(m_1,\dots,m_5)=(0,2,1,4,3).\qquad\text{(M)}$$
+这是**精确导出**，不是数值观察。Brunault（继 Lecacheux）把 $X_1(11)$ 的五个有理尖点
+$P_v$——以 $v\in(\mathbb Z/11\mathbb Z)^\times/\{\pm1\}$ 标记——列为 $E$ 上的点
+（(3.152)–(3.153)）：$P_1=\infty$、$P_2=(1,0)$、$P_3=(0,-1)$、$P_4=(0,0)$、
+$P_5=(1,-1)$，满足 $P_{4^a}=a\,P_4$，$P_4$ 生成
+$E(\mathbb Q)\cong\mathbb Z/5\mathbb Z$。对 $A=(0,0)$ 用群律 $2A=(1,-1)$、
+$3A=(1,0)$、$4A=(0,-1)$ 读作 $P_v=n(v)A$，$n=(0,3,4,1,2)$。标签换算是**逆**字典：
+$P_v$ 是尖点 $k/11$ 当且仅当 $v\equiv k^{-1}\pmod{11}$（相差 $\pm1$）。具体地，锚点
+$P_1=i\infty=1/11$（因
+$\big(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\big)\in\Gamma_1(11)$）加上 diamond
+算子的等变作用（其在五个有理尖点上传递）把字典限制到 $v\equiv k^{\pm1}$，再由下面的
+精确除子阶匹配选定逆约定，即得 (M)。故 $x\circ\pi,y\circ\pi$ 的尖点阶为
 $$\operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
 \operatorname{ord}_{k/11}(y\circ\pi)=(-1,+3,0,0,-2)$$
-（$k=1,\dots,5$；Abel 积分 60 位计算，与本小节开头的精确除子交叉吻合）。
-**(2) Siegel 表示**：记 $G_a:=\prod_{b\bmod 11}g_{a,b}$；用 Kubert–Lang 尖点阶
+（$k=1,\dots,5$），与本小节开头的精确除子完全吻合；反过来，这些阶与 (2) 的
+Kubert–Lang 阶合起来**唯一**迫使元组 (M)——一条独立的精确推导。尖点像的 60 位
+Abel 积分计算与两种推导都一致，仅作核查（`siegel_anchor_step14.py`，存档
+`notes/attack17-constants.txt`）。
+**(2) Siegel 表示与常数**：记 $G_a:=\prod_{b\bmod 11}g_{a,b}$；用 Kubert–Lang 尖点阶
 $\operatorname{ord}_{(r,t)}g_{a,b}=\tfrac{11}{2}B_2(\{(ar+bt)/11\})$（$X(11)$ 的 60 个
 尖点上），精确有理线性代数给出
 $$x\circ\pi=-\frac{G_4G_5}{G_2^2},\qquad
 y\circ\pi=\frac{G_1G_5^{\,3}}{G_2^{\,3}G_3}.\qquad\text{(P)}$$
-两边均 $\Gamma_1(11)$ 不变且尖点除子相同，故各比值为常数；常数为单位根（在四个
-$\tau$ 点算到 70 位：$-1$ 与 $+1$），对 $\eta$ 不可见：$\log|C|=0$，且对这些行均匀
-乘积 $d\arg$ 修正恒为零。
+(P) 两边均 $\Gamma_1(11)$ 不变且尖点除子相同，故各比值为非零常数：
+$x\circ\pi=C_x\,U$、$y\circ\pi=C_y\,V$，其中 $U=G_4G_5/G_2^2$、
+$V=G_1G_5^3/(G_2^3G_3)$。**常数现在是精确确定的**（rev5；旧稿只有四个 $\tau$ 点上的
+70 位数值观察）：在两边阶均为 $0$ 的尖点处可以直接求值——由 (M)，
+$\pi(4/11)=4A$、$\pi(3/11)=A$ 分别是 $U$、$V$ 的这种尖点；$U,V$ 在尖点 $c$ 的首项
+$q$ 系数 $\kappa_c$ 是显式单位根（把 $\gamma i\infty=c$ 写成 $S,T$ 的字并施用
+Brunault 的 Lemma 4 与 eq. (3)；精确分圆计算给出
+$\kappa_{4/11}(U)=\kappa_{3/11}(V)=-1$），而 $x(4A)=1$、$y(A)=-1$，故
+$$C_x=\frac{x(4A)}{\kappa_{4/11}(U)}=\frac{1}{-1}=-1,\qquad
+C_y=\frac{y(A)}{\kappa_{3/11}(V)}=\frac{-1}{-1}=+1$$
+（`siegel_anchor_step14.py`）。
+**辐角周期与一则勘误（$D_U=2\pi$）**：regulator 积分其实不依赖常数的具体值——由
+$\eta(CU,C'V)=\eta(U,V)+\log|C|\,d\!\arg V-\log|C'|\,d\!\arg U$，
+$$\int_{\gamma^-}\eta(x\circ\pi,y\circ\pi)=\int_{\gamma^-}\eta(U,V)
++\log|C_x|\,D_V-\log|C_y|\,D_U,\qquad
+D_F:=\int_{\gamma^-}d\!\arg F.$$
+用 Brunault 的 Lemma 5，
+$$\int_0^{i\infty}d\!\arg g_{a,b}=
+\begin{cases}
+0,&a\equiv0\ \text{或}\ b\equiv0\pmod{11},\\[1mm]
+2\pi\bigl(\{\tfrac{a}{11}\}-\tfrac12\bigr)
+ \bigl(\{\tfrac{b}{11}\}-\tfrac12\bigr),&\text{否则},
+\end{cases}$$
+(3) 中七个 Manin 符号的每一段的每个因子都算成 $2\pi$ 的显式有理倍数
+（$g_{a,b}\circ\gamma=w\,g_{(a,b)\gamma}$ 中的因子 $w$ 是常数，对 $d\arg$ 不可见）；
+精确求和给出
+$$D_U=2\pi,\qquad D_V=0.\qquad\text{(D)}$$
+（`siegel_anchor_step14.py`）。**勘误**：旧存档 `notes/attack16-siegel-anchor.txt`
+断言"$D_U=D_V=0$"，这对 $U$ 是**错的**——$U$ 沿 $\gamma^-$ 的绕数为 $1$，
+$D_U=2\pi\neq0$。因此修正项的消失**不是**自动的：它成立是因为常数已精确确定为
+单位根，$\log|C_x|=\log|C_y|=0$ 精确成立，从而
+$\log|C_x|\cdot D_V-\log|C_y|\cdot D_U=0\cdot0-0\cdot2\pi=0$。锚定的结论不变，但理由
+被更正、且比旧稿更强（该存档已加醒目勘误段）。
 **(3) 闭链**：取模符号 $\gamma^-=\{0,\tfrac{3}{11}\}-\{0,\tfrac{8}{11}\}$：它在
-$X_1(11)$ 上闭合（$3\equiv-8\bmod 11$）、在 $\tau\mapsto-\bar\tau$ 下反不变、且本原
-（其周期先验为 $w_{\mathrm{anti}}$ 的非零整数倍，60 位等于 $w_{\mathrm{anti}}$），故即
-反不变生成元引理的类 $\pm(a-2b)$。连分数把它分解为七个 Manin 符号：
+$X_1(11)$ 上闭合（$3\equiv-8\bmod 11$）、在 $\tau\mapsto-\bar\tau$ 下反不变。其
+**本原性现在由精确整数线性代数证明**（rev5；`siegel_anchor_step13.py`，存档
+`notes/attack17-primitivity.txt`）：取 $\pm\Gamma_1(11)$（在
+$\mathrm{PSL}_2(\mathbb Z)$ 中指数 60）的 Manin 符号——由底行
+$(c,d)\in((\mathbb Z/11\mathbb Z)^2\setminus0)/\pm1$ 参数化——模关系 $x+xS=0$ 与
+$x+xR+xR^2=0$，边界映射到 10 个尖点；$\mathbb Z$ 上的 Smith 正规形计算给出
+$H_1(X_1(11),\mathbb Z)=\ker\partial\cong\mathbb Z^2$ 无挠，带显式整基；共轭
+$(c,d)\mapsto(-c,d)$ 在 $H_1$ 上诱导
+$C=\big(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\big)$，故
+$H_1^-=\ker(C+I)=\mathbb Z\cdot(-1,1)$ 秩恰为 $1$；下面这条七符号链在整基下的坐标为
+$(1,-1)$——恰为 $H_1^-$ 生成元的 $\pm1$ 倍（等价地，与某个整同调类的相交数为
+$\pm1$）。故即反不变生成元引理（§9.2）的类 $\pm(a-2b)$。（其周期 60 位等于
+$w_{\mathrm{anti}}$，PARI 的模符号规范化在其上取精确值 $v^-=1$；二者仅作核查。）
+连分数把它分解为七个 Manin 符号：
 $$\begin{aligned}
 \{0,\tfrac{3}{11}\}&=\textstyle
  +\big[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big]
@@ -525,12 +579,29 @@ $$\begin{aligned}
  +\big[\begin{smallmatrix}3&2\\4&3\end{smallmatrix}\big]
  -\big[\begin{smallmatrix}3&8\\4&11\end{smallmatrix}\big].
 \end{aligned}$$
-**(4) 求值**：沿这些符号对 (P) 逐项施用 (S)，分圆系数域上的精确 $q$ 展开算术
-（251 个系数，远超 $M_2(\Gamma_0(11))$ 的 Sturm 界 2）证明总权 2 形式恰为
-$$F_{\mathrm{total}}=-2f_{11}\ \in\ M_2(\Gamma_0(11)):$$
-两个符号（$\big[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big]$、
-$\big[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\big]$）各贡献 $-f_{11}$，其余五个
-恒为零。因此 $\Lambda$ 和等于 $-2\Lambda(f_{11},0)=-2b_{11}$——由
+**(4) 求值**：沿这些符号对 (P) 逐项施用 (S)，把积分表为
+$\pi\,\Lambda^*(F_{\mathrm{total}},0)$，其中 $F_{\mathrm{total}}$ 是形如
+$e_{a,d}e_{b,-c}+e_{a,-d}e_{b,c}$ 的乘积的显式有限带符号和。**成员性的无条件确立**
+（rev5 严格化）：每个 $e_{a,b}$ 都是 $\Gamma_1(121)$ 上的权 1 Eisenstein 级数
+（Brunault 的 Definition 10 与 Lemma 11——注意 level 是 $N^2=121$ 而非 $11$），在
+$\mathcal H$ 上与每个尖点处全纯；故**无条件**有
+$F_{\mathrm{total}}\in M_2(\Gamma_1(121))$，并且
+$D:=F_{\mathrm{total}}+2f_{11}\in M_2(\Gamma_1(121))$。该空间的 Sturm 界为
+$\frac{2}{12}[\mathrm{PSL}_2(\mathbb Z):\bar\Gamma_1(121)]
+=\frac{2}{12}\cdot7260=1210$
+（指数为 $\frac{121^2}{2}(1-\frac1{121})=7260$，因偶数权下 $-I$ 作用平凡）。精确有理
+$q$ 展开算术（高次 $e$ 系数为整数、$\alpha_0(a,b)\in\frac1{22}\mathbb Z$，卷积全部
+精确求值，并与旧的 251 个系数交叉吻合）给出 $a_n(D)=0$ 对所有 $0\le n\le2420$
+成立——sharp 界 $1210$ 的两倍，也超出保守的 $\mathrm{SL}_2$ 指数约定
+$\frac{2}{12}\cdot14520=2420$（`siegel_anchor_step12.py`，存档
+`notes/attack17-membership.txt`）。由 Sturm 定理 $D=0$，即作为模形式
+$$F_{\mathrm{total}}=-2f_{11}$$
+成立；a fortiori $F_{\mathrm{total}}\in M_2(\Gamma_0(11))$——旧稿"251 个系数远超
+Sturm 界 2"的说法循环在先（成员性未先证），现被追认合法并已从正文移除。（同一个
+Sturm 计算逐符号施用，认证符号 $\big[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big]$
+与 $\big[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\big]$ 各恰贡献 $-f_{11}$、其余
+五个恒为零；主论证只用总和，逐符号分解作为补充陈述，同样是证得的而非观察。）因此
+$\Lambda$ 和等于 $-2\Lambda(f_{11},0)=-2b_{11}$——由
 $\Lambda(f,s)=11^{s/2}(2\pi)^{-s}\Gamma(s)L(f,s)$ 与 $L(f_{11},0)=0$（根数 $+1$）有
 $\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$。乘上 (S) 的因子 $\pi$，按 (3) 的定向得
 $\int_{\gamma^-}\eta(x,y)=-2\pi b_{11}$，即一般情形的 (A)。$\blacksquare$
@@ -584,7 +655,7 @@ tempered symbol 观测到的统一因子 2（见下段）。这不影响任一�
 `notes/attack15-coinvariant.txt`）**：形式展开
 $D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$，而沿**子群**生成元的认证积分
 $\int_{\gamma^-}\eta=2\pi b_{11}$——因子-1 归一化（L–R Thm. 6）下两边恰差 2。我们用
-同一曲线上三个**独立** tempered symbol 考察此事：Weierstrass symbol、我们的 $S_0$
+同一曲线上三个**不同** tempered symbol 考察此事：Weierstrass symbol、我们的 $S_0$
 symbol、以及 Bertin (C1) 三次 $(X+1)(Y+1)(X+Y+1)+XY=0$ 的坐标 symbol $\{X,Y\}$（经显式
 Riemann–Roch 变换映到 $E$，PARI `ellidentify` 认证像为 `11.a3`，精确变量代换
 $[1,-1,-2,2]$）。$\diamond$ 值分别为 $-\frac52$、$+\frac52$、$+\frac{35}{2}$ 倍
@@ -771,11 +842,16 @@ python-flint 0.9.0/Arb、PARI/GP 2.15.5）：
    构造并验证，带程序化包含断言），而 $b_{11}=\Lambda(f_{11},2)>0$ 由 $s=2$ 处绝对收敛的
    Euler 乘积精确成立。
 7. **Siegel 锚定**：Siegel 表示 (P) 是 $\Gamma_1(11)$ 不变函数的精确恒等式（Kubert–Lang
-   阶的精确尖点除子匹配；常数为单位根，算到 70 位）；$\gamma^-$ 的 Manin 符号分解精确
-   （连分数）；权 2 形式恒等式 $F_{\mathrm{total}}=-2f_{11}$ 由精确 $q$ 展开算术证到
-   251 个系数、远超 Sturm 界 2（`siegel_anchor_step6/7/9`，存档
-   `notes/attack16-siegel-anchor.txt`）；尖点-扭点对应与闭链本原性对其先验整数值
-   60 位确认。
+   阶的精确尖点除子匹配；常数 $C_x=-1$、$C_y=+1$ 由阶 $0$ 尖点求值与分圆首项系数
+   精确确定，辐角周期 $D_U=2\pi$、$D_V=0$ 经 Brunault 的 Lemma 5 为 $2\pi$ 的精确
+   有理倍数）；尖点-扭点对应 (M) 由 Brunault (3.152)–(3.153) 精确导出，并独立地由
+   精确除子阶数据唯一迫使（`siegel_anchor_step14.py`，存档
+   `notes/attack17-constants.txt`）；$\gamma^-$ 的本原性由 Manin 符号 Smith 正规形
+   精确证明——整基下坐标 $(1,-1)$（`siegel_anchor_step13.py`，存档
+   `notes/attack17-primitivity.txt`）；Manin 符号分解精确（连分数）；恒等式
+   $F_{\mathrm{total}}=-2f_{11}$ 由无条件成员性 $M_2(\Gamma_1(121))$ 加精确有理
+   $q$ 展开算术证到 $q^{2420}$——sharp Sturm 界 $1210$ 的两倍
+   （`siegel_anchor_step12.py`，存档 `notes/attack17-membership.txt`）。
 
 主定理证明中唯一的外部输入是 Brunault 的 Siegel 单位 regulator 公式（J. Number
 Theory **163** (2016) 542–569，Thm. 1——原文以 Rankin–Selberg 计算证明），连同函数
@@ -799,6 +875,7 @@ modular units，四步精确计算直接给出 $\int_{\gamma^-}\eta=\pm2\pi b_{1
 8. **conductor 17（第七波，附录 A）**：同一方法再应用于 $k=1$——链结构逐字平行（$c=2\pi/3$、跳跃值 $y=\pm i$ 精确）、$\mathrm{class}(C')=\pm2\gamma^-$ Arb 铁证、regulator 侧由 Lalín–Ramamonjisoa 已发表定理闭环——Samart 的 $\tilde n(1)=b_{17}$ 类比猜想成为定理，**conditional on 附录 A 讨论的归一化引理**。
 9. **rev2/rev3（第十一、十二波）严格化**：环面交/模单位的精确刻画（§8.4）+ 反不变生成元本原性引理（§9.2）+ 符号的认证区间包围（`sign_certify.py`、`k1_sign_certify.py`）+ 认证计算定理（§9.2 末六项清单）+（第十二波）因子 2 的源头定位——反不变子群在余商 $H_1/H_1^+$ 中的指数（$\Delta<0$ 时指数 2；指数引理，§9.1），Bloch 定理重述为余商生成元的因子-1 恒等式 (B)，直接锚定 (A) 取代已删除的比例引理，并新增 `verify_coinvariant.gp` 直接数值验证（$\int_b\eta=-\pi b_{11}$ 因子 1、$\int_{a-2b}\eta=2\pi b_{11}$）；Brunault Thm. 118 字典降为交叉验证；k=1 材料移入附录 A 并标注 conditional；LICENSE 与 requirements.txt 落定（§11）。
 10. **rev4（第四轮审稿后）**：regulator 锚定再升级——证明不再使用 Bloch 菱形定理、Bertin Thm. 6 与 symbol 字典，改用 Brunault 已证的 Siegel 单位 regulator 公式（JNT 163 (2016) 542–569，Thm. 1）直接严格计算 $\int_{\gamma^-}\eta=-2\pi b_{11}$（§9.1 锚定定理：尖点↔扭点对应 $k/11\mapsto m_kA$、Siegel 表示 (P)、七个 Manin 符号、$F_{\mathrm{total}}=-2f_{11}$ 由 251 系数精确 $q$ 展开证明；存档 `notes/attack16-siegel-anchor.txt`，脚本 `siegel_anchor_step1`–`11`）；认证计算定理新增第 7 项记录其机器可验证部分，唯一外部输入 = Brunault Thm. 1 + 函数方程 $\Lambda(f_{11},0)=b_{11}$；`verify_coinvariant.gp` 改中心格式（实测收敛阶 $p=2$），明确标注为数值一致性核查。
+11. **rev5（第五轮审稿后）**：锚定证明的三处严格化，均沿审稿人建议的路线以精确论证修复——(i) $F_{\mathrm{total}}=-2f_{11}$ 的成员性：Brunault 的 Lemma 11 给出 $e_{a,b}\in M_1(\Gamma_1(121))$（level 是 $N^2$ 而非 $N$），故成员性**无条件**成立；Sturm 界 $\frac{2}{12}\cdot7260=1210$，精确有理 $q$ 展开算到 $q^{2420}$（sharp 界两倍）全为零 ⟹ 恒等式严格成立；逐符号断言（两个 $-f_{11}$、五个恒零）同法证掉（`siegel_anchor_step12.py`，`notes/attack17-membership.txt`）；(ii) $\gamma^-$ 的本原性：$\pm\Gamma_1(11)$（PSL 指数 60）Manin 符号 + Smith 正规形的纯整数线性代数——$H_1(X_1(11),\mathbb Z)\cong\mathbb Z^2$ 无挠、$H_1^-=\mathbb Z\cdot(-1,1)$、七符号链坐标 $(1,-1)$ 恰为生成元 $\pm1$ 倍（step13，`notes/attack17-primitivity.txt`）；(iii) 常数与尖点表精确化：$C_x=-1$、$C_y=+1$ 由阶 0 尖点求值 + $S,T$ 变换律的单位根首项系数精确确定，$m=(0,2,1,4,3)$ 由 Brunault 博士论文 (3.152)–(3.153) 精确导出（逆标签约定 $v\equiv k^{-1}\bmod 11$）并有 Kubert–Lang 阶唯一解的独立推导（step14，`notes/attack17-constants.txt`）；**勘误**：精确计算揭示旧存档"$D_U=D_V=0$"对 $U$ 错误——$D_U=2\pi$（绕数 1），修正项靠 $\log|C_x|=\log|C_y|=0$ 精确消失，`attack16` 存档已加勘误段；认证计算定理第 7 项重写；step10 标注为弃用缺陷实验。
 
 
 ## 附录 A. k=1（conductor 17）：同一方法的再应用（第七波；conditional）
@@ -870,8 +947,12 @@ gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 gp -q verify_coinvariant.gp  # 余商 vs 子群生成元积分（∫_b=-πb11 因子 1；∫_{a-2b}=2πb11）
 python siegel_anchor_step11.py  # Siegel 锚定：最终值（§9.1 锚定定理）
+python siegel_anchor_step12.py  # M_2(Γ₁(121)) 成员性 + 精确 Sturm（q^2420）
+python siegel_anchor_step13.py  # 闭链本原性（Smith 正规形）
+python siegel_anchor_step14.py  # 精确常数 C_x/C_y、D_U/D_V、尖点表 (M)
 # 完整锚定链重建：siegel_anchor_step4.py -> step5.py -> step6.py
 #   -> step7.gp -> step9.py -> step8.py（step8 约 10–20 分钟）
+#   （step10 是已弃用的缺陷实验，不在链中；见存档注记）
 ```
 
 依赖（仓库根目录 `requirements.txt`）：Python ≥3.10 + mpmath + sympy；区间铁证另需

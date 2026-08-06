@@ -1067,21 +1067,44 @@ the sign depending on orientations.
 
 \begin{proof}
 All steps are exact rational/$q$-expansion computations or are archived
-(\texttt{code/siegel\_anchor\_step1}--\texttt{11},
-\texttt{notes/attack16-siegel-anchor.txt}).
+(\texttt{code/siegel\_anchor\_step1}--\texttt{14},
+\texttt{notes/attack16-siegel-anchor.txt},
+\texttt{notes/attack17-membership.txt},
+\texttt{notes/attack17-primitivity.txt},
+\texttt{notes/attack17-constants.txt}).
 \emph{(1) Cusps and divisors.}  Under the modular parametrization
-$X_1(11)\to E$ attached to $f_{11}$ (infinite cusp $\mapsto O$), the
-rational cusps map as $k/11\mapsto m_kA$ with
-$(m_1,\dots,m_5)=(0,2,1,4,3)$, consistently with Brunault's cusp table
-\cite[(3.152)--(3.153)]{Brunault}; the cusps $i\infty$ and $1/11$ coincide
-on $X_1(11)$ since $\bigl(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}
-\bigr)\in\Gamma_1(11)$.  Hence $x\circ\pi,y\circ\pi$ have cusp orders
+$\pi\colon X_1(11)\to E$ attached to $f_{11}$ (infinite cusp $\mapsto O$),
+the rational cusps map as $k/11\mapsto m_kA$ with
+\begin{equation}\label{eq:mtable}
+  (m_1,\dots,m_5)=(0,2,1,4,3).
+\end{equation}
+This is derived exactly, not numerically.  Brunault, after Lecacheux,
+tabulates the five rational cusps $P_v$ of $X_1(11)$, indexed by
+$v\in(\Z/11\Z)^\times/\{\pm1\}$, as points of $E$
+\cite[(3.152)--(3.153)]{Brunault}: $P_1=\infty$, $P_2=(1,0)$,
+$P_3=(0,-1)$, $P_4=(0,0)$, $P_5=(1,-1)$, with $P_{4^a}=a\,P_4$ and $P_4$
+a generator of $E(\Q)\cong\Z/5\Z$.  With the group law $2A=(1,-1)$,
+$3A=(1,0)$, $4A=(0,-1)$ for $A=(0,0)$ this reads $P_v=n(v)A$,
+$n=(0,3,4,1,2)$.  The label conversion is the \emph{inverse} one:
+$P_v$ is the cusp $k/11$ if and only if $v\equiv k^{-1}\pmod{11}$ up to
+$\pm1$.  Indeed, the anchor $P_1=i\infty=1/11$ (since
+$\bigl(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\bigr)\in\Gamma_1(11)$)
+together with equivariance under the diamond operators, which act
+transitively on the five rational cusps, restricts the dictionary to
+$v\equiv k^{\pm1}$, and the exact divisor-order match below selects the
+inverse dictionary; this gives \eqref{eq:mtable}.  Hence
+$x\circ\pi,y\circ\pi$ have cusp orders
 \[
   \operatorname{ord}_{k/11}(x\circ\pi)=(-1,+1,+1,0,-1),\qquad
   \operatorname{ord}_{k/11}(y\circ\pi)=(-1,+3,0,0,-2)
 \]
-for $k=1,\dots,5$ (Abel-integral computation to $60$ digits, cross-checked
-against the exact divisors displayed at the beginning of this subsection).
+for $k=1,\dots,5$, matching exactly the divisors displayed at the
+beginning of this subsection; conversely, these orders together with the
+Kubert--Lang orders of \emph{(2)} force the tuple \eqref{eq:mtable}
+uniquely, an independent exact derivation.  The $60$-digit Abel-integral
+evaluation of the cusp images agrees with both derivations and is used
+only as a check (\texttt{siegel\_anchor\_step14.py},
+\texttt{notes/attack17-constants.txt}).
 \emph{(2) Siegel presentations.}  With
 $G_a:=\prod_{b\bmod 11}g_{a,b}$ and the Kubert--Lang cusp orders
 $\operatorname{ord}_{(r,t)}g_{a,b}=\tfrac{11}{2}B_2(\{(ar+bt)/11\})$ on the
@@ -1092,18 +1115,66 @@ $60$ cusps of $X(11)$, exact rational linear algebra gives
   y\circ\pi=\frac{G_1G_5^{\,3}}{G_2^{\,3}G_3}.
 \end{equation}
 Each side of \eqref{eq:siegelpres} is $\Gamma_1(11)$-invariant with the
-same cusp divisor, so each ratio is a constant; the constants are roots of
-unity (computed to $70$ digits at four $\tau$-points: $-1$ and $+1$), hence
-invisible to $\eta$: $\log|C|=0$, and the $d\arg$ corrections vanish
-identically for these row-uniform products.
+same cusp divisor, so each ratio is a nonzero constant:
+$x\circ\pi=C_x\,U$, $y\circ\pi=C_y\,V$ with $U=G_4G_5/G_2^2$,
+$V=G_1G_5^3/(G_2^3G_3)$.  The constants are determined exactly.  At a
+cusp where both sides have order $0$ one may simply evaluate: by
+\eqref{eq:mtable}, $\pi(4/11)=4A$ and $\pi(3/11)=A$ are such cusps for
+$U$ and $V$ respectively; the leading $q$-coefficients $\kappa_c$ of
+$U,V$ at a cusp $c$ are explicit roots of unity (write
+$\gamma i\infty=c$ as a word in $S,T$ and apply
+\cite[Lemma~4 and eq.~(3)]{BrunaultSiegel}; the exact cyclotomic
+computation gives $\kappa_{4/11}(U)=\kappa_{3/11}(V)=-1$), and
+$x(4A)=1$, $y(A)=-1$, hence
+\[
+  C_x=\frac{x(4A)}{\kappa_{4/11}(U)}=\frac{1}{-1}=-1,\qquad
+  C_y=\frac{y(A)}{\kappa_{3/11}(V)}=\frac{-1}{-1}=+1
+\]
+(\texttt{siegel\_anchor\_step14.py}).  In fact the regulator integral
+does not even depend on these values: since
+$\eta(CU,C'V)=\eta(U,V)+\log|C|\,d\!\arg V-\log|C'|\,d\!\arg U$, one has
+$\int_{\gamma^-}\eta(x\circ\pi,y\circ\pi)=\int_{\gamma^-}\eta(U,V)
+ +\log|C_x|\,D_V-\log|C_y|\,D_U$ with $D_F:=\int_{\gamma^-}d\!\arg F$,
+and Brunault's Lemma~5 \cite{BrunaultSiegel},
+\[
+  \int_0^{i\infty}d\!\arg g_{a,b}=
+  \begin{cases}
+    0 & \text{if }a\equiv0\text{ or }b\equiv0\pmod{11},\\[1mm]
+    2\pi\bigl(\{\tfrac{a}{11}\}-\tfrac12\bigr)
+        \bigl(\{\tfrac{b}{11}\}-\tfrac12\bigr) & \text{otherwise},
+  \end{cases}
+\]
+evaluates each piece of each of the seven Manin symbols of \emph{(3)} as
+an explicit rational multiple of $2\pi$ (the factors $w$ in
+$g_{a,b}\circ\gamma=w\,g_{(a,b)\gamma}$ are constant, hence invisible to
+$d\!\arg$); exact summation gives
+\begin{equation}\label{eq:DUDV}
+  D_U=2\pi,\qquad D_V=0
+\end{equation}
+(\texttt{siegel\_anchor\_step14.py}).  Note that $D_U=2\pi\neq0$: $U$
+has winding number $1$ along $\gamma^-$, so the vanishing of the
+correction is not automatic --- it holds because
+$\log|C_x|=\log|C_y|=0$ exactly.
 \emph{(3) The cycle.}  Take the modular symbol
 $\gamma^-=\{0,\tfrac{3}{11}\}-\{0,\tfrac{8}{11}\}$: it is closed on
-$X_1(11)$ (as $3\equiv-8\bmod 11$), anti-invariant under
-$\tau\mapsto-\bar\tau$, and primitive (its period is a priori a nonzero
-integral multiple of $w_{\mathrm{anti}}$ and equals $w_{\mathrm{anti}}$ to
-$60$ digits); hence it is the class $\pm(a-2b)$ of
-Lemma~\ref{lem:antiinv}.  Continued fractions decompose it into seven
-Manin symbols:
+$X_1(11)$ (as $3\equiv-8\bmod 11$) and anti-invariant under
+$\tau\mapsto-\bar\tau$.  Its primitivity is proved by exact integral
+linear algebra (\texttt{siegel\_anchor\_step13.py},
+\texttt{notes/attack17-primitivity.txt}): for Manin symbols of
+$\pm\Gamma_1(11)$ (index $60$ in $\mathrm{PSL}_2(\Z)$, parametrized by
+bottom rows $(c,d)\in((\Z/11\Z)^2\setminus0)/\pm1$) subject to $x+xS=0$
+and $x+xR+xR^2=0$, with boundary map to the $10$ cusps, a Smith normal
+form computation gives $H_1(X_1(11),\Z)=\ker\partial\cong\Z^2$
+torsion-free with an explicit integral basis; conjugation induces
+$C=\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)$ on $H_1$,
+so $H_1^-=\ker(C+I)=\Z\cdot(-1,1)$; and the seven-symbol chain below
+has coordinates $(1,-1)$ in this basis --- exactly $\pm1$ times a
+generator of $H_1^-$ (equivalently, it has intersection number $\pm1$
+with an integral class).  Hence it is the class $\pm(a-2b)$ of
+Lemma~\ref{lem:antiinv}.  (Its period equals $w_{\mathrm{anti}}$ to $60$
+digits, and PARI's modular-symbol normalization takes the exact value
+$v^-=1$ on it; both are checks only.)  Continued fractions decompose it
+into seven Manin symbols:
 \[
 \begin{aligned}
   \{0,\tfrac{3}{11}\}&=\textstyle
@@ -1118,16 +1189,36 @@ Manin symbols:
 \end{aligned}
 \]
 \emph{(4) Evaluation.}  Applying \eqref{eq:siegelthm} term by term to
-\eqref{eq:siegelpres} along these symbols, exact $q$-expansion arithmetic
-in the cyclotomic coefficient fields (251 coefficients, far beyond the
-Sturm bound $2$ for $M_2(\Gamma_0(11))$) proves that the total weight-$2$
-form is exactly
+\eqref{eq:siegelpres} along these symbols expresses the integral as
+$\pi\,\Lambda^*(F_{\mathrm{total}},0)$, where $F_{\mathrm{total}}$ is an
+explicit finite signed sum of products
+$e_{a,d}e_{b,-c}+e_{a,-d}e_{b,c}$.  Each $e_{a,b}$ is an Eisenstein
+series of weight $1$ on $\Gamma_1(121)$
+\cite[Definition~10 and Lemma~11]{BrunaultSiegel}, holomorphic on
+$\mathcal{H}$ and at every cusp; hence the \emph{unconditional}
+membership $F_{\mathrm{total}}\in M_2(\Gamma_1(121))$, and
+$D:=F_{\mathrm{total}}+2f_{11}\in M_2(\Gamma_1(121))$.  The Sturm bound
+for this space is
+$\frac{2}{12}\,[\mathrm{PSL}_2(\Z):\bar\Gamma_1(121)]
+ =\frac{2}{12}\cdot 7260=1210$ (the index being
+$\frac{121^2}{2}(1-\frac1{121})=7260$, as $-I$ acts trivially in even
+weight).  Exact rational $q$-expansion arithmetic (the higher
+$e$-coefficients are integral and
+$\alpha_0(a,b)\in\frac1{22}\Z$; the convolutions are evaluated exactly)
+gives $a_n(D)=0$ for all $0\le n\le 2420$ --- twice the sharp bound, and
+also beyond the conservative $\mathrm{SL}_2$-index convention
+$\frac{2}{12}\cdot14520=2420$ (\texttt{siegel\_anchor\_step12.py},
+\texttt{notes/attack17-membership.txt}).  By Sturm's theorem $D=0$,
+that is,
 \[
-  F_{\mathrm{total}}=-2\,f_{11}\ \in\ M_2(\Gamma_0(11)):
+  F_{\mathrm{total}}=-2\,f_{11}
 \]
-two symbols ($\bigl[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\bigr]$,
-$\bigl[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\bigr]$) contribute
-$-f_{11}$ each and the remaining five vanish identically.  Therefore the
+as modular forms; a fortiori $F_{\mathrm{total}}\in M_2(\Gamma_0(11))$.
+(The same Sturm computation applied symbol by symbol certifies that the
+symbols $\bigl[\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\bigr]$ and
+$\bigl[\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\bigr]$ contribute
+$-f_{11}$ each and that the remaining five vanish identically; the main
+argument uses only the total.)  Therefore the
 $\Lambda$-sum equals $-2\,\Lambda(f_{11},0)=-2\,b_{11}$, since with
 $\Lambda(f,s)=11^{s/2}(2\pi)^{-s}\Gamma(s)L(f,s)$ and $L(f_{11},0)=0$
 (root number $+1$) one has $\Lambda(f_{11},0)=L'(f_{11},0)=b_{11}$.
@@ -1183,7 +1274,7 @@ $D_E((x)\diamond(y))=\frac52D_E(P)=\pi b_{11}$, while the certified integral
 over the subgroup generator is $\int_{\gamma^-}\eta=2\pi b_{11}$: in the
 factor-$1$ normalization $r(\{x,y\})[\gamma]=D^E((x)\diamond(y))$,
 $r[\gamma]=\int_\gamma\eta$, of \cite[Thm.~6]{LalinRam} the two sides differ
-by exactly $2$. We investigated this discrepancy with three \emph{independent}
+by exactly $2$. We investigated this discrepancy with three \emph{different}
 tempered symbols on the same curve (\texttt{code/bertin\_diamond.py},
 \texttt{code/bertin\_diamond.gp}, archive
 \texttt{notes/attack13-bertin-diamond.txt}): the Weierstrass symbol above,
@@ -1531,15 +1622,24 @@ PARI/GP~2.15.5\textup{)}:
   \item \emph{The Siegel-unit anchor.} The presentations
   \eqref{eq:siegelpres} are exact identities of $\Gamma_1(11)$-invariant
   functions \textup{(}exact cusp-divisor match via Kubert--Lang orders;
-  the constants are roots of unity, computed to $70$
-  digits\textup{)}; the Manin-symbol decomposition of $\gamma^-$ is exact
-  \textup{(}continued fractions\textup{)}; and the identity
-  $F_{\mathrm{total}}=-2f_{11}$ of weight-$2$ forms on $\Gamma_0(11)$ is
-  proved by exact $q$-expansion arithmetic to $251$ coefficients, far
-  beyond the Sturm bound $2$ \textup{(}\texttt{siegel\_anchor\_step6/7/9},
-  archive \texttt{notes/attack16-siegel-anchor.txt}\textup{)}; the
-  cusp-torsion correspondence and the primitivity of the cycle are
-  confirmed to $60$ digits against their a-priori integral values.
+  the constants $C_x=-1$, $C_y=+1$ are determined exactly by evaluation
+  at order-$0$ cusps with cyclotomic leading coefficients, and the
+  argument periods $D_U=2\pi$, $D_V=0$ are exact rational multiples of
+  $2\pi$ via Brunault's Lemma~5\textup{)}; the cusp-torsion
+  correspondence \eqref{eq:mtable} is derived exactly from
+  \cite[(3.152)--(3.153)]{Brunault} and, independently, from exact
+  divisor-order data \textup{(}\texttt{siegel\_anchor\_step14.py},
+  archive \texttt{notes/attack17-constants.txt}\textup{)}; the
+  primitivity of $\gamma^-$ is proved exactly by Manin-symbol Smith
+  normal form, coordinates $(1,-1)$ in an integral basis
+  \textup{(}\texttt{siegel\_anchor\_step13.py}, archive
+  \texttt{notes/attack17-primitivity.txt}\textup{)}; the Manin-symbol
+  decomposition is exact \textup{(}continued fractions\textup{)}; and
+  the identity $F_{\mathrm{total}}=-2f_{11}$ is proved by the
+  unconditional membership in $M_2(\Gamma_1(121))$ plus exact rational
+  $q$-expansion arithmetic through $q^{2420}$, twice the sharp Sturm
+  bound $1210$ \textup{(}\texttt{siegel\_anchor\_step12.py}, archive
+  \texttt{notes/attack17-membership.txt}\textup{)}.
 \end{enumerate}
 The only remaining external input in the proof of
 Theorem~\ref{thm:C3} is Brunault's regulator formula for Siegel units
@@ -1852,11 +1952,19 @@ File & Purpose\\
 \texttt{verify\_ratios.gp} & PARI \texttt{lfun} cross-check of ratios\\
 \texttt{kfamily\_torsion.gp} & torsion, $\operatorname{ord}(0,0)$ for the family\\
 \texttt{verify\_coinvariant.gp} & generator integrals (numerical cross-check)\\
-\texttt{siegel\_anchor\_step1--11} & the Siegel-unit regulator anchor
+\texttt{siegel\_anchor\_step1--9,11} & the Siegel-unit regulator anchor
   (Theorem~\ref{thm:anchor}):\\
   & cusp-torsion map, presentations \eqref{eq:siegelpres}, Manin
     decomposition,\\
   & exact $F_{\mathrm{total}}=-2f_{11}$, final value\\
+\texttt{siegel\_anchor\_step10} & discarded experiment, defective
+  (not used; see the archive note)\\
+\texttt{siegel\_anchor\_step12} & membership in $M_2(\Gamma_1(121))$ +
+  exact Sturm ($q^{2420}$)\\
+\texttt{siegel\_anchor\_step13} & primitivity of $\gamma^-$ (Smith normal
+  form)\\
+\texttt{siegel\_anchor\_step14} & exact $C_x,C_y$; $D_U,D_V$; table
+  \eqref{eq:mtable}\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1887,8 +1995,12 @@ gp -q k53.gp && gp -q k53b.gp && gp -q kfamily_torsion.gp
 gp -q k1_pari.gp && gp -q k1_points.gp && gp -q k1_zvals.gp
 gp -q verify_coinvariant.gp  # quotient vs subgroup generator integrals
 python siegel_anchor_step11.py  # Siegel anchor: final value (Thm. anchor)
+python siegel_anchor_step12.py  # membership M_2(Gamma_1(121)) + Sturm
+python siegel_anchor_step13.py  # primitivity of the cycle (Smith nf)
+python siegel_anchor_step14.py  # exact constants, D_U/D_V, cusp table
 # full anchor chain rebuild: siegel_anchor_step4.py -> step5.py -> step6.py
 #   -> step7.gp -> step9.py -> step8.py   (step8 takes 10-20 min)
+#   (step10 is a discarded defective experiment and is not part of the chain)
 \end{verbatim}
 }
 

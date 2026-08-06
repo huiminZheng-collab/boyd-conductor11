@@ -70,6 +70,13 @@ X(11) 有 60 个尖点 (r,t)∈P¹(Z/11)/±;  Kubert–Lang: ord_{(r,t)} g_{a,b}
 step7.gp 在 4 个 τ 点 70 位验证: 乘积恒等式成立, 常数 C_x = −1, C_y = +1 精确
 （logCx = iπ, logCy = 0, 实部全 0）⟹ log|C| 修正项消失; 且对 Γ₀(11) 符号
 Du=Dv=0, darg 修正严格为 0。
+【勘误 2026-08-06（rev5，详见 notes/attack17-constants.txt）: 上行 "Du=Dv=0"
+当时无任何脚本支持，且对 U 是错的。attack17 的精确计算（step14.py，经
+Brunault Lemma 5 + Kubert–Lang 首项单位根）给出 D_V = 0 但 D_U = 2π
+（U 沿 γ⁻ 绕数 1）。darg 修正项 log|C_x|·D_V − log|C_y|·D_U 之所以为 0，
+是因为常数 C_x = −1, C_y = +1 现已被**精确**确定（ord=0 尖点求值法），
+故 log|C_x| = log|C_y| = 0 精确成立，修正项 = 0·0 − 0·2π = 0。
+结论（∫η(x∘π,y∘π) = ∫η(U,V)）不变，但理由以此为准。】
 
 Step 8-9 (step8.py, step9.py + step9_out.json): γ⁻ 的模符号分解与主求值。
 γ⁻ = {0,3/11} − {0,8/11}（反不变生成元, 3/11~8/11 on X₁(11)）。连分数分解:
@@ -106,7 +113,8 @@ step8（数值, NMAX=200, e/f 系数表 + 配对卷积 + W-分裂）: 7 符号 �
 3. I_1=0 类恒等式必须区分 Γ₁ 真实性与 Γ₀ 投影。
 4. Boyd 的 x ≠ Weierstrass 的 X（有理映射见上）。
 5. Brunault 的 Atkin–Lehner W 与通常 Fricke 反号（W₁₁f₁₁=+f₁₁）。
-6. 行均匀 Siegel 表示使 darg 修正项恒消失（Du=Dv=0），大幅简化计算。
+6. 行均匀 Siegel 表示本身不能使 darg 修正项自动消失——实际 D_U=2π≠0
+   （见第 72 行勘误与 attack17）；修正项消失靠的是 log|C_x|=log|C_y|=0 精确。
 7. 任务书引用的 b11 数字串从第 31 位起为转录错误; 正确值以仓库
    attack13 三重认证值为准（见上）。
 

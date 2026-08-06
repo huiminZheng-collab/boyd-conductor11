@@ -1,0 +1,152 @@
+% attack17: paste-ready LaTeX paragraphs for the proof paper.
+% Exact determination of the constants C_x, C_y, the argument periods
+% D_U, D_V (Brunault's Lemma 5), and the cusp-torsion table m = (0,2,1,4,3).
+% Assumes: \pi : X_1(11) \to E, E: y^2+y = x^3-x^2 (11.a3), A = (0,0),
+% Boyd's functions x_B, y_B on E, cycle \delta = {0,3/11} - {0,8/11}.
+
+\paragraph{The constants and the argument periods.}
+Write the Siegel-unit presentations of attack16 as
+$u := x_B\circ\pi = C_x\,U$ and $v := y_B\circ\pi = C_y\,V$, where
+\begin{equation}\label{eq:UVdef}
+  U = \frac{G_4 G_5}{G_2^2}, \qquad
+  V = \frac{G_1 G_5^3}{G_2^3 G_3}, \qquad
+  G_a = \prod_{b \bmod 11} g_{a,b},
+\end{equation}
+and $g_{a,b}$ are the Siegel units of level $11$ in Brunault's normalization
+\cite[§1]{Brunault}. Since
+$\eta(f,g) = \log|f|\,\mathrm{d}\!\arg g - \log|g|\,\mathrm{d}\!\arg f$,
+for nonzero constants $C, C'$ one has the exact identity of $1$-forms
+\begin{equation}\label{eq:etascale}
+  \eta(CU, C'V) = \eta(U,V) + \log|C|\,\mathrm{d}\!\arg V
+                             - \log|C'|\,\mathrm{d}\!\arg U .
+\end{equation}
+Integrating \eqref{eq:etascale} over
+$\delta = \{0,\tfrac{3}{11}\} - \{0,\tfrac{8}{11}\}$ gives
+\begin{equation}\label{eq:correction}
+  \int_\delta \eta(u,v) = \int_\delta \eta(U,V)
+  + \log|C_x|\, D_V - \log|C_y|\, D_U,
+  \qquad D_F := \int_\delta \mathrm{d}\!\arg F .
+\end{equation}
+
+We compute $D_U$ and $D_V$ exactly. Decompose the paths into Manin symbols
+$\xi(\gamma) = \{\gamma 0, \gamma i\infty\}$:
+\begin{equation}\label{eq:manin}
+\begin{aligned}
+  \{0,\tfrac{3}{11}\} &=
+    \xi\bigl(\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\bigr)
+  - \xi\bigl(\begin{smallmatrix}1&1\\3&4\end{smallmatrix}\bigr)
+  + \xi\bigl(\begin{smallmatrix}3&1\\11&4\end{smallmatrix}\bigr),\\
+  \{0,\tfrac{8}{11}\} &=
+    \xi\bigl(\begin{smallmatrix}1&0\\1&1\end{smallmatrix}\bigr)
+  - \xi\bigl(\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\bigr)
+  + \xi\bigl(\begin{smallmatrix}3&2\\4&3\end{smallmatrix}\bigr)
+  - \xi\bigl(\begin{smallmatrix}3&8\\4&11\end{smallmatrix}\bigr).
+\end{aligned}
+\end{equation}
+For each symbol, $g_{a,b}\circ\gamma = w\cdot g_{(a,b)\gamma}$ with $w$ a root
+of unity \cite[(4)]{Brunault}; being constant, $w$ is invisible to
+$\mathrm{d}\!\arg$, so Brunault's Lemma~5 \cite{Brunault},
+\begin{equation}\label{eq:lemma5}
+  \int_0^{i\infty} \mathrm{d}\!\arg\, g_{a,b} =
+  \begin{cases}
+    0 & \text{if } a \equiv 0 \text{ or } b \equiv 0 \pmod{11},\\[2mm]
+    2\pi\bigl(\{\tfrac{a}{11}\}-\tfrac12\bigr)
+        \bigl(\{\tfrac{b}{11}\}-\tfrac12\bigr)
+      & \text{otherwise},
+  \end{cases}
+\end{equation}
+evaluates every piece as an explicit rational multiple of $2\pi$. Summing the
+seven symbols in \eqref{eq:manin} with exact rational arithmetic (the two paths
+contribute $0$, resp.\ $-2\pi$, for $U$, and $-\pi$, resp.\ $-\pi$, for $V$)
+gives
+\begin{equation}\label{eq:DUDV}
+  D_U = 2\pi, \qquad D_V = 0 .
+\end{equation}
+Note that $D_U = 2\pi \neq 0$: $U$ has winding number $1$ along the closed
+cycle $\delta$. Hence the vanishing of the correction in \eqref{eq:correction}
+does \emph{not} come for free; it follows from the exact determination of the
+constants, to which we now turn.
+
+At a cusp where both sides have order $0$ we may simply evaluate. By the
+Kubert--Lang formula $\operatorname{ord}_{k/11} g_{a,b}
+= \tfrac12 B_2(\{ak/11\})$, so
+\begin{equation}\label{eq:ordUV}
+  \operatorname{ord}_{k/11} U = (-1, +1, +1, 0, -1), \qquad
+  \operatorname{ord}_{k/11} V = (-1, +3, 0, 0, -2) \qquad (k = 1, \dots, 5),
+\end{equation}
+and in particular $\operatorname{ord}_{4/11} U = \operatorname{ord}_{3/11} V = 0$.
+Using the cusp table \eqref{eq:mtable} below, $\pi(4/11) = 4A$ and
+$\pi(3/11) = A$, and evaluating Boyd's functions at the torsion points
+($x_B(4A) = x_B(0,-1) = 1$ and $y_B(A) = y_B(0,0) = -1$), we get
+\begin{equation}\label{eq:constants}
+  C_x = \frac{x_B(4A)}{\kappa_{4/11}(U)} = \frac{1}{-1} = -1, \qquad
+  C_y = \frac{y_B(A)}{\kappa_{3/11}(V)} = \frac{-1}{-1} = +1,
+\end{equation}
+where $\kappa_c(F)$ denotes the leading $q$-coefficient of a modular unit $F$
+at the cusp $c$. The $\kappa$'s are exact cyclotomic numbers: writing
+$\gamma \in \mathrm{SL}_2(\mathbb Z)$ with $\gamma i\infty = c$ as a word in
+$S = \bigl(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr)$ and
+$T = \bigl(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr)$ and using
+\cite[Lemma~4 and (3)]{Brunault},
+\begin{equation}\label{eq:STlaws}
+  g_{a,b}(S\tau) = e^{-2\pi i\,(\{a/11\}-\frac12)(\{b/11\}-\frac12)}\, g_{b,-a}(\tau),
+  \qquad
+  g_{a,b}(\tau+q) = e^{\pi i q B_2(\{a/11\})}\, g_{a,\,b+qa}(\tau),
+\end{equation}
+one obtains $g_{a,b}(\gamma\tau) = W_\gamma(a,b)\, g_{(a,b)\gamma}(\tau)$ with
+$W_\gamma(a,b)$ an explicit root of unity. At the cusps $k/11$ every
+transformed index $(a,b)\gamma$ has first component $\not\equiv 0 \pmod{11}$,
+so the leading coefficient of each $g_{(a,b)\gamma}$ at $i\infty$ is $1$ and
+$\kappa_{k/11}(U)$, $\kappa_{k/11}(V)$ are products of roots of unity; the
+exact computation gives $\kappa_{4/11}(U) = \kappa_{3/11}(V) = -1$. In
+particular $|C_x| = |C_y| = 1$ \emph{exactly}, and the correction
+in \eqref{eq:correction} vanishes:
+\begin{equation}\label{eq:corrvanish}
+  \log|C_x|\, D_V - \log|C_y|\, D_U = 0\cdot 0 - 0\cdot 2\pi = 0,
+  \qquad\text{hence}\qquad
+  \int_\delta \eta(u,v) = \int_\delta \eta(U,V),
+\end{equation}
+without any numerical evaluation of the constants.
+
+\paragraph{The cusp-torsion correspondence.}
+We identify the images of the cusps under the modular parametrization
+$\pi : X_1(11) \xrightarrow{\sim} E$, normalized by $\pi(i\infty) = O$.
+Brunault, after Lecacheux, tabulates the five rational cusps $P_v$ of
+$X_1(11)$, indexed by $v \in (\mathbb Z/11\mathbb Z)^\times/\{\pm 1\}$, as
+points of $E$ \cite[(3.152)--(3.153)]{BrunaultThesis}:
+\begin{equation}\label{eq:Pv}
+  P_1 = \infty, \quad P_2 = (1,0), \quad P_3 = (0,-1), \quad
+  P_4 = (0,0), \quad P_5 = (1,-1), \qquad
+  P_{4^a} = a\cdot P \quad (a \in \mathbb Z/5\mathbb Z),
+\end{equation}
+where $P = P_4$ generates $E(\mathbb{Q}) \cong \mathbb Z/5\mathbb Z$ and the
+class of $4$ generates $(\mathbb Z/11\mathbb Z)^\times/\{\pm 1\}$. The rational
+cusps of $X_1(11)$ are the fractions $k/11$ with
+$k \in (\mathbb Z/11\mathbb Z)^\times/\{\pm 1\}$; our label convention is the
+\emph{inverse} one:
+\begin{equation}\label{eq:labelconv}
+  P_v \ \text{is the cusp } k/11
+  \quad\Longleftrightarrow\quad
+  v \equiv k^{-1} \pmod{11} \quad (\text{up to } \pm 1).
+\end{equation}
+The anchor $P_1 = i\infty = 1/11$ (note
+$\bigl(\begin{smallmatrix}1&0\\11&1\end{smallmatrix}\bigr) \in \Gamma_1(11)$)
+and equivariance under the diamond operators, which act transitively on the
+five rational cusps, restrict the identification to $v \equiv k^{\pm 1}
+\pmod{11}$; the exact divisor-order computation below selects the inverse
+dictionary \eqref{eq:labelconv} (and the Abel--Jacobi evaluation agrees with
+it).
+Since the group law on $E$ gives $2A = (1,-1)$, $3A = (1,0)$, $4A = (0,-1)$ for
+$A := (0,0)$, the table \eqref{eq:Pv} reads $P_v = n(v)\,A$ with
+$n = (0,3,4,1,2)$ for $v = (1,2,3,4,5)$, and \eqref{eq:labelconv} yields
+\begin{equation}\label{eq:mtable}
+  \pi(k/11) = m_k\,A, \qquad
+  (m_1, m_2, m_3, m_4, m_5) = (0, 2, 1, 4, 3).
+\end{equation}
+Independently of \eqref{eq:Pv}, the tuple \eqref{eq:mtable} is forced by exact
+divisor data: the Kubert--Lang orders \eqref{eq:ordUV} matched against
+$\operatorname{div}(x_B) = [A] + [2A] - [O] - [3A]$ and
+$\operatorname{div}(y_B) = 3[2A] - 2[3A] - [O]$ have the unique solution
+$m = (0,2,1,4,3)$. The $60$-digit Abel--Jacobi evaluation of the cusp images
+reported earlier is in agreement with both exact derivations and is used only
+as a check.

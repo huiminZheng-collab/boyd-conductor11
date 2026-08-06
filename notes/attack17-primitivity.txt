@@ -1,0 +1,135 @@
+attack17: δ 的本原性（primitivity）严格证明 —— δ 生成 H₁(X₁(11),ℤ)⁻
+================================================================================
+日期: 2026-08-06   回应: 第五轮审稿意见第 2 条（周期是 w_anti 的非零整数倍
+且 60 位数值符合 ≠ 本原性证明；本 attack 用纯整数线性代数补上严格证明）。
+
+最终结论
+--------
+δ = {0,3/11} − {0,8/11} 是 H₁(X₁(11),ℤ)⁻ ≅ ℤ 的生成元。
+在 ±Γ₁(11) 的 Manin 符号模型中（60 陪集，全程 ℤ 上线性代数 + Smith 正规形）：
+  · H₁ = ker ∂ ≅ ℤ²（无挠，关系格 SNF 对角元全为 1）；
+  · 复共轭 c 在 H₁ 上的矩阵 C = (0 1; 1 0)，C²=I，det C=−1，
+    H₁⁻ = ker(C+I) = ℤ·(−1,1)（秩恰为 1）；
+  · δ 在 H₁ 整基下的坐标 = (1,−1)，gcd(1,−1) = 1，
+    且 δ = −1 × (H₁⁻ 生成元 (−1,1)) —— 坐标恰为 ±1。∎
+（等价表述：δ 与某整类的相交数为 ±1；本原向量 ⟺ 坐标 gcd=1。）
+
+算法与约定（code/siegel_anchor_step13.py，全部可复现）
+----------------------------------------------------
+参考 Manin / Stein "Modular Forms: A Computational Approach" §3、Cremona
+模符号算法。
+
+1. 陪集。±Γ₁(11)\PSL₂(ℤ) ↔ (ℤ/11)²\{0}/±1，60 个（与指数
+   [PSL₂(ℤ):±Γ₁(11)] = 120/2 = 60 一致）。用矩阵下行 (c,d) mod 11 参数化；
+   典范代表：c∈{1..5} 任意 d，或 c=0, d∈{1..5}。
+   验证 T=(1 1;0 1)∈Γ₁(11) 与 I 下行相同，故下行确为陪集不变量。
+
+2. Manin 符号。x_i = {g_i∞, g_i0}，60 个基符号。右作用在下行上：
+     S=(0 −1;1 0): (c,d)↦(d,−c)      R=(0 −1;1 1): (c,d)↦(d,−c+d)
+     T=(1 1;0 1):  (c,d)↦(c,c+d)     共轭 J=diag(−1,1): (c,d)↦(−c,d)
+   关系（PSL 中）：x+xS=0（S 交换 0,∞），x+xR+xR²=0（R 循环 ∞→0→−1→∞，
+   R³=−I=I in PSL）。去重后 50 行，秩 49。
+
+3. 尖点与边界。尖点 = 双陪集 ±Γ₁(11)\PSL₂(ℤ)/⟨T⟩，T-轨道并查集得
+   10 个尖点（与公式 ½Σ_{d|11}φ(d)φ(11/d)=10 一致；X(11) 的 60 尖点是
+   attack16 的另一层）。∂(x_i)=[g_i0]−[g_i∞]=cusp(S·i)−cusp(i)，
+   ∂: ℤ⁶⁰→ℤ¹⁰，秩 9（增广核）。所有关系行 ⊂ ker ∂（机器验证）。
+
+4. H₁。对 ∂ 作带变换的 Smith 分解 U·∂·V=D：ker ∂ 的 ℤ 基 = V 的后
+   51 列。关系格 Λ（49 秩）在 ker ∂ 基下坐标作 SNF：对角元全 1
+   ⟹ H₁ = ker∂/Λ ≅ ℤ² 无挠（与亏格 1 一致；M=ℤ⁶⁰/关系 秩 11
+   = 2g+#cusps−1 ✓）。
+
+5. 共轭。c: τ↦−τ̄，符号 {α,β}↦{−α,−β}，下行 (c,d)↦(−c,d)（JgJ，
+   J=diag(1,−1)）。机器验证 c 保持 ker ∂ 与关系格，得 H₁ 上 2×2 整矩阵
+   C=(0 1;1 0)。H₁⁻=ker(C+I)=ℤ·(−1,1)，秩 1。
+
+6. δ 的坐标。attack16 step8/9 的 7 符号连分数链（[[a,b],[c,d]]=矩阵
+   (a b;c d)→陪集 (c,d)）：
+     {0,3/11} = +[[1,0],[3,1]] − [[1,1],[3,4]] + [[3,1],[11,4]]
+     {0,8/11} = +[[1,0],[1,1]] − [[1,2],[1,3]] + [[3,2],[4,3]] − [[3,8],[4,11]]
+     δ = 前者 − 后者。
+   边界伸缩验证：∂(chain(k/11)) = [k/11]−[0]，且 cusp(3/11)=cusp(8/11)
+   （(3,11)≡−(8,11) mod 11 的 a 分量，双陪集标签相同 = 2）
+   ⟹ δ ∈ ker ∂（闭合）。δ 的 H₁ 坐标 = (1,−1)：gcd=1（本原），
+   C·(1,−1)ᵀ = −(1,−1)ᵀ（反不变），且恰等于 −1×H₁⁻ 生成元 (−1,1)。
+
+关键数字一览（step13 输出，全部 PASS）
+--------------------------------------
+  陪集数 60；尖点数 10；关系行 50（秩 49）；rank ∂ = 9；
+  rank ker∂ = 51；rank M = 11；H₁ 秩 2（无挠）；H₁⁻ 秩 1；
+  δ 坐标 (1,−1)，gcd 1；C=(0 1;1 0)，C²=I；
+  δ = −(−1,1) = ±1 × 反不变生成元。
+
+数值交叉验证（可选，gp 2.15.5，128 bit 精度）
+--------------------------------------------
+  · mfsymboleval: ∫_δ 2πi f dz = 2πi·0.4643557513007149711...
+    = 2.9176332338769904586...·i = w1−2w2 = w_anti，
+    |2πi·v/w_anti − 1| = 0.0（在 128 bit 精度下严格到最后一位）。
+  · PARI msfromell 的归一化 ± 符号（取值生成 ℤ 的唯一 Hecke 特征符号）
+    在 δ 上：v⁺ = 0（精确整数），v⁻ = 1（精确整数）
+    —— 即 ∫_δ ω = ±1 × 反不变周期生成元，与坐标 ±1 互为印证。
+  与 attack16 存档的 w_anti = 2.917633233876990...i 一致。
+
+坑与备注
+--------
+1. ±Γ₁(11) 的尖点是 10 个（X₁(11)），不是 attack16 中 X(11) 的 60 个；
+   Kubert–Lang 那套属于 Γ(11) 层。本 attack 全部在 Γ₁ 层。
+2. gp 的 msfromell(E) 返回 [M, x]（M=msinit 空间，x=符号值向量），
+   求值用 mseval(M, x, [a,b])；sign=±1 时给出归一化有理符号，
+   v⁻(δ)=1 恰是本原性的 PARI 表述。gp printf %e 不能直接打印
+   复数零（需 real(abs(...))）。
+3. 对称判定 δ 反不变：c({0,k/11}) = {0,−k/11}，而 −3/11~8/11、
+   −8/11~3/11（±Γ₁ 尖点等同），故 c(δ)=−δ——与符号层面
+   (c,d)↦(−c,d) 的机器验证一致。
+4. "坐标 gcd=1 ⟺ 本原 ⟺ 存在整类与之相交 ±1"：H₁ 上交错相交形式
+   unimodular（曲面），坐标 (1,−1) 本原即存在对偶整基向量与 δ 配对 ±1。
+
+文件清单（全部新建，未改动任何既有文件；未做 git 操作）
+------------------------------------------------------
+code/siegel_anchor_step13.py        本原性严格判定（17 项检查全 PASS）
+code/siegel_anchor_step13_out.json  全部中间量：60 陪集表、尖点标签、
+                                    H₁ 整基（60 维符号向量）、δ 链与坐标、
+                                    共轭矩阵 C、gp 交叉验证值
+notes/attack17-primitivity.txt      本存档
+
+复现: cd boyd-conductor11 && .venv/Scripts/python.exe code/siegel_anchor_step13.py
+（纯 sympy 部分数秒完成；末尾 gp 交叉验证需 gp 在 PATH，失败不影响整数格判定。）
+
+论文用 LaTeX 段落（可直接粘贴）
+------------------------------
+见下（引 step13 输出；编号/macros 按 paper.tex 现有约定调整）：
+
+\begin{proposition}\label{prop:delta-primitive}
+The cycle $\delta=\{0,\tfrac{3}{11}\}-\{0,\tfrac{8}{11}\}$ generates
+$H_1(X_1(11),\mathbf{Z})^{-}\cong\mathbf{Z}$.
+\end{proposition}
+
+\begin{proof}
+We compute the integral homology of $X_1(11)$ by Manin symbols for the group
+$\pm\Gamma_1(11)$, which has index~$60$ in $\mathrm{PSL}_2(\mathbf{Z})$
+(\texttt{code/siegel\_anchor\_step13.py}; all linear algebra is over
+$\mathbf{Z}$). Cosets $\pm\Gamma_1(11)\backslash\mathrm{PSL}_2(\mathbf{Z})$
+are parametrized by nonzero pairs $(c,d)\in(\mathbf{Z}/11)^2$ modulo $\pm1$
+(the bottom row of a matrix), giving $60$ Manin symbols $x_i=\{g_i\infty,g_i0\}$
+subject to $x+xS=0$ and $x+xR+xR^2=0$ with $S=\left(\begin{smallmatrix}0&-1\\
+1&0\end{smallmatrix}\right)$, $R=\left(\begin{smallmatrix}0&-1\\1&1
+\end{smallmatrix}\right)$. The boundary map $\partial(x_i)=[g_i0]-[g_i\infty]$
+lands in the divisor group of the $10$ cusps
+(double cosets $\pm\Gamma_1(11)\backslash\mathrm{PSL}_2(\mathbf{Z})/\langle
+T\rangle$). A Smith normal form computation gives
+$H_1=\ker\partial\cong\mathbf{Z}^2$, torsion-free, with an explicit integral
+basis. Complex conjugation $c\colon\tau\mapsto-\bar\tau$ acts on bottom rows
+by $(c,d)\mapsto(-c,d)$ and induces $C=\left(\begin{smallmatrix}0&1\\1&0
+\end{smallmatrix}\right)$ on $H_1$; hence
+$H_1^{-}=\ker(C+I)=\mathbf{Z}\cdot(-1,1)$ has rank one. The
+continued-fraction expansion expresses $\delta$ as the signed sum of the
+seven Manin symbols $[[1,0],[3,1]]$, $-[[1,1],[3,4]]$, $[[3,1],[11,4]]$,
+$-[[1,0],[1,1]]$, $[[1,2],[1,3]]$, $-[[3,2],[4,3]]$, $[[3,8],[4,11]]$;
+its boundary telescopes to $[3/11]-[8/11]=0$ since $3/11$ and $8/11$ define
+the same $\pm\Gamma_1(11)$-cusp, so $\delta$ is closed. In the integral
+basis of $H_1$ the class of $\delta$ has coordinates $(1,-1)$: it satisfies
+$C(1,-1)^t=-(1,-1)^t$ and $\gcd(1,-1)=1$, i.e.\ $\delta=-1\cdot(-1,1)$ is
+\emph{exactly} $\pm1$ times a generator of $H_1^{-}$. Equivalently, $\delta$
+has intersection number $\pm1$ with an integral class.
+\end{proof}
